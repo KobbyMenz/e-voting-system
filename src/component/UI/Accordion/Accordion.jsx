@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import PaginationTable from "../PaginationTable/PaginationTable";
 import { Box } from "@mui/material";
 import Button from "../Button/Button";
+import StopIcon from "../Icons/StopIcon";
+import PlayIcon from "../Icons/PlayIcon";
 
 export default function AccordionExpandDefault({
   electionTitle,
@@ -80,11 +82,10 @@ export default function AccordionExpandDefault({
               <div>{electionTitle}</div>{" "}
               <div
                 style={{
-                  background:
-                    status === "Active" ? "var(--primary)" : "#ca0202",
-                  padding: "0.2rem 1rem",
+                  background: status === "Active" ? "#06882d" : "#ca0202",
+                  padding: "0.2rem 1.5rem",
                   fontSize: "1.4rem",
-                  borderRadius: "0.5rem",
+                  borderRadius: "1.5rem",
                   height: "fit-content",
                   display: "flex",
                   alignItems: "center",
@@ -115,8 +116,10 @@ export default function AccordionExpandDefault({
               <Box
                 sx={{
                   display: "flex",
-                  gap: "2rem",
+                  columnGap: "2rem",
+                  rowGap: "0.5rem",
                   alignItems: "center",
+                  flexWrap: "wrap",
                 }}
               >
                 <h2>Status Control:</h2>
@@ -129,9 +132,11 @@ export default function AccordionExpandDefault({
               <Button
                 onClick={onChangeStatus}
                 style={{
-                  backgroundColor: status === "Active" ? "#ca0202" : "#06882d",
+                  backgroundColor:
+                    status === "Active" ? "#ca0202" : "var(--primary)",
                 }}
               >
+                {status === "Active" ? <StopIcon /> : <PlayIcon />}
                 <Typography
                   sx={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}
                 >
@@ -140,6 +145,7 @@ export default function AccordionExpandDefault({
               </Button>
             </Box>
 
+            
             <PaginationTable
               key={id}
               columns={columns}

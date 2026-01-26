@@ -21,6 +21,8 @@ import CustomButton from "../Button/Button";
 import SearchBar from "../SearchBar/SeachBar";
 import ToolTip from "../ToolTip/ToolTip";
 import FormatNumber from "../../Functions/FormatNumber";
+// import AddIcon from "../Icons/AddIcon";
+import AddUserIcon from "../Icons/AddUserIcon";
 
 const PaginationTable = ({
   columns,
@@ -114,7 +116,7 @@ const PaginationTable = ({
             },
           }}
         >
-          Number of Items: {FormatNumber(filteredRows.length)}
+          Number of Candidates: {FormatNumber(filteredRows.length)}
         </Typography>
 
         <Box
@@ -156,18 +158,8 @@ const PaginationTable = ({
           </Box>
 
           <CustomButton style={buttonStyle} className="add_btn" onClick={onAdd}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              className="size-6"
-            >
-              <path
-                fillRule="evenodd"
-                d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
-                clipRule="evenodd"
-              />
-            </svg>{" "}
+            <AddUserIcon />
+
             {addButton || "Add"}
           </CustomButton>
         </Box>
@@ -340,7 +332,7 @@ const PaginationTable = ({
                     border: "0.1rem solid var(--bg-color)",
                   }}
                 >
-                  Data not found
+                  No candidates added yet.
                 </TableCell>
               </TableRow>
             )}

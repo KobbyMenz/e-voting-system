@@ -58,7 +58,7 @@ const createElectionInstance = (
 });
 
 const election = [
-  createElectionInstance("SRC President", "Namong SRC Presidential Election"),
+  createElectionInstance("SRC Presidential", "Namong SRC Presidential Election"),
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Presidential Election",
@@ -166,6 +166,12 @@ const AdminDashboardContent = () => {
             if (election.id === electionId) {
               const newStatus =
                 election.status === "Active" ? "Closed" : "Active";
+              Toast(
+                "success",
+                `${election.title} election ${
+                  newStatus === "Active" ? "started" : "ended"
+                } successfully.`,
+              );
               return {
                 ...election,
                 status: newStatus,
