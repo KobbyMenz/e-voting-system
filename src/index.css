@@ -1,0 +1,235 @@
+/* @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap"); */
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600&display=swap"); */
+
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
+
+/* Default theme (light) */
+:root {
+  --bg-color: #e9ebf4; /*#E9EBF4*/
+  --bg-color2: #fff;
+  --bg-color3:#fff;
+  --text-color: #1a1a1a;
+  
+  --primary: #0c007c;
+  --primary-deep:#0a0063;
+  --secondary: #007aba;
+  --nav-bg: hsla(246, 100%, 24%, 0.884);
+  --hover-color: #c4c4c48f; /*#c4c4c48f*/
+  --table-header: #4452a1ff; /*#4452a1ff*/
+  --table-strip: #f5f5f5c9;
+  --header-color: rgba(255, 255, 255, 0.651);
+  --border-color: #ccc;
+
+  font-family: "Inter", sans-serif, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+
+  color: var(--text-color);
+  background-color: var(--bg-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --bg-color: #263341; /* #263341 #191A1C #5495b8ff*/
+  --bg-color2: #1b222a; /*  */
+   --bg-color3:#12191fd8;
+  --text-color: #ffffff;
+  
+  --primary: #007aba; /*,,  #007aba*/
+  --primary-deep:#0068a0;
+  --secondary: #0c007c;
+  --nav-bg: rgba(0, 121, 186, 0.884);
+  --hover-color: #12191f; /*#12191f*/
+  --table-header: #5495b8ff; /*#5495b8ff*/
+  --table-strip: #1a1e22;
+  --header-color: hsla(214, 22%, 14%, 0.89);
+  --border-color: rgb(60, 79, 99); /*rgb(60, 79, 99)*/
+  --border-color: rgb(60, 79, 99);
+}
+
+* {
+  /* Noto Sans JP */
+  /* font-family: "Poppins", sans-serif; */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  text-decoration: none;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary) var(--bg-color2);
+}
+
+body {
+  color: var(--text-color);
+  background: var(--bg-color);
+  transition: all 0.5s ease-in-out;
+}
+
+/* ::-webkit-scrollbar-track{
+  background:rgba(245, 4, 4, 0.1);
+  
+}
+
+::-webkit-scrollbar-thumb{
+  background:rgba(255, 255, 255, 0.1);
+  
+}*/
+
+/* ::-webkit-scrollbar-thumb:hover{
+  background:var(--secondary);
+  
+}  */
+
+html {
+  font-size: 58.5%;
+  scroll-behavior: smooth;
+  transition: all 0.5s ease-in-out;
+}
+
+/* html::-webkit-scrollbar-track {
+  background: rgb(255, 0, 0);
+  backdrop-filter: blur(1rem);
+}
+
+html::-webkit-scrollbar-thumb {
+  background: rgb(255, 0, 0);
+  backdrop-filter: blur(1rem);
+} */
+
+/* h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+} */
+
+/*======== Toast Notification styles starts =========*/
+.Toastify__close-button {
+  color: var(--text-color);
+  opacity: 1;
+}
+
+.Toastify__close-button > svg {
+  fill: var(--text-color);
+}
+
+.Toastify__close-button > svg:hover {
+  fill: #ff0000; /* change color on hover */
+}
+/*======== Toast Notification styles ends =========*/
+
+#root
+  > main
+  > div
+  > div.content
+  > div.content
+  > div
+  > div:nth-child(1)
+  > div
+  > div.left_panel_container
+  > div.left_panel
+  > div
+  > div.MuiBox-root.css-1qd5x6z
+  > nav
+  > ul
+  > li
+  > button:hover {
+  background: var(--nav-bg);
+}
+
+#root
+  > main
+  > div
+  > div.content
+  > div.content
+  > div
+  > div.left_panel_container
+  > div.left_panel
+  > div
+  > div.MuiBox-root.css-5flwkf
+  > nav
+  > ul
+  > li
+  > button
+  > span {
+  color: #fff;
+}
+
+.css-wlsqrd-MuiButtonBase-root-MuiMenuItem-root-MuiTablePagination-menuItem,
+.css-1gak8h1-MuiToolbar-root-MuiTablePagination-toolbar p,
+#\:rbh\:,
+#root
+  > main
+  > div
+  > div.content
+  > div.content
+  > div
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1h73l19-MuiPaper-root
+  > div.MuiTablePagination-root.css-14oe2nd-MuiTablePagination-root
+  > div
+  > p.MuiTablePagination-displayedRows.css-11cfq65-MuiTablePagination-displayedRows {
+  font-size: 1.4rem;
+}
+
+.MuiTablePagination-toolbar .MuiTablePagination-actions button {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+}
+
+.MuiTablePagination-toolbar
+  .MuiTablePagination-actions
+  button
+  .css-1umw9bq-MuiSvgIcon-root {
+  color: var(--text-color);
+}
+
+.MuiTablePagination-toolbar .MuiTablePagination-actions button:hover {
+  background-color: var(--hover-color);
+}
+
+.css-mmygx2-MuiSelect-select-MuiInputBase-input.css-mmygx2-MuiSelect-select-MuiInputBase-input.css-mmygx2-MuiSelect-select-MuiInputBase-input {
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  border-radius: 0.5rem;
+}
+
+.css-1gpuzre-MuiSvgIcon-root-MuiSelect-icon {
+  color: var(--text-color);
+}
+
+/* input:-webkit-autofill {
+  
+  
+  background-color:  var(--bg-color) ;
+  
+} */
+
+/* .MuiButtonBase-root.MuiTab-root.MuiTab-textColorInherit */
+/* .Mui-selected.css-1nhy1ef-MuiButtonBase-root-MuiTab-root.active {
+border-bottom: 0.2rem solid red;
+} */
+
+input {
+  /* color: var(--text-color); */
+  caret-color: var(--text-color);
+}
+
+/* input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--bg-color) inset !important; 
+  -webkit-text-fill-color: var(--text-color) !important;
+} */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
