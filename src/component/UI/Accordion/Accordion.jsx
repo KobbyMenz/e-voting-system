@@ -52,10 +52,10 @@ export default function AccordionExpandDefault({
           aria-controls={`panel${id}-content`}
           id={`panel${id}-header`}
         >
-          <Typography
+          {/* <Typography
             component="span"
             sx={{
-              fontSize: "1.8rem",
+              fontSize: "1.6rem",
               fontWeight: "bold",
               "@media (max-width: 600px)": {
                 fontSize: "1.2rem",
@@ -64,7 +64,7 @@ export default function AccordionExpandDefault({
                 fontSize: "1.5rem",
               },
             }}
-          >
+          > */}
             <Box
               sx={{
                 display: "flex",
@@ -79,7 +79,7 @@ export default function AccordionExpandDefault({
                 },
               }}
             >
-              <div>{electionTitle}</div>{" "}
+              <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
               <div
                 style={{
                   background: status === "Active" ? "#06882d" : "#ca0202",
@@ -97,7 +97,7 @@ export default function AccordionExpandDefault({
               </div>{" "}
               <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
             </Box>
-          </Typography>
+          {/* </Typography> */}
         </AccordionSummary>
         <AccordionDetails sx={{ marginBottom: "2rem" }}>
           <Box>
@@ -145,7 +145,6 @@ export default function AccordionExpandDefault({
               </Button>
             </Box>
 
-            
             <PaginationTable
               key={id}
               columns={columns}
