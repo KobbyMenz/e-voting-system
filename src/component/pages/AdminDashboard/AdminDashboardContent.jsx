@@ -36,6 +36,7 @@ const generateUniqueId = () =>
 const columns = [
   { field: "sn", headerName: "S/N" },
   { field: "id", headerName: "ID" },
+  { field: "image", headerName: "Photo", type: "image" },
   { field: "name", headerName: "Candidate Name" },
 ];
 
@@ -53,12 +54,16 @@ const createElectionInstance = (
   candidates: candidates.map((candidate, index) => ({
     sn: index + 1,
     id: candidate.id,
+    image: candidate.photo ? candidate.photo : "",
     name: candidate.name,
   })),
 });
 
 const election = [
-  createElectionInstance("SRC Presidential", "Namong SRC Presidential Election"),
+  createElectionInstance(
+    "SRC Presidential",
+    "Namong SRC Presidential Election",
+  ),
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Presidential Election",
@@ -94,6 +99,7 @@ const AdminDashboardContent = () => {
                     {
                       sn: election.candidates.length + 1,
                       id: candidateData.id,
+                      image: candidateData.photo,
                       name: candidateData.name,
                     },
                   ],

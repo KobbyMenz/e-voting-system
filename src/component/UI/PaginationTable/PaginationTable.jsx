@@ -23,6 +23,7 @@ import ToolTip from "../ToolTip/ToolTip";
 import FormatNumber from "../../Functions/FormatNumber";
 // import AddIcon from "../Icons/AddIcon";
 import AddUserIcon from "../Icons/AddUserIcon";
+import ImageBox from "../ImageBox/ImageBox";
 
 const PaginationTable = ({
   columns,
@@ -270,7 +271,16 @@ const PaginationTable = ({
                         }}
                         key={col.field}
                       >
-                        {row[col.field]}
+                        {/* {row[col.field]} */}
+                        {col.type === "image" ? (
+                          <ImageBox
+                            background="transparent"
+                            src={`${row[col.field]}`}
+                            alt={row.name}
+                          />
+                        ) : (
+                          row[col.type === "status" ? "" : col.field]
+                        )}
                       </TableCell>
                     ))}
                     <TableCell
