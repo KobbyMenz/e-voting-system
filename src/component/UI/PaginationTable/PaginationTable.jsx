@@ -126,7 +126,7 @@ const PaginationTable = ({
           flexGrow={1}
           justifyContent={"flex-end"}
           alignItems={"center"}
-          flexWrap={"wrap"}
+          flexWrap={"wrap-reverse"}
           sx={{
             // Mobile responsive
             "@media (max-width: 600px)": {

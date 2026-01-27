@@ -62,10 +62,12 @@ const createElectionInstance = (
 const election = [
   createElectionInstance(
     "SRC Presidential",
+    // "2026-01-15 09:23:32",
     "Namong SRC Presidential Election",
   ),
   createElectionInstance(
     "Sanitation Prefect",
+    // "2026-01-15 09:23:32",
     "Namong SRC Presidential Election",
   ),
 ];
@@ -85,7 +87,7 @@ const AdminDashboardContent = () => {
     if (
       typeof candidateData === "object" &&
       candidateData !== null &&
-      candidateData.id &&
+      candidateData.id &&candidateData.image&&
       candidateData.name
     ) {
       setAddElection((prev) => {
@@ -99,7 +101,7 @@ const AdminDashboardContent = () => {
                     {
                       sn: election.candidates.length + 1,
                       id: candidateData.id,
-                      image: candidateData.photo,
+                      image: candidateData.image,
                       name: candidateData.name,
                     },
                   ],
@@ -189,6 +191,9 @@ const AdminDashboardContent = () => {
     });
   }, []);
 
+
+  const totalCandidates = addElection.map(item=> (item.candidates.length))
+
   return (
     <Fragment>
       {/* {loading && <Loader />} */}
@@ -254,7 +259,7 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>{`Registered Voters:`}</p>
-                        <p className={`${classes.amount}`}>{5}</p>
+                        <p className={`${classes.amount}`}>{0}</p>
                       </div>
                     </div>
 
@@ -274,7 +279,7 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Active Election:</p>
-                        <p className={classes.amount2}>{1}</p>
+                        <p className={classes.amount2}>{addElection.length}</p>
                       </div>
                     </div>
 
@@ -298,7 +303,7 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Total Candidates:</p>
-                        <p className={classes.amount2}>{5}</p>
+                        <p className={classes.amount2}>{totalCandidates.slice(0,-1)}</p>
                       </div>
                     </div>
 
@@ -324,7 +329,7 @@ const AdminDashboardContent = () => {
                       <div className={classes.description}>
                         <p>Total Votes Cast:</p>
 
-                        <p className={` ${classes.amount2}`}>{1}</p>
+                        <p className={` ${classes.amount2}`}>{0}</p>
                       </div>
                     </div>
 
@@ -389,7 +394,7 @@ const AdminDashboardContent = () => {
                 <h1>Election Management</h1>
                 <p>
                   Control active status, manage candidates, and view results for
-                  all election
+                  all elections.
                 </p>
               </div>
 

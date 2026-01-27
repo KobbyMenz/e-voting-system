@@ -18,6 +18,7 @@ import ToolTip from "../ToolTip/ToolTip";
 const AddCandidateModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
+    image:""
   });
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -51,7 +52,7 @@ const AddCandidateModal = (props) => {
         fileReader.onloadend = () => {
           setFormData((prev) => ({
             ...prev,
-            profilePicture: fileReader.result,
+            image: fileReader.result,
           }));
         };
 
@@ -73,7 +74,7 @@ const AddCandidateModal = (props) => {
       if (window.confirm("Are you sure you want to add a new candidate?")) {
         const candidateData = {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          image: file,
+          image: formData.image,
           name: formData.name,
         };
 
@@ -83,23 +84,24 @@ const AddCandidateModal = (props) => {
         // Clear form after successful submission
         setFormData({
           name: "",
+          image:""
         });
 
         props.onCloseModal();
       }
     },
-    [props, formData.name, file],
+    [props, formData.name, formData.image],
   );
 
   ///////////////////////////////
   //DELETE PROFILE PICTURE FILE
   /////////////////////////
   const deleteProfilePictureHandler = useCallback(async () => {
-    if (file || formData.profilePicture) {
+    if (file || formData.image) {
       setFormData((prev) => {
         return {
           ...prev,
-          profilePicture: null,
+          image: null,
         };
       });
 
@@ -109,13 +111,13 @@ const AddCandidateModal = (props) => {
       //setSelectedImage(defaultLogo);
       setFormData((prev) => ({
         ...prev,
-        profilePicture: "",
+        image: "",
       }));
     } else {
       Toast("info", "No image to be deleted");
       return;
     }
-  }, [file, formData.profilePicture]);
+  }, [file, formData.image]);
 
   return (
     <Fragment>
@@ -149,12 +151,12 @@ const AddCandidateModal = (props) => {
                   <ImageBox
                     width="13rem"
                     height="16rem"
-                    src={formData.profilePicture}
+                    src={formData.image}
                   />
                 </div>
 
                 <div className={classes.form_control}>
-                  <label htmlFor="photo">Choose Photo</label>
+                  <label htmlFor="photo">Choose Photo<span className={classes.required_field}>*</span></label>
 
                   <div className="image_chooser_container">
                     <input
@@ -165,6 +167,7 @@ const AddCandidateModal = (props) => {
                       type="file"
                       onChange={profilePictureChangeHandler}
                       accept="image/*"
+                      required
                     />
                   </div>
 
