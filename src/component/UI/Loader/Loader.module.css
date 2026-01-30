@@ -27,8 +27,8 @@
 }
 
 .loader_container svg {
-  width: 10rem;
-  height: 10rem;
+  width: 5rem;
+  height: 5rem;
   /* background: #fff; */
   border-radius: 50%;
   color: var(--primary);
