@@ -154,6 +154,7 @@ export default function AccordionExpandDefault({
                       status === "Active" ? "#ca0202" : "var(--primary)",
                   }}
                 >
+                  {/*Change button icon and text based on election status*/}
                   {status === "Active" ? <StopIcon /> : <PlayIcon />}
                   <Typography
                     sx={{
@@ -196,22 +197,6 @@ export default function AccordionExpandDefault({
           <Typography sx={{ fontSize: "1.1rem" }}></Typography>
         </AccordionDetails>
       </Accordion>
-
-      {/* <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2-content"
-          id="panel2-header"
-        >
-          <Typography component="span">Header</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
-        </AccordionDetails>
-      </Accordion> */}
     </div>
   );
 }

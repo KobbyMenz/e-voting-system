@@ -27,7 +27,6 @@ import CloseEyeIcon from "../../UI/Icons/CloseEyeIcon";
 
 //import { response } from "express";
 
-
 const SignIn = () => {
   // const apiUrl = import.meta.env.VITE_API_URL;
   // const appName = import.meta.env.VITE_APP_NAME;
@@ -63,7 +62,10 @@ const SignIn = () => {
 
     if (userName === "KobbyMenz" && pass === "11111111") {
       navigate("/admin/dashboard");
-    } else {
+
+    }else if (userName === "Ronyx" && pass === "22222222") {
+      navigate("/voter/dashboard");
+     } else {
       Toast("error", "Wrong credentials");
     }
 
@@ -101,13 +103,13 @@ const SignIn = () => {
 
         //==========checking for admin login============
         if (response.data.token && response.data.user.loginType === "Admin") {
-          navigate("/adminDashboard");
+          navigate("/admin/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }
 
         //========checking for voter login ============
         if (response.data.token && response.data.user.loginType !== "Admin") {
-          navigate("/votePage");
+          navigate("/voter/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }
       } catch (err) {

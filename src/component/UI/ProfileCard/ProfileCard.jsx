@@ -1,4 +1,4 @@
-import axios from "axios";
+//import axios from "axios";
 import { useEffect, useState } from "react";
 import classes from "./ProfileCard.module.css";
 //import defaultProfilePicture from "../../../assets/images/profilePicture.png";
@@ -23,7 +23,7 @@ import Logout from "@mui/icons-material/Logout";
 import ToolTip from "../ToolTip/ToolTip";
 import Card from "../Card/Card";
 import ImageBox from "../ImageBox/ImageBox";
-import app_api_url from "../../../app_api_url";
+//import app_api_url from "../../../app_api_url";
 import QuestionModal from "../Modals/QuestionModal";
 
 const settings = [
@@ -31,15 +31,15 @@ const settings = [
   { key: "logout", label: "Logout", Icon: Logout },
 ];
 
-const ProfileCard = (props) => {
+const ProfileCard = () => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const [userDetails, setUserDetails] = useState({
     fullName: "",
     lastLogin: "",
     loginType: "",
   });
-  const [selectedImage, setSelectedImage] = useState("");
-  const [loading, setLoading] = useState(true);
+  // const [selectedImage, setSelectedImage] = useState("");
+  // const [loading, setLoading] = useState(true);
 
   //   props.loading(loading);
   //========Getting user's info from local storage ============
@@ -59,33 +59,33 @@ const ProfileCard = (props) => {
   }, []);
 
   //////////////////////////////////////////////////////////////
-  useEffect(() => {
-    //Fetching profile picture from the backend
-    const userDataFromLocalStorage = JSON.parse(localStorage.getItem("user"));
-    const userId = userDataFromLocalStorage.userId;
+  // useEffect(() => {
+  //   //Fetching profile picture from the backend
+  //   const userDataFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+  //   const userId = userDataFromLocalStorage.userId ;
 
-    axios
-      .get(`${app_api_url}/getUserProfilePicture/${userId}`)
-      .then((response) => {
-        if (
-          response.data.profilePicture !== null ||
-          response.data.profilePicture !== ""
-        ) {
-          setSelectedImage(
-            response.data.profilePicture
-              ? `${response.data.profilePicture}`
-              : props.profileImage,
-          );
+  //   axios
+  //     .get(`${app_api_url}/getUserProfilePicture/${userId}`)
+  //     .then((response) => {
+  //       if (
+  //         response.data.profilePicture !== null ||
+  //         response.data.profilePicture !== ""
+  //       ) {
+  //         setSelectedImage(
+  //           response.data.profilePicture
+  //             ? `${response.data.profilePicture}`
+  //             : props.profileImage,
+  //         );
 
-          setLoading(false);
-          // console.log("response: ", selectedImage);
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data.error);
-        setLoading(false);
-      });
-  }, [selectedImage, props.profileImage]);
+  //         setLoading(false);
+  //         // console.log("response: ", selectedImage);
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response.data.error);
+  //       setLoading(false);
+  //     });
+  // }, [selectedImage, props.profileImage]);
   //////////////////////////////////////////////////////
 
   //Getting user name from props
@@ -145,9 +145,11 @@ const ProfileCard = (props) => {
         />
       )}
 
-      {!loading ? (
-        <ProfileCardSkeleton />
-      ) : (
+      {
+      // !loading ? (
+      //   <ProfileCardSkeleton />
+      // ) : 
+      (
         <div className={classes.user_details_container}>
           {/*======= user and last login details ===========*/}
           <div className={classes.user_details}>
@@ -174,7 +176,7 @@ const ProfileCard = (props) => {
                       width="3.5rem"
                       height="3.5rem"
                       borderRadius="50%"
-                      src={selectedImage}
+                      // src={selectedImage}
                     />
                   </IconButton>
                 </ToolTip>
