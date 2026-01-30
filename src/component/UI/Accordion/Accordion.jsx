@@ -5,10 +5,13 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PropTypes from "prop-types";
 import PaginationTable from "../PaginationTable/PaginationTable";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import Button from "../Button/Button";
 import StopIcon from "../Icons/StopIcon";
 import PlayIcon from "../Icons/PlayIcon";
+//import DeleteIcon from "../Icons/DeleteIcon";
+import { Delete } from "@mui/icons-material";
+import ToolTip from "../ToolTip/ToolTip";
 
 export default function AccordionExpandDefault({
   electionTitle,
@@ -21,6 +24,7 @@ export default function AccordionExpandDefault({
   onDelete,
   onAdd,
   onChangeStatus,
+  onDeleteElection,
 }) {
   return (
     <div>
@@ -65,38 +69,38 @@ export default function AccordionExpandDefault({
               },
             }}
           > */}
-            <Box
-              sx={{
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: "4rem",
+              "@media (max-width: 600px)": {
+                gap: "0.3rem",
+                flexDirection: "row",
+              },
+              "@media (max-width: 768px)": {
+                gap: "2rem",
+              },
+            }}
+          >
+            <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
+            <div
+              style={{
+                background: status === "Active" ? "#06882d" : "#ca0202",
+                padding: "0.2rem 1.5rem",
+                fontSize: "1.4rem",
+                borderRadius: "1.5rem",
+                height: "fit-content",
                 display: "flex",
                 alignItems: "center",
-                gap: "4rem",
-                "@media (max-width: 600px)": {
-                  gap: "0.3rem",
-                  flexDirection: "row",
-                },
-                "@media (max-width: 768px)": {
-                  gap: "2rem",
-                },
+                justifyContent: "center",
+                color: "#fff",
               }}
             >
-              <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
-              <div
-                style={{
-                  background: status === "Active" ? "#06882d" : "#ca0202",
-                  padding: "0.2rem 1.5rem",
-                  fontSize: "1.4rem",
-                  borderRadius: "1.5rem",
-                  height: "fit-content",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                }}
-              >
-                {status}
-              </div>{" "}
-              <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
-            </Box>
+              {status}
+            </div>{" "}
+            <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
+          </Box>
           {/* </Typography> */}
         </AccordionSummary>
         <AccordionDetails sx={{ marginBottom: "2rem" }}>
@@ -109,6 +113,7 @@ export default function AccordionExpandDefault({
                 border: "0.1rem solid var(--bg-color)",
                 borderRadius: "1rem",
                 alignItems: "center",
+                justifyContent: "space-between",
                 flexWrap: "wrap",
                 marginBottom: "2rem",
               }}
@@ -119,30 +124,64 @@ export default function AccordionExpandDefault({
                   columnGap: "2rem",
                   rowGap: "0.5rem",
                   alignItems: "center",
+
                   flexWrap: "wrap",
                 }}
               >
-                <h2>Status Control:</h2>
-                <p>
-                  Election is currently{" "}
-                  {status === "Active" ? "open for voting" : "closed"}
-                </p>
+                <Box
+                  sx={{
+                    display: "flex",
+                    columnGap: "2rem",
+                    rowGap: "0.5rem",
+                    alignItems: "center",
+
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <h2>Status Control:</h2>
+                  <p>
+                    Election is currently{" "}
+                    {status === "Active" ? "open for voting" : "closed"}
+                  </p>
+                </Box>
               </Box>
 
-              <Button
-                onClick={onChangeStatus}
-                style={{
-                  backgroundColor:
-                    status === "Active" ? "#ca0202" : "var(--primary)",
-                }}
-              >
-                {status === "Active" ? <StopIcon /> : <PlayIcon />}
-                <Typography
-                  sx={{ fontSize: "1.5rem", fontWeight: "bold", color: "#fff" }}
+              <Box display="flex" alignItems="center" gap="2rem">
+                <Button
+                  onClick={onChangeStatus}
+                  style={{
+                    backgroundColor:
+                      status === "Active" ? "#ca0202" : "var(--primary)",
+                  }}
                 >
-                  {status === "Active" ? "End Election" : "Start Election"}
-                </Typography>
-              </Button>
+                  {status === "Active" ? <StopIcon /> : <PlayIcon />}
+                  <Typography
+                    sx={{
+                      fontSize: "1.5rem",
+                      fontWeight: "bold",
+                      color: "#fff",
+                    }}
+                  >
+                    {status === "Active" ? "End Election" : "Start Election"}
+                  </Typography>
+                </Button>
+
+                <ToolTip title="Delete election">
+                  <IconButton
+                    sx={{
+                      width: "3.6rem",
+                      height: "3.6rem",
+                      border: "0.3rem solid #ffffff4d",
+                      backgroundColor: "#ca0202",
+                      color: "var(text-color)",
+                      "&:hover": { backgroundColor: "#f52b1cff" },
+                    }}
+                    onClick={() => onDeleteElection(id)}
+                  >
+                    <Delete sx={{ fontSize: "1.8rem" }} />
+                  </IconButton>
+                </ToolTip>
+              </Box>
             </Box>
 
             <PaginationTable
@@ -187,4 +226,5 @@ AccordionExpandDefault.propTypes = {
   onDelete: PropTypes.func,
   onAdd: PropTypes.func,
   onChangeStatus: PropTypes.func,
+  onDeleteElection: PropTypes.func,
 };

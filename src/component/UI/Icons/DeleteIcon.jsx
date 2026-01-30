@@ -1,7 +1,9 @@
-const DeleteIcon = () => {
+import PropTypes from "prop-types";
+const DeleteIcon = ({ style }) => {
   return (
     <>
       <svg
+        style={style}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         fill="currentColor"
@@ -16,5 +18,7 @@ const DeleteIcon = () => {
     </>
   );
 };
-
+DeleteIcon.propTypes = {
+  style: PropTypes.object,
+};
 export default DeleteIcon;

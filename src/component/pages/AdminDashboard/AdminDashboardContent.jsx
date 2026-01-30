@@ -87,7 +87,8 @@ const AdminDashboardContent = () => {
     if (
       typeof candidateData === "object" &&
       candidateData !== null &&
-      candidateData.id &&candidateData.image&&
+      candidateData.id &&
+      candidateData.image &&
       candidateData.name
     ) {
       setAddElection((prev) => {
@@ -191,8 +192,19 @@ const AdminDashboardContent = () => {
     });
   }, []);
 
+  //delete election handler
+  const onDeleteElectionHandler = (electionId) => {
+    if (window.confirm("Are you sure you want to delete this election?")) {
+      setAddElection((prev) => {
+        return Array.isArray(prev)
+          ? prev.filter((election) => election.id !== electionId)
+          : prev;
+      });
+      Toast("success", "Election deleted successfully.");
+    }
+  };
 
-  const totalCandidates = addElection.map(item=> (item.candidates.length))
+  const totalCandidates = addElection.map((item) => item.candidates.length);
 
   return (
     <Fragment>
@@ -303,7 +315,9 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Total Candidates:</p>
-                        <p className={classes.amount2}>{totalCandidates.slice(0,-1)}</p>
+                        <p className={classes.amount2}>
+                          {totalCandidates.slice(0, -1)}
+                        </p>
                       </div>
                     </div>
 
@@ -418,6 +432,7 @@ const AdminDashboardContent = () => {
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onChangeStatus={() => onClickElectionStatus(item.id)}
+                      onDeleteElection={onDeleteElectionHandler}
                     />
                   ))}
                   {/* <ul>
