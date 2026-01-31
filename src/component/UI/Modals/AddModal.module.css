@@ -17,6 +17,7 @@
 }
 
 .modal {
+  background: var(--bg-color2);
   position: fixed;
   top: 50%;
   left: 50%;
@@ -145,6 +146,7 @@ input,textarea
   margin: 0 auto 1rem auto;
   border-radius: 1rem;
   background: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* .select:user-invalid {

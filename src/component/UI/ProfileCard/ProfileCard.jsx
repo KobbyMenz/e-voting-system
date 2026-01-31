@@ -146,10 +146,9 @@ const ProfileCard = () => {
       )}
 
       {
-      // !loading ? (
-      //   <ProfileCardSkeleton />
-      // ) : 
-      (
+        // !loading ? (
+        //   <ProfileCardSkeleton />
+        // ) :
         <div className={classes.user_details_container}>
           {/*======= user and last login details ===========*/}
           <div className={classes.user_details}>
@@ -184,7 +183,58 @@ const ProfileCard = () => {
                 {/*======= Menu popup ========*/}
                 <Card className={classes.card}>
                   <Menu
-                    sx={{ mt: "4.5rem" }}
+                    sx={{
+                      mt: "4.5rem",
+
+                      "& .MuiMenu-paper": {
+                        backgroundColor: "var(--bg-color)",
+                        boxShadow: "0rem 0.5rem 1.5rem rgba(0, 0, 0, 0.51)",
+                      },
+                      // "& .MuiMenu-paper .MuiMenu-list": {
+                      //   p: 1,
+                      // },
+                      "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root": {
+                        color: "var(--text-color)",
+                      },
+                      "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root:hover":
+                        {
+                          backgroundColor: "var(--primary)",
+                          color: "#fff",
+                        },
+                      "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root:hover svg":
+                        {
+                          color: "#fff",
+                        },
+                      "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root svg": {
+                        color: "var(--text-color)",
+                      },
+                      // "& .MuiMenu-paper .MuiMenu-list:hover label": {
+                      //   color: "#fff",
+                      // },
+
+                      // "& .MuiMenu-paper svg": {
+                      //   color: "var(--text-color)",
+                      // },
+
+                      // // "& .MuiMenu-list": {
+                      // //   p: 0,
+                      // //   color: "var(--text-color)",
+                      // // },
+
+                      //  "& .MuiMenu-list .MuiTypography-root": {
+                      //   color: "var(--text-color)",
+                      // },
+
+                      // "& .MuiMenu-list svg":
+                      //   {
+                      //     color: "var(--text-color)",
+                      //   },
+
+                      // "& .MuiMenu-list:hover svg":
+                      //   {
+                      //     color: "#fff",
+                      //   },
+                    }}
                     id="menu-appbar"
                     anchorEl={anchorElUser}
                     anchorOrigin={{
@@ -228,15 +278,29 @@ const ProfileCard = () => {
                             // color: "#fff",
                             px: 2,
                             transition: "background-color 200ms, color 200ms",
-                            "&:hover": {
-                              backgroundColor: "var(--primary)",
-                              color: "#fff",
-                            },
 
-                            "&:hover label": {
-                              // backgroundColor: "var(--primary)",
+                            "& svg": {
+                              fontSize: "1.6rem",
                               color: "inherit",
                             },
+                            "& label": {
+                              // color: "var(--text-color)",
+                              color: "inherit",
+                            },
+
+                            // "& .MuiMenu-paper .MuiMenu-list:hover label": {
+                            //   color: "#fff",
+                            // },
+
+                            // "&:hover": {
+                            //   backgroundColor: "var(--primary)",
+                            //   color: "#fff",
+                            // },
+
+                            // "&:hover label": {
+                            //   // backgroundColor: "var(--primary)",
+                            //   color: "inherit",
+                            // },
                           }}
                         >
                           <Icon
@@ -269,7 +333,7 @@ const ProfileCard = () => {
             </Toolbar>
           </div>
         </div>
-      )}
+      }
     </>
   );
 };
