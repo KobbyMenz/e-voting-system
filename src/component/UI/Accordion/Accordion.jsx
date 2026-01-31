@@ -10,7 +10,7 @@ import Button from "../Button/Button";
 import StopIcon from "../Icons/StopIcon";
 import PlayIcon from "../Icons/PlayIcon";
 //import DeleteIcon from "../Icons/DeleteIcon";
-import { Delete } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import ToolTip from "../ToolTip/ToolTip";
 import formatDateTime from "../../Functions/formatDateTime";
 import Card from "../Card/Card";
@@ -265,21 +265,43 @@ export default function AccordionExpandDefault({
                   </Typography>
                 </Button>
 
-                <ToolTip title="Delete election">
-                  <IconButton
-                    sx={{
-                      width: "3.6rem",
-                      height: "3.6rem",
-                      border: "0.3rem solid #ffffff4d",
-                      backgroundColor: "#ca0202",
-                      color: "var(text-color)",
-                      "&:hover": { backgroundColor: "#f52b1cff" },
-                    }}
-                    onClick={() => onDeleteElection(id)}
-                  >
-                    <Delete sx={{ fontSize: "1.8rem" }} />
-                  </IconButton>
-                </ToolTip>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
+                >
+                  <ToolTip title="view/Edit election">
+                    <IconButton
+                      sx={{
+                        width: "3.6rem",
+                        height: "3.6rem",
+                        border: "0.3rem solid #ffffff4d",
+                        backgroundColor: " #006323",
+                        color: "var(--text-color)",
+                        "&:hover": { backgroundColor: "#06882d" },
+                      }}
+                      // onClick={() => onEditElection(id)
+
+                      // }
+                    >
+                      <Edit sx={{ fontSize: "1.8rem" }} />
+                    </IconButton>
+                  </ToolTip>
+
+                  <ToolTip title="Delete election">
+                    <IconButton
+                      sx={{
+                        width: "3.6rem",
+                        height: "3.6rem",
+                        border: "0.3rem solid #ffffff4d",
+                        backgroundColor: "#ca0202",
+                        color: "var(text-color)",
+                        "&:hover": { backgroundColor: "#f52b1cff" },
+                      }}
+                      onClick={() => onDeleteElection(id)}
+                    >
+                      <Delete sx={{ fontSize: "1.8rem" }} />
+                    </IconButton>
+                  </ToolTip>
+                </Box>
               </Box>
             </Box>
 
