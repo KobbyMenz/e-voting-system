@@ -132,6 +132,11 @@ const AddCandidateModal = (props) => {
             <CloseIcon />
           </div>
         </header>
+
+        <p className={classes.heading}>
+          Register a candidate for this election.
+        </p>
+
         <form onSubmit={onAddCustomerHandler}>
           <div className={classes.content}>
             <div className="profile_picture_container">
@@ -212,7 +217,8 @@ const AddCandidateModal = (props) => {
 
             <div className={classes.form_control}>
               <label className={classes.label} htmlFor="position">
-                Candidate Position<span className={classes.required_field}>*</span>
+                Candidate Position
+                <span className={classes.required_field}>*</span>
               </label>
 
               <input

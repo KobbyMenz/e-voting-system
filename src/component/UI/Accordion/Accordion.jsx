@@ -87,7 +87,7 @@ export default function AccordionExpandDefault({
               <div
                 style={{
                   background: status === "Active" ? "#06882d" : "#ca0202",
-                  padding: "0.3rem 1.5rem",
+                  padding: "0.3rem 1.2rem",
                   fontSize: "1.4rem",
                   borderRadius: "1.5rem",
                   height: "fit-content",

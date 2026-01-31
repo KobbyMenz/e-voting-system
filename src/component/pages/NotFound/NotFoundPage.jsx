@@ -3,14 +3,14 @@ const NotFoundPage = () => {
     <>
       <p
         style={{
-          position: "absolute",
-          top: "40%",
-          left: "50%",
-          transform: "translate(-50% -50%)",
+          // position: "absolute",
+          // top: "40%",
+          // left: "40%",
+          // transform: "translate(-50% -50%)",
           textAlign: "center",
-          // marginTop: "4rem",
+          margin: "40vh auto",
           fontSize: "3rem",
-          color: "#4b4b4b",
+          color: "var(--text-color)",
         }}
       >
         404 | Page Not Found

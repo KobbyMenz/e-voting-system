@@ -80,6 +80,14 @@ header .close_btn:hover svg {
   color: #fff;
 }
 
+.heading {
+  font-size: 1.6rem;
+  /* font-weight: 200; */
+  color: var(--text-color);
+  margin: 1rem 0;
+  text-align: center;
+}
+
 .form_control {
   position: relative;
 }
@@ -147,6 +155,10 @@ input,textarea
   border-radius: 1rem;
   background: var(--bg-color);
   color: var(--text-color);
+}
+
+.form_control input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
 }
 
 /* .select:user-invalid {

@@ -81,11 +81,17 @@ const AddElectionModal = (props) => {
             <CloseIcon />
           </div>
         </header>
+
+        <p className={classes.heading}>
+          Create a new election by filling in the details below.
+        </p>
+
         <form onSubmit={onAddCustomerHandler}>
           <div className={classes.content}>
             <div className={classes.form_control}>
               <label className={classes.label} htmlFor="title">
-                Election Title<span className={classes.required_field}>*</span>
+                Election Title
+                <span className={classes.required_field}>*</span>
               </label>
 
               <input
@@ -121,6 +127,7 @@ const AddElectionModal = (props) => {
               </label>
 
               <input
+                className={`${classes.date_input}}`}
                 name="startDate"
                 id="startDate"
                 value={formData.startDate}
@@ -137,6 +144,7 @@ const AddElectionModal = (props) => {
               </label>
 
               <input
+                className={classes.date_input}
                 name="endDate"
                 id="endDate"
                 value={formData.endDate}
