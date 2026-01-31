@@ -19,7 +19,7 @@ const VoterDashboardContent = () => {
       title: "SRC Presidential",
       description: "Namong SRC Presidential Election",
       status: "Active",
-      startDate: "2026-02-023 07:00:00",
+      startDate: "2026-01-30 07:00:00",
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
@@ -42,7 +42,7 @@ const VoterDashboardContent = () => {
       title: "Dinning Hall Prefect",
       description: "Namong Dinning Hall Election",
       status: "Closed",
-      startDate: "2026-02-023 07:00:00",
+      startDate: "2026-02-23 07:00:00",
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
@@ -65,7 +65,7 @@ const VoterDashboardContent = () => {
       title: "Sanitation Prefect",
       description: "Namong Sanitation Prefect Election",
       status: "Active",
-      startDate: "2026-02-023 07:00:00",
+      startDate: "2026-02-23 07:00:00",
       endDate: "2026-02-27 19:00:00",
       candidates: [
         // {

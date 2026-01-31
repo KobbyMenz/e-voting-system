@@ -18,7 +18,7 @@
   margin: 2rem 0;
   padding: 2rem;
   background: var(--bg-color3);
-  box-shadow: none;
+  /* box-shadow: none; */
 }
 
 .userInfo h2 {
