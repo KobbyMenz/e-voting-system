@@ -37,7 +37,7 @@ export default function AccordionExpandDefault({
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
           borderBottom: "0.2rem solid var(--bg-color)",
-          // marginBottom: "0.3rem",
+          marginBottom: "0.2rem",
           borderRadius: "1rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
           "@media (max-width: 600px)": {
