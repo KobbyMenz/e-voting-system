@@ -19,6 +19,8 @@ const VoterDashboardContent = () => {
       title: "SRC Presidential",
       description: "Namong SRC Presidential Election",
       status: "Active",
+      startDate: "2026-02-023 07:00:00",
+      endDate: "2026-02-27 19:00:00",
       candidates: [
         {
           candidateId: 1,
@@ -40,6 +42,8 @@ const VoterDashboardContent = () => {
       title: "Dinning Hall Prefect",
       description: "Namong Dinning Hall Election",
       status: "Closed",
+      startDate: "2026-02-023 07:00:00",
+      endDate: "2026-02-27 19:00:00",
       candidates: [
         {
           candidateId: 1,
@@ -53,6 +57,29 @@ const VoterDashboardContent = () => {
           image: "",
           position: "Dinning Hall Prefect",
         },
+      ],
+    },
+
+    {
+      id: 3,
+      title: "Sanitation Prefect",
+      description: "Namong Sanitation Prefect Election",
+      status: "Active",
+      startDate: "2026-02-023 07:00:00",
+      endDate: "2026-02-27 19:00:00",
+      candidates: [
+        // {
+        //   candidateId: 1,
+        //   name: "John Doe",
+        //   image: "",
+        //   position: "Dinning Hall Prefect",
+        // },
+        // {
+        //   candidateId: 2,
+        //   name: "Jane Smith",
+        //   image: "",
+        //   position: "Dinning Hall Prefect",
+        // },
       ],
     },
   ]);

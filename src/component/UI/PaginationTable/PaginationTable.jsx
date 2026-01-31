@@ -36,7 +36,7 @@ const PaginationTable = ({
   placeholder,
 }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
 
   // Filter rows based on search
@@ -51,7 +51,7 @@ const PaginationTable = ({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
+    setRowsPerPage(parseInt(event.target.value, 5));
     setPage(0);
   };
 
@@ -169,12 +169,13 @@ const PaginationTable = ({
       {/* Table */}
       <TableContainer>
         <Table
-          stickyHeader
+          // stickyHeader
           sx={{
             borderTop: "0.1rem solid var(--bg-color)",
             borderRight: "0.1rem solid var(--bg-color)",
             borderBottom: "0.1rem solid var(--bg-color)",
-            borderRadius: "1rem",
+            // borderTopLeftRadius: "1rem",
+            // borderTopRightRadius: "1rem",
           }}
         >
           <TableHead>
@@ -195,7 +196,10 @@ const PaginationTable = ({
                     backgroundColor: "var(--primary)",
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
-                    display: col.field === "id" ? "none" : "table-cell",
+                    display:
+                      col.field === "id" || col.field === "position"
+                        ? "none"
+                        : "table-cell",
                     // Mobile responsive
                     "@media (max-width: 600px)": {
                       fontSize: "0.9rem",
@@ -257,7 +261,10 @@ const PaginationTable = ({
                           color: "var(--text-color)",
                           borderBottom: "1px solid var(--bg-color)",
                           borderLeft: "0.1rem solid var(--bg-color)",
-                          display: col.field === "id" ? "none" : "table-cell",
+                          display:
+                            col.field === "id" || col.field === "position"
+                              ? "none"
+                              : "table-cell",
                           // Mobile responsive
                           "@media (max-width: 600px)": {
                             fontSize: "0.9rem",
@@ -283,6 +290,7 @@ const PaginationTable = ({
                         )}
                       </TableCell>
                     ))}
+
                     <TableCell
                       sx={{
                         borderBottom: "1px solid var(--bg-color)",

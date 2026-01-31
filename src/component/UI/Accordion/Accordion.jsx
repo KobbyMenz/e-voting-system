@@ -12,11 +12,14 @@ import PlayIcon from "../Icons/PlayIcon";
 //import DeleteIcon from "../Icons/DeleteIcon";
 import { Delete } from "@mui/icons-material";
 import ToolTip from "../ToolTip/ToolTip";
+import formatDateTime from "../../Functions/formatDateTime";
 
 export default function AccordionExpandDefault({
   electionTitle,
   status,
   dateCreated,
+  startDate,
+  endDate,
   id,
   columns,
   rows,
@@ -56,24 +59,16 @@ export default function AccordionExpandDefault({
           aria-controls={`panel${id}-content`}
           id={`panel${id}-header`}
         >
-          {/* <Typography
-            component="span"
-            sx={{
-              fontSize: "1.6rem",
-              fontWeight: "bold",
-              "@media (max-width: 600px)": {
-                fontSize: "1.2rem",
-              },
-              "@media (max-width: 768px)": {
-                fontSize: "1.5rem",
-              },
-            }}
-          > */}
+        
           <Box
             sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: "4rem",
+               display: "flex",
+              flexGrow: 1,
+              gap: "2rem",
+              
+               alignItems: "center",
+               justifyContent: "space-between",
+               flexWrap: "wrap",
               "@media (max-width: 600px)": {
                 gap: "0.3rem",
                 flexDirection: "row",
@@ -83,26 +78,114 @@ export default function AccordionExpandDefault({
               },
             }}
           >
-            <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
-            <div
-              style={{
-                background: status === "Active" ? "#06882d" : "#ca0202",
-                padding: "0.2rem 1.5rem",
-                fontSize: "1.4rem",
-                borderRadius: "1.5rem",
-                height: "fit-content",
+            <Box 
+            sx={{ display: "flex", alignItems: "center", gap: "1rem" }}
+            >
+              <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
+              <div
+                style={{
+                  background: status === "Active" ? "#06882d" : "#ca0202",
+                  padding: "0.3rem 1.5rem",
+                  fontSize: "1.4rem",
+                  borderRadius: "1.5rem",
+                  height: "fit-content",
+                  width: "fit-content",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                }}
+              >
+                {status}
+              </div>{" "}
+            </Box>
+
+            <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
+
+            <Box
+              sx={{
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
+                gap: "1.5rem",
+                flexDirection: "row",
+                
+                "@media (max-width: 600px)": {
+                  flexDirection: "column",
+                  gap: "0.8rem",
+                  flexWrap: "wrap",
+                },
               }}
             >
-              {status}
-            </div>{" "}
-            <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
+              <Box
+                sx={{
+                  background:
+                    "linear-gradient(135deg, #764ba2 0%,  #667eea  100%)",
+                  padding: "0.8rem 1.5rem",
+                  borderRadius: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.3rem",
+                  color: "#fff",
+                  minWidth: "200px",
+                  // boxShadow: "0 4px 15px rgba(102, 126, 234, 0.3)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  "@media (max-width: 600px)": {
+                    padding: "0.6rem 1.2rem",
+                    minWidth: "auto",
+                  },
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "1.3rem",
+                    opacity: 0.9,
+                    fontWeight: "400",
+                  }}
+                >
+                  Start Date
+                </span>
+                <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                  {formatDateTime(startDate)}
+                </span>
+              </Box>
+
+              <Box
+                sx={{
+                  background:
+                    "linear-gradient(135deg, #f5576c 0%,  #ea2bff 100%)",
+                  padding: "0.8rem 1.5rem",
+                  borderRadius: "1rem",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "0.3rem",
+                  color: "#fff",
+                  marginRight: "0.5rem",
+                  minWidth: "200px",
+                  // boxShadow: "0 4px 15px rgba(245, 87, 108, 0.3)",
+                  border: "1px solid rgba(255, 255, 255, 0.2)",
+                  "@media (max-width: 600px)": {
+                    padding: "0.6rem 1.2rem",
+                    minWidth: "auto",
+                  },
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: "1.3rem",
+                    opacity: 0.9,
+                    fontWeight: "400",
+                  }}
+                >
+                  End Date
+                </span>
+                <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                  {formatDateTime(endDate)}
+                </span>
+              </Box>
+            </Box>
           </Box>
           {/* </Typography> */}
         </AccordionSummary>
+
         <AccordionDetails sx={{ marginBottom: "2rem" }}>
           <Box>
             <Box
@@ -203,6 +286,8 @@ export default function AccordionExpandDefault({
 AccordionExpandDefault.propTypes = {
   electionTitle: PropTypes.string,
   dateCreated: PropTypes.string,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
   status: PropTypes.string,
   id: PropTypes.string,
   columns: PropTypes.array,

@@ -9,12 +9,15 @@ import Button from "../Button/Button";
 import CloseIcon from "../Icons/CloseIcon";
 import AddIcon from "../Icons/AddIcon";
 import CancelIcon from "../Icons/CancelIcon";
+import DateInput from "../DateInput/DateInput";
 //import app_api_url from "../../../app_api_url";
 
 const AddElectionModal = (props) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    startDate: "",
+    endDate: "",
   });
 
   const onFormDataChangeHandler = useCallback((e) => {
@@ -47,6 +50,8 @@ const AddElectionModal = (props) => {
           // dateCreated: new Date().toLocaleDateString(),
           // status: "Active",
           description: formData.description,
+          startDate: formData.startDate,
+          endDate: formData.endDate,
         };
 
         props.onAddElection(electionData);
@@ -61,7 +66,7 @@ const AddElectionModal = (props) => {
         props.onCloseModal();
       }
     },
-    [props, formData.title, formData.description],
+    [props, formData],
   );
 
   return (
@@ -105,6 +110,38 @@ const AddElectionModal = (props) => {
                 value={formData.description}
                 type="text"
                 placeholder="Brief details about this election..."
+                onChange={onFormDataChangeHandler}
+                required
+              />
+            </div>
+
+            <div className={classes.form_control}>
+              <label className={classes.label} htmlFor="startDate">
+                Start Date<span className={classes.required_field}>*</span>
+              </label>
+
+              <input
+                name="startDate"
+                id="startDate"
+                value={formData.startDate}
+                type="date"
+                placeholder="Enter election start date..."
+                onChange={onFormDataChangeHandler}
+                required
+              />
+            </div>
+
+            <div className={classes.form_control}>
+              <label className={classes.label} htmlFor="endDate">
+                End Date<span className={classes.required_field}>*</span>
+              </label>
+
+              <input
+                name="endDate"
+                id="endDate"
+                value={formData.endDate}
+                type="date"
+                placeholder="Enter election end date..."
                 onChange={onFormDataChangeHandler}
                 required
               />

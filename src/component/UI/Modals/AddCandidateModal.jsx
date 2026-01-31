@@ -18,7 +18,8 @@ import ToolTip from "../ToolTip/ToolTip";
 const AddCandidateModal = (props) => {
   const [formData, setFormData] = useState({
     name: "",
-    image:""
+    image: "",
+    position: "",
   });
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -84,7 +85,7 @@ const AddCandidateModal = (props) => {
         // Clear form after successful submission
         setFormData({
           name: "",
-          image:""
+          image: "",
         });
 
         props.onCloseModal();
@@ -148,15 +149,14 @@ const AddCandidateModal = (props) => {
                         />
                       } */}
 
-                  <ImageBox
-                    width="13rem"
-                    height="16rem"
-                    src={formData.image}
-                  />
+                  <ImageBox width="13rem" height="16rem" src={formData.image} />
                 </div>
 
                 <div className={classes.form_control}>
-                  <label htmlFor="photo">Choose Photo<span className={classes.required_field}>*</span></label>
+                  <label htmlFor="photo">
+                    Choose Photo
+                    <span className={classes.required_field}>*</span>
+                  </label>
 
                   <div className="image_chooser_container">
                     <input
@@ -205,6 +205,22 @@ const AddCandidateModal = (props) => {
                 value={formData.name}
                 type="text"
                 placeholder="Enter candidate name..."
+                onChange={onFormDataChangeHandler}
+                required
+              />
+            </div>
+
+            <div className={classes.form_control}>
+              <label className={classes.label} htmlFor="position">
+                Candidate Position<span className={classes.required_field}>*</span>
+              </label>
+
+              <input
+                name="position"
+                id="position"
+                value={formData.position}
+                type="text"
+                placeholder="Enter candidate position..."
                 onChange={onFormDataChangeHandler}
                 required
               />

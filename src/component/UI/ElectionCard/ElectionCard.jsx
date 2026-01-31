@@ -6,6 +6,7 @@ import classes from "../ElectionCard/ElectionCard.module.css";
 import Toast from "../../UI/Notification/Toast";
 import ImageBox from "../../UI/ImageBox/ImageBox";
 import PropTypes from "prop-types";
+import formatDateTime from "../../Functions/formatDateTime";
 
 const ElectionCard = ({
   election,
@@ -16,18 +17,41 @@ const ElectionCard = ({
   return (
     <>
       <Card key={election._id || election.id} className={classes.content}>
-        <Box display="flex" alignItems="center" justifyContent="space-between">
-          <h1>{election.title || "Election"}</h1>
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="space-between"
+          flexWrap="wrap"
+          gap="1rem"
+        >
+          <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <h1>{election.title || "Election"}</h1>
 
-          <div
-            className={
-              election.status === "Active"
-                ? `${classes.status} ${classes.active}`
-                : `${classes.status} ${classes.closed}`
-            }
-          >
-            {election.status}
-          </div>
+            <span
+              className={
+                election.status === "Active"
+                  ? `${classes.status} ${classes.active}`
+                  : `${classes.status} ${classes.closed}`
+              }
+            >
+              {election.status}
+            </span>
+          </Box>
+
+          <Box>
+            <div
+              style={{ fontSize: "1.2rem", fontWeight: "500", opacity: 0.8 }}
+            >
+              Election Period:{" "}
+              <strong>
+                <em>{formatDateTime(election.startDate)}</em>
+              </strong>{" "}
+              to{" "}
+              <strong>
+                <em>{formatDateTime(election.endDate)}</em>
+              </strong>
+            </div>
+          </Box>
         </Box>
 
         <p className={classes.electionDescription}>
@@ -57,7 +81,7 @@ const ElectionCard = ({
                         Toast("error", "Election is closed");
                         return;
                       }
-                      //console.log("Clicked candidate:", candidateId);
+
                       handleSelectCandidate(
                         election._id || election.id,
                         candidateId,

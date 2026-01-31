@@ -38,37 +38,45 @@ const columns = [
   { field: "id", headerName: "ID" },
   { field: "image", headerName: "Photo", type: "image" },
   { field: "name", headerName: "Candidate Name" },
+  { field: "position", headerName: "Position", type: "position" },
 ];
 
 // Function to create a new election instance with candidates
 const createElectionInstance = (
   title,
   description,
+  startDate,
+  endDate,
   candidates = DEFAULT_CANDIDATES,
 ) => ({
   id: generateUniqueId(),
-  title,
+  title: title,
   dateCreated: formatDateTime(moment().format("YYYY-MM-DD HH:mm:ss")),
   status: "Active",
-  description,
+  description: description,
+  startDate: startDate,
+  endDate: endDate,
   candidates: candidates.map((candidate, index) => ({
     sn: index + 1,
     id: candidate.id,
     image: candidate.photo ? candidate.photo : "",
     name: candidate.name,
+    position: candidate.position ? candidate.position : "N/A",
   })),
 });
 
 const election = [
   createElectionInstance(
     "SRC Presidential",
-    // "2026-01-15 09:23:32",
     "Namong SRC Presidential Election",
+    "2026-02-23 07:00:00",
+    "2026-02-27 19:00:00",
   ),
   createElectionInstance(
     "Sanitation Prefect",
-    // "2026-01-15 09:23:32",
-    "Namong SRC Presidential Election",
+    "Namong SRC Sanitation Prefect Election",
+    "2026-02-23 07:00:00",
+    "2026-02-27 19:00:00",
   ),
 ];
 
@@ -124,14 +132,16 @@ const AdminDashboardContent = () => {
       typeof electionData === "object" &&
       electionData !== null &&
       electionData.title &&
-      electionData.description
+      electionData.description &&
+      electionData.startDate &&
+      electionData.endDate
     ) {
       // Create a new election instance with its own candidates
       const newElection = createElectionInstance(
         electionData.title,
-        electionData.dateCreated,
-        electionData.status,
         electionData.description,
+        electionData.startDate,
+        electionData.endDate,
         electionData.candidates || DEFAULT_CANDIDATES,
       );
       setAddElection((prev) => {
@@ -427,6 +437,8 @@ const AdminDashboardContent = () => {
                       id={item.id}
                       electionTitle={item.title}
                       dateCreated={item.dateCreated}
+                      startDate={item.startDate}
+                      endDate={item.endDate}
                       status={item.status}
                       columns={columns}
                       rows={item.candidates}

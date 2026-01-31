@@ -64,9 +64,10 @@
 
 .status {
   color: #ffffff;
-  padding: 0.5rem 1rem;
+  padding: 0.3rem 1.2rem;
   border-radius: 2rem;
   font-size: 1.2rem;
+  width: fit-content;
   /* font-weight: bold; */
 }
 .status.active {
@@ -197,6 +198,15 @@
   background-color: #ccc;
   cursor: not-allowed;
   opacity: 0.6;
+}
+
+.castVoteBtn:disabled :hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.castVoteBtn:disabled:active {
+  transform: none;
 }
 
 @media (max-width: 750px) {
