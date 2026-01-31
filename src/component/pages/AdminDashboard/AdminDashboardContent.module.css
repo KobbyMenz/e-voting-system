@@ -8,11 +8,19 @@
 .card__wrapper {
   padding: 1rem 2.5rem;
   position: relative;
+  background: var(--bg-color2);
+}
+
+
+
+.card__box__container{
+  background: transparent;
 }
 
 .system_overview_card {
   padding: 0;
   margin: -0.4rem 0 -1rem 0;
+  background: transparent;
 }
 
 .message_container {
@@ -22,6 +30,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1.5rem;
+  
 }
 
 .welcome_message_header {
@@ -31,9 +40,8 @@
   text-align: left;
 }
 
-
-
-.welcome_message, p {
+.welcome_message,
+p {
   font-size: 1.5rem;
   color: var(--text-color);
   margin-top: 0.3rem;

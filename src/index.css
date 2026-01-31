@@ -13,7 +13,7 @@
   --primary: #0c007c;
   --primary-deep:#0a0063;
   --secondary: #007aba;
-  --nav-bg: hsla(246, 100%, 24%, 0.884);
+  --nav-bg: hsla(246, 100%, 24%, 0.938);
   --hover-color: #c4c4c48f; /*#c4c4c48f*/
   --table-header: #4452a1ff; /*#4452a1ff*/
   --table-strip: #f5f5f5c9;
@@ -42,7 +42,7 @@
   --primary: #007aba; /*,,  #007aba*/
   --primary-deep:#0068a0;
   --secondary: #0c007c;
-  --nav-bg: rgba(0, 121, 186, 0.884);
+  --nav-bg: rgba(0, 121, 186, 0.952);
   --hover-color: #12191f; /*#12191f*/
   --table-header: #5495b8ff; /*#5495b8ff*/
   --table-strip: #1a1e22;

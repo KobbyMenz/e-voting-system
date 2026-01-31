@@ -5,6 +5,12 @@
     align-items: center;
     
   }
+
+  .loader_container p{
+    color: #fff;
+    font-size: 1.4rem;
+    margin-top: 0.8rem;
+  }
   
   .loader_container svg {
     width: 3rem;
