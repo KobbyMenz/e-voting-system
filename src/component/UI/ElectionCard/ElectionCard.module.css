@@ -35,17 +35,17 @@
 .content {
   margin: 3rem 0;
   padding: 2rem;
-  background: #f9f9f9;
+  background: var(--bg-color3);
   border-left: 0.4rem solid var(--primary);
 }
 
 .content h3 {
-  color: #333;
+  color: var(--text-color);
   margin-top: 0;
 }
 
 .content h4 {
-  color: #333;
+  color:  var(--text-color);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
@@ -58,7 +58,7 @@
 }
 
 .content h3 {
-  color: #333;
+  color: var(--text-color);
   margin-top: 0;
 }
 
@@ -79,7 +79,7 @@
 
 .candidatesContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(40rem, 1fr));
   gap: 2rem;
   margin: 2rem 0;
 }
@@ -87,8 +87,8 @@
 .candidateCard {
   position: relative;
   padding: 1.5rem;
-  background: white;
-  border: 0.2rem solid #e0e0e0;
+  background:  var(--bg-color3);
+  border: 0.2rem solid var(--border-color);
   border-radius: 0.8rem;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -105,7 +105,7 @@
 
 .candidateCard.selected {
   border-color: #28a745;
-  background-color: #f0f9f0;
+  background-color: var(--bg-color3);
   box-shadow: 0 0.4rem 1.2rem rgba(40, 167, 69, 0.3);
 }
 

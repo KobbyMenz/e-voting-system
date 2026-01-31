@@ -5,10 +5,11 @@ import NotFoundPage from "./component/pages/NotFound/NotFoundPage";
 import AdminDashboard from "./component/pages/AdminDashboard/AdminDashboard";
 import VoterDashboard from "./component/pages/VoterDashboard/VoterDashboard";
 import { ToastContainer } from "react-toastify";
+import { ThemeProvider } from "./context/ThemeContext";
 
 function App() {
   return (
-    <>
+    <ThemeProvider>
       <main className="App">
         <ToastContainer />
         <Routes>
@@ -19,7 +20,7 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
-    </>
+    </ThemeProvider>
   );
 }
 

@@ -48,7 +48,7 @@
   --table-strip: #1a1e22;
   --header-color: hsla(214, 22%, 14%, 0.89);
   --border-color: rgb(60, 79, 99); /*rgb(60, 79, 99)*/
-  --border-color: rgb(60, 79, 99);
+  /* --border-color: rgb(60, 79, 99); */
 }
 
 * {

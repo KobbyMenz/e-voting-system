@@ -33,7 +33,9 @@ export default function AccordionExpandDefault({
     <div>
       <Accordion
         sx={{
-          borderBottom: "0.2rem solid #ccc",
+          backgroundColor: "var(--bg-color3)",
+          transition: "all 0.3s ease-in-out",
+          borderBottom: "0.2rem solid var(--bg-color)",
           borderRadius: "2rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
           "@media (max-width: 600px)": {
@@ -59,16 +61,15 @@ export default function AccordionExpandDefault({
           aria-controls={`panel${id}-content`}
           id={`panel${id}-header`}
         >
-        
           <Box
             sx={{
-               display: "flex",
+              display: "flex",
               flexGrow: 1,
               gap: "2rem",
-              
-               alignItems: "center",
-               justifyContent: "space-between",
-               flexWrap: "wrap",
+
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
               "@media (max-width: 600px)": {
                 gap: "0.3rem",
                 flexDirection: "row",
@@ -78,10 +79,10 @@ export default function AccordionExpandDefault({
               },
             }}
           >
-            <Box 
-            sx={{ display: "flex", alignItems: "center", gap: "1rem" }}
-            >
-              <h3 style={{ fontWeight: "600" }}>{electionTitle}</h3>{" "}
+            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+              <h3 style={{ fontWeight: "600", color: "var(--text-color)" }}>
+                {electionTitle}
+              </h3>{" "}
               <div
                 style={{
                   background: status === "Active" ? "#06882d" : "#ca0202",
@@ -100,14 +101,16 @@ export default function AccordionExpandDefault({
               </div>{" "}
             </Box>
 
-            <div style={{ fontSize: "1.5rem" }}>Created: {dateCreated}</div>
+            <div style={{ fontSize: "1.5rem", color: "var(--text-color)" }}>
+              Created: {dateCreated}
+            </div>
 
             <Box
               sx={{
                 display: "flex",
                 gap: "1.5rem",
                 flexDirection: "row",
-                
+
                 "@media (max-width: 600px)": {
                   flexDirection: "column",
                   gap: "0.8rem",
@@ -139,6 +142,7 @@ export default function AccordionExpandDefault({
                     fontSize: "1.3rem",
                     opacity: 0.9,
                     fontWeight: "400",
+                    // color: "var(--text-color)",
                   }}
                 >
                   Start Date
@@ -173,11 +177,18 @@ export default function AccordionExpandDefault({
                     fontSize: "1.3rem",
                     opacity: 0.9,
                     fontWeight: "400",
+                    // color: "var(--text-color)",
                   }}
                 >
                   End Date
                 </span>
-                <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                <span
+                  style={{
+                    fontSize: "1.5rem",
+                    fontWeight: "600",
+                    // color: "var(--text-color)",
+                  }}
+                >
                   {formatDateTime(endDate)}
                 </span>
               </Box>
@@ -186,7 +197,9 @@ export default function AccordionExpandDefault({
           {/* </Typography> */}
         </AccordionSummary>
 
-        <AccordionDetails sx={{ marginBottom: "2rem" }}>
+        <AccordionDetails
+          sx={{ marginBottom: "2rem", transition: "all 0.3s ease-in-out" }}
+        >
           <Box>
             <Box
               sx={{
@@ -219,6 +232,7 @@ export default function AccordionExpandDefault({
                     alignItems: "center",
 
                     flexWrap: "wrap",
+                    color: "var(--text-color)",
                   }}
                 >
                   <h2>Status Control:</h2>

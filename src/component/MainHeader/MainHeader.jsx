@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import ProfileCard from "../UI/ProfileCard/ProfileCard";
 import Navigation from "../Navigation/Navigation";
 import { Box } from "@mui/material";
+import ThemeToggle from "../UI/ThemeToggle/ThemeToggle";
 //import { useNavigate } from "react-router-dom";
 // import Menu from "./M";
 // import Button from "../UI/Button";
@@ -17,6 +18,8 @@ const MainHeader = (props) => {
 
           <Box display="flex" alignItems="center" gap="2rem">
             {props.children}
+
+            <ThemeToggle />
 
             <div className="profile_card">
               <ProfileCard profileImage={props.profileImage} />

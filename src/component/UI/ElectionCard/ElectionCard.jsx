@@ -96,7 +96,7 @@ const ElectionCard = ({
                     </div>
 
                     <div className={classes.candidateInfo}>
-                      <ImageBox src={candidate.image} alt={candidate.name} />
+                      <ImageBox src={candidate.image} width="13rem" height="14rem" alt={candidate.name} />
 
                       <Box>
                         <h2>{candidate.name}</h2>
