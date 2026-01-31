@@ -1,8 +1,13 @@
+.card{
+  background: var(--bg-color);
+}
+
 .user_details_container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.5rem;
+  
 }
 
 .user_details_container .img {

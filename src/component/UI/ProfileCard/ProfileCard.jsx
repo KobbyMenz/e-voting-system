@@ -182,7 +182,7 @@ const ProfileCard = () => {
                 </ToolTip>
 
                 {/*======= Menu popup ========*/}
-                <Card>
+                <Card className={classes.card}>
                   <Menu
                     sx={{ mt: "4.5rem" }}
                     id="menu-appbar"
