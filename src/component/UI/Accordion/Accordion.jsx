@@ -13,6 +13,7 @@ import PlayIcon from "../Icons/PlayIcon";
 import { Delete } from "@mui/icons-material";
 import ToolTip from "../ToolTip/ToolTip";
 import formatDateTime from "../../Functions/formatDateTime";
+import Card from "../Card/Card";
 
 export default function AccordionExpandDefault({
   electionTitle,
@@ -30,21 +31,21 @@ export default function AccordionExpandDefault({
   onDeleteElection,
 }) {
   return (
-    <div>
+    <Card>
       <Accordion
         sx={{
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
           borderBottom: "0.2rem solid var(--bg-color)",
-          borderRadius: "2rem",
+          // marginBottom: "0.3rem",
+          borderRadius: "1rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
           "@media (max-width: 600px)": {
-            borderRadius: "1rem",
             boxShadow: "0rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15)",
           },
-          "@media (max-width: 768px)": {
-            borderRadius: "1.5rem",
-          },
+          // "@media (max-width: 768px)": {
+
+          // },
         }}
       >
         <AccordionSummary
@@ -60,13 +61,13 @@ export default function AccordionExpandDefault({
           }
           aria-controls={`panel${id}-content`}
           id={`panel${id}-header`}
+          sx={{ transition: "all 0.3s ease-in-out" }}
         >
           <Box
             sx={{
               display: "flex",
               flexGrow: 1,
               gap: "2rem",
-
               alignItems: "center",
               justifyContent: "space-between",
               flexWrap: "wrap",
@@ -294,7 +295,7 @@ export default function AccordionExpandDefault({
           <Typography sx={{ fontSize: "1.1rem" }}></Typography>
         </AccordionDetails>
       </Accordion>
-    </div>
+    </Card>
   );
 }
 AccordionExpandDefault.propTypes = {
