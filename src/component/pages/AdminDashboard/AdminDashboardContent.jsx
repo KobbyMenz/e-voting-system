@@ -13,8 +13,9 @@ import AccordionExpandDefault from "../../UI/Accordion/Accordion";
 import DigitalClock from "../../UI/Clock/DigitalClock";
 import Footer from "../../Footer/Footer";
 import Toast from "../../UI/Notification/Toast";
-import formatDateTime from "../../Functions/formatDateTime";
-import moment from "moment";
+//import formatDateTime from "../../Functions/formatDateTime";
+import EditElectionModal from "../../UI/Modals/EditElectionModal";
+import dayjs from "dayjs";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [
@@ -51,7 +52,7 @@ const createElectionInstance = (
 ) => ({
   id: generateUniqueId(),
   title: title,
-  dateCreated: formatDateTime(moment().format("YYYY-MM-DD HH:mm:ss")),
+  dateCreated: dayjs().format("YYYY-MM-DDTHH:mm"),
   status: "Active",
   description: description,
   startDate: startDate,
@@ -69,23 +70,57 @@ const election = [
   createElectionInstance(
     "SRC Presidential",
     "Namong SRC Presidential Election",
-    "2026-02-23 07:00:00",
-    "2026-02-27 19:00:00",
+    "2026-02-23T07:00",
+    "2026-02-27T19:00",
   ),
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Sanitation Prefect Election",
-    "2026-02-23 07:00:00",
-    "2026-02-27 19:00:00",
+    "2026-02-23T07:00",
+    "2026-02-27T19:00",
   ),
 ];
 
 const AdminDashboardContent = () => {
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
+  const [showEditElectionModal, setShowEditElectionModal] = useState(false);
   const [addElection, setAddElection] = useState(election);
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  const closeShowModalHandler = useCallback(() => {
+    setShowModal((prev) => !prev);
+  }, []);
+
+  const onShowAddElectionModalHandler = useCallback(() => {
+    setShowAddElectionModal(true);
+  }, []);
+
+  //console.log("addElection: ", addElection);
+  // const onShowEditElectionModalHandler = useCallback(() => {
+  //   setShowEditElectionModal(true);
+  // }, []);
+
+  const closeShowAddElectionModalHandler = useCallback(() => {
+    setShowAddElectionModal(false);
+  }, []);
+
+  const closeShowEditElectionModalHandler = useCallback(() => {
+    setShowEditElectionModal(false);
+  }, []);
+
+  const ToastHandler = useCallback((type, message) => {
+    Toast(type, message);
+  }, []);
+
+  const onShowAddCandidateModalHandler = useCallback((electionId) => {
+    setShowAddCandidateModal(electionId);
+  }, []);
+
+  const closeShowAddCandidateModalHandler = useCallback(() => {
+    setShowAddCandidateModal(false);
+  }, []);
 
   /////////////////////////////////////////////////////////
   //* Handler to add a candidate to a specific election*/
@@ -151,29 +186,23 @@ const AdminDashboardContent = () => {
     }
   };
 
-  const closeShowModalHandler = useCallback(() => {
-    setShowModal((prev) => !prev);
-  }, []);
+  //////////////////////////////////////////////
+  //Edit Election
+  /////////////////////////////////////////////
+  const onShowEditElectionHandler = useCallback(
+    (electionId) => {
+      //console.log("electionId: ", electionId);
+      setShowEditElectionModal(true);
 
-  const onShowAddElectionModalHandler = useCallback(() => {
-    setShowAddElectionModal(true);
-  }, []);
+      addElection.filter((item) => {
+        const electionData = item.electionId === electionId;
 
-  const closeShowAddElectionModalHandler = useCallback(() => {
-    setShowAddElectionModal(false);
-  }, []);
-
-  const ToastHandler = useCallback((type, message) => {
-    Toast(type, message);
-  }, []);
-
-  const onShowAddCandidateModalHandler = useCallback((electionId) => {
-    setShowAddCandidateModal(electionId);
-  }, []);
-
-  const closeShowAddCandidateModalHandler = useCallback(() => {
-    setShowAddCandidateModal(false);
-  }, []);
+        //console.log("electionData: ", electionData);
+        return electionData;
+      });
+    },
+    [addElection],
+  );
 
   /////////////////////////////////////////////////////////
   //* Handler to change election status */
@@ -202,8 +231,10 @@ const AdminDashboardContent = () => {
     });
   }, []);
 
+  /////////////////////////////////////////
   //delete election handler
-  const onDeleteElectionHandler = (electionId) => {
+  ////////////////////////////////////////
+  const onDeleteElectionHandler = useCallback((electionId) => {
     if (window.confirm("Are you sure you want to delete this election?")) {
       setAddElection((prev) => {
         return Array.isArray(prev)
@@ -212,7 +243,7 @@ const AdminDashboardContent = () => {
       });
       Toast("success", "Election deleted successfully.");
     }
-  };
+  }, []);
 
   const totalCandidates = addElection.map((item) => item.candidates.length);
 
@@ -227,6 +258,15 @@ const AdminDashboardContent = () => {
           toastModal={ToastHandler}
           //setRefetch={refetchHandler}
           onCloseModal={closeShowAddElectionModalHandler}
+        />
+      )}
+
+      {showEditElectionModal && (
+        <EditElectionModal
+          // onEditElection={onEditElectionHandler}
+          toastModal={ToastHandler}
+          //setRefetch={refetchHandler}
+          onCloseModal={closeShowEditElectionModalHandler}
         />
       )}
 
@@ -445,6 +485,7 @@ const AdminDashboardContent = () => {
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onChangeStatus={() => onClickElectionStatus(item.id)}
                       onDeleteElection={onDeleteElectionHandler}
+                      onEditElection={onShowEditElectionHandler}
                     />
                   ))}
                   {/* <ul>

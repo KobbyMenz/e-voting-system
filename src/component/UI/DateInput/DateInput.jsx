@@ -11,7 +11,7 @@ const DateInput = (props) => {
           <input
             className={styles.input}
             placeholder={props.placeholder}
-            type="Date"
+            type="time"
             name={props.name}
             value={props.value}
             id={props.id}

@@ -29,6 +29,7 @@ export default function AccordionExpandDefault({
   onAdd,
   onChangeStatus,
   onDeleteElection,
+  onEditElection,
 }) {
   return (
     <Card>
@@ -103,7 +104,7 @@ export default function AccordionExpandDefault({
             </Box>
 
             <div style={{ fontSize: "1.5rem", color: "var(--text-color)" }}>
-              Created: {dateCreated}
+              Created: {formatDateTime(dateCreated)}
             </div>
 
             <Box
@@ -268,7 +269,7 @@ export default function AccordionExpandDefault({
                 <Box
                   sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}
                 >
-                  <ToolTip title="view/Edit election">
+                  <ToolTip title="View/Edit election">
                     <IconButton
                       sx={{
                         width: "3.6rem",
@@ -278,9 +279,7 @@ export default function AccordionExpandDefault({
                         color: "var(--text-color)",
                         "&:hover": { backgroundColor: "#06882d" },
                       }}
-                      // onClick={() => onEditElection(id)
-
-                      // }
+                      onClick={() => onEditElection(id)}
                     >
                       <Edit sx={{ fontSize: "1.8rem" }} />
                     </IconButton>
@@ -334,4 +333,5 @@ AccordionExpandDefault.propTypes = {
   onAdd: PropTypes.func,
   onChangeStatus: PropTypes.func,
   onDeleteElection: PropTypes.func,
+  onEditElection: PropTypes.func,
 };

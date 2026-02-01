@@ -9,10 +9,12 @@ import Button from "../Button/Button";
 import CloseIcon from "../Icons/CloseIcon";
 import AddIcon from "../Icons/AddIcon";
 import CancelIcon from "../Icons/CancelIcon";
+import DateTimeInput from "../DateTimeInput/DateTimeInput";
 import dayjs from "dayjs";
+//import DateTimeInput from "../DateTimeInput/DateTimeInput";
 //import app_api_url from "../../../app_api_url";
 
-const AddElectionModal = (props) => {
+const EditElectionModal = (props) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -39,11 +41,11 @@ const AddElectionModal = (props) => {
   /////////////////////////////////////////
   // ADDING CUSTOMER
   /////////////////////////////////////////
-  const onAddCustomerHandler = useCallback(
+  const onEditElectionHandler = useCallback(
     (e) => {
       e.preventDefault();
 
-      if (window.confirm("Are you sure you want to add a new election?")) {
+      if (window.confirm("Are you sure you want to update election?")) {
         const electionData = {
           // id: Date.now().toString(),
           title: formData.title,
@@ -53,9 +55,9 @@ const AddElectionModal = (props) => {
           startDate: formData.startDate,
           endDate: formData.endDate,
         };
-        console.log("electionData: ", electionData);
-        props.onAddElection(electionData);
-        props.toastModal("success", `Election added successfully`);
+
+        props.onEditElection(electionData);
+        props.toastModal("success", `Election updated successfully`);
 
         // Clear form after successful submission
         setFormData({
@@ -75,19 +77,19 @@ const AddElectionModal = (props) => {
 
       <Card className={`${classes.modal}`}>
         <header>
-          <span>Add New Election</span>
+          <span>Update Election Details</span>
 
           <div onClick={props.onCloseModal} className={classes.close_btn}>
             <CloseIcon />
           </div>
         </header>
 
-        <p className={classes.heading}>
-          Create a new election by filling in the details below.
-        </p>
-
-        <form onSubmit={onAddCustomerHandler}>
+        <form onSubmit={onEditElectionHandler}>
           <div className={classes.content}>
+            <p className={classes.heading}>
+              Update election by filling in the details below.
+            </p>
+
             <div className={classes.form_control}>
               <label className={classes.label} htmlFor="title">
                 Election Title
@@ -182,11 +184,11 @@ const AddElectionModal = (props) => {
   );
 };
 
-AddElectionModal.propTypes = {
+EditElectionModal.propTypes = {
   toastModal: PropTypes.func.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   setRefetch: PropTypes.func,
-  onAddElection: PropTypes.func.isRequired,
+  onEditElection: PropTypes.func.isRequired,
 };
 
-export default AddElectionModal;
+export default EditElectionModal;

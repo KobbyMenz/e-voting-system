@@ -151,9 +151,9 @@ const ProfileCard = () => {
         // ) :
         <div className={classes.user_details_container}>
           {/*======= user and last login details ===========*/}
-          <div className={classes.user_details}>
-            <p className={classes.user_name}>{userDetails.fullName}</p>
-            {/* <div className={classes.last_login}>
+          {/* <div className={classes.user_details}>
+            <p className={classes.user_name}>{userDetails.fullName}</p> */}
+          {/* <div className={classes.last_login}>
               <span>Last Login: </span>
               {day === "Today" || day === "Yesterday"
                 ? `${day},`
@@ -162,7 +162,7 @@ const ProfileCard = () => {
             <div className={classes.time}>
               {userDetails.lastLogin === "N/A" ? "" : `${dayName} @ ${time}`}
             </div> */}
-          </div>
+          {/* </div> */}
 
           {/*=========== Profile Menu =======s=====*/}
           <div className={classes.avatar_container}>
@@ -205,6 +205,11 @@ const ProfileCard = () => {
                         {
                           color: "#fff",
                         },
+                        "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root:hover p":
+                        {
+                          color: "#fff",
+                        },
+                        
                       "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root svg": {
                         color: "var(--text-color)",
                       },

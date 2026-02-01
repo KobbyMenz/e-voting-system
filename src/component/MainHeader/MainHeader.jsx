@@ -5,6 +5,7 @@ import ProfileCard from "../UI/ProfileCard/ProfileCard";
 import Navigation from "../Navigation/Navigation";
 import { Box } from "@mui/material";
 import ThemeToggle from "../UI/ThemeToggle/ThemeToggle";
+import logo from "../../assets/images/KM_Inventory_logo_new.ico";
 //import { useNavigate } from "react-router-dom";
 // import Menu from "./M";
 // import Button from "../UI/Button";
@@ -14,12 +15,17 @@ const MainHeader = (props) => {
     <Fragment>
       <header className={`${classes["main-header"]} ${props.className}`}>
         <div className={classes.container}>
-          <h2 className={classes.header_title}> {props.headerTitle}</h2>
+          <div className={classes.logo_container}>
+            <h2 className={classes.header_title}> {props.headerTitle}</h2>
+            <img src={logo} width={"45rem"} height={"45rem"} alt="logo" />
+          </div>
 
-          <Box display="flex" alignItems="center" gap="2rem">
-            {props.children}
+          <Box display="flex" alignItems="center" gap="0.5rem">
+            <Box sx={{ marginRight: "1rem" }}>{props.children}</Box>
 
-            <ThemeToggle />
+            <Box sx={{ borderLeft: "0.3rem solid var(--bg-color)" }}>
+              <ThemeToggle />
+            </Box>
 
             <div className="profile_card">
               <ProfileCard profileImage={props.profileImage} />

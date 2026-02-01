@@ -1,5 +1,5 @@
 .content__container {
-  padding: 1.5rem 1%;
+  padding: 1.5rem 9%;
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -330,9 +330,10 @@ p {
   .content__container {
     padding: 1.5rem 0rem;
   }
-  /* .card__wrapper {
+  .card__wrapper {
     padding: 1rem 1.5rem;
-  } */
+  }
+  
 
   .dashboard_active {
     display: none;
