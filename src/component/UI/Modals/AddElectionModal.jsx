@@ -152,7 +152,7 @@ const AddElectionModal = (props) => {
                 type="datetime-local"
                 placeholder="Enter election end date..."
                 onChange={onFormDataChangeHandler}
-                min={dayjs().format("YYYY-MM-DDTHH:mm")}
+                min={dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")}
                 required
               />
             </div>

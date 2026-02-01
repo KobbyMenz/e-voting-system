@@ -16,6 +16,9 @@ import Toast from "../../UI/Notification/Toast";
 //import formatDateTime from "../../Functions/formatDateTime";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import dayjs from "dayjs";
+// import axios from "axios";
+// import app_api_url from "../../../app_api_url";
+// import useFetch from "../../Hooks/useFetch";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [
@@ -89,6 +92,16 @@ const AdminDashboardContent = () => {
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  //  const { data, loading, setRefetch } = useFetch(
+  //   `${app_api_url}/getAllElections`,
+  // );
+  // const allElections = data !== null ? data : [];
+
+  //Refetch data handler
+  // const refetchHandler = useCallback(() => {
+  //   setRefetch((prev) => !prev);
+  // }, [setRefetch]);
+
   const closeShowModalHandler = useCallback(() => {
     setShowModal((prev) => !prev);
   }, []);
@@ -96,11 +109,6 @@ const AdminDashboardContent = () => {
   const onShowAddElectionModalHandler = useCallback(() => {
     setShowAddElectionModal(true);
   }, []);
-
-  //console.log("addElection: ", addElection);
-  // const onShowEditElectionModalHandler = useCallback(() => {
-  //   setShowEditElectionModal(true);
-  // }, []);
 
   const closeShowAddElectionModalHandler = useCallback(() => {
     setShowAddElectionModal(false);
@@ -234,22 +242,45 @@ const AdminDashboardContent = () => {
   /////////////////////////////////////////
   //delete election handler
   ////////////////////////////////////////
-  const onDeleteElectionHandler = useCallback((electionId) => {
-    if (window.confirm("Are you sure you want to delete this election?")) {
-      setAddElection((prev) => {
-        return Array.isArray(prev)
-          ? prev.filter((election) => election.id !== electionId)
-          : prev;
-      });
-      Toast("success", "Election deleted successfully.");
-    }
-  }, []);
+  const onDeleteElectionHandler = useCallback(
+    (electionId) => {
+      if (window.confirm("Are you sure you want to delete this election?")) {
+        setAddElection((prev) => {
+          return Array.isArray(prev)
+            ? prev.filter((election) => election.id !== electionId)
+            : prev;
+        });
+        Toast("success", "Election deleted successfully.");
 
-  const totalCandidates = addElection.map((item) => item.candidates.length);
+        // const deleteElection = async () => {
+        //   try {
+        //     const response = await axios.delete(
+        //       `${app_api_url}/deleteElection/${electionId}`,
+        //     );
+        //     refetchHandler();
+
+        //     ToastHandler("success", `${response.data.message}`);
+        //   } catch (err) {
+        //     ToastHandler("error", `Error deleting election: ${err}`);
+        //   }
+        // };
+        // deleteElection();
+      }
+    },
+    [
+      // refetchHandler, ToastHandler
+    ],
+  );
+
+  const totalCandidates = addElection
+    .map((item) => item.candidates.length)
+    .slice(0, -1)
+    .reduce((a, b) => a + b, 0);
 
   return (
     <Fragment>
       {/* {loading && <Loader />} */}
+
       {showModal && <Modal onCloseModal={closeShowModalHandler} />}
 
       {showAddElectionModal && (
@@ -365,9 +396,7 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Total Candidates:</p>
-                        <p className={classes.amount2}>
-                          {totalCandidates.slice(0, -1)}
-                        </p>
+                        <p className={classes.amount2}>{totalCandidates}</p>
                       </div>
                     </div>
 
