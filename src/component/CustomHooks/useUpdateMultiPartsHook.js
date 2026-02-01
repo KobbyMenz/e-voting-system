@@ -1,5 +1,5 @@
 import axios from "axios";
-import app_api_url from "../../../APP_API_URL";
+import app_api_url from "../../app_api_url";
 
 const useUpdateMultiPartsHook = () => {
   const updateMultiPartsData = async (
