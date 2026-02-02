@@ -157,7 +157,7 @@ input,textarea
   color: var(--text-color);
 }
 
-.form_control input[type="date"]::-webkit-calendar-picker-indicator {
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 

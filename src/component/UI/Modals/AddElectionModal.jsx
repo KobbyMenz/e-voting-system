@@ -127,7 +127,6 @@ const AddElectionModal = (props) => {
               </label>
 
               <input
-                className={`${classes.date_input}}`}
                 name="startDate"
                 id="startDate"
                 value={formData.startDate}
@@ -145,7 +144,6 @@ const AddElectionModal = (props) => {
               </label>
 
               <input
-                className={classes.date_input}
                 name="endDate"
                 id="endDate"
                 value={formData.endDate}
