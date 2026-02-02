@@ -16,6 +16,7 @@ import Toast from "../../UI/Notification/Toast";
 //import formatDateTime from "../../Functions/formatDateTime";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import dayjs from "dayjs";
+//import useDeleteHook from "../../CustomHooks/useDeleteHook";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
 // import useFetch from "../../Hooks/useFetch";
@@ -91,6 +92,8 @@ const AdminDashboardContent = () => {
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+
+  //const { deleteData } = useDeleteHook();
 
   //  const { data, loading, setRefetch } = useFetch(
   //   `${app_api_url}/getAllElections`,
@@ -252,6 +255,9 @@ const AdminDashboardContent = () => {
         });
         Toast("success", "Election deleted successfully.");
 
+        //Hook to delete election
+        //deleteData("deleteElection", electionId, refetchHandler, ToastHandler);
+
         // const deleteElection = async () => {
         //   try {
         //     const response = await axios.delete(
@@ -268,7 +274,7 @@ const AdminDashboardContent = () => {
       }
     },
     [
-      // refetchHandler, ToastHandler
+      // deleteData, refetchHandler, ToastHandler
     ],
   );
 

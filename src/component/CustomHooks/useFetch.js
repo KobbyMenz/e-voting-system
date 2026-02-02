@@ -1,29 +1,27 @@
 import { useEffect, useState, useRef } from "react";
+import app_api_url from "../../app_api_url";
 
-const useFetch = (url) => {
-  const [data, setData] = useState(null);
+const useFetch = (endPointName) => {
+  const [fetchedData, setFetchedData] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
   const isFirstRender = useRef(false);
 
   useEffect(() => {
-    // if (isFirstRender.current) {
-    //   isFirstRender.current = false;
-    //   return;
-    // }
-
     const controller = new AbortController();
     const signal = controller.signal;
 
     //=======Fetching all products from database======
     const fetchData = async () => {
       try {
-        const response = await fetch(url, { signal });
+        const response = await fetch(`${app_api_url}/${endPointName}`, {
+          signal,
+        });
 
         const data = await response.json();
 
         if (data.result) {
-          setData(data.result);
+          setFetchedData(data.result);
 
           setLoading(false);
         }
@@ -36,8 +34,8 @@ const useFetch = (url) => {
     fetchData();
 
     return () => controller.abort();
-  }, [refetch, url, isFirstRender]);
+  }, [endPointName, refetch, isFirstRender]);
 
-  return { data, loading, setRefetch, isFirstRender };
+  return { fetchedData, setRefetch, loading, isFirstRender };
 };
 export default useFetch;

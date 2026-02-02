@@ -2,7 +2,7 @@ import axios from "axios";
 import app_api_url from "../../app_api_url";
 
 const useDeleteHook = () => {
-  const deleteData = async (id, apiEndPointName, refreshTable, toastModal) => {
+  const deleteData = async (apiEndPointName, id, refreshTable, toastModal) => {
     try {
       const response = await axios.delete(
         `${app_api_url}/${apiEndPointName}/${id}`,
