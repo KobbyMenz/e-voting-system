@@ -8,6 +8,7 @@ import DashboardIcon from "../../UI/Icons/DashboardIcon";
 import AddVoterIcon from "../../UI/Icons/AddVoterIcon";
 //import AddUserIcon from "../../UI/Icons/AddUserIcon";
 import UserIcon from "../../UI/Icons/UserIcon";
+import RegisterVotersContent from "./RegisterVotersContent";
 
 const RegisterVoters = () => {
   return (
@@ -60,7 +61,7 @@ const RegisterVoters = () => {
         </MainHeader>
 
         <div className="content">
-          <RegisterVoters />
+          <RegisterVotersContent />
         </div>
       </div>
     </>

@@ -6,6 +6,7 @@ import ToolTip from "../../UI/ToolTip/ToolTip";
 import { NavLink } from "react-router-dom";
 import DashboardIcon from "../../UI/Icons/DashboardIcon";
 import AddVoterIcon from "../../UI/Icons/AddVoterIcon";
+import ManageUsersContent from "../ManageUsers/ManageUsersContent";
 //import AddUserIcon from "../../UI/Icons/AddUserIcon";
 import UserIcon from "../../UI/Icons/UserIcon";
 
@@ -60,7 +61,7 @@ const ManageUsers = () => {
         </MainHeader>
 
         <div className="content">
-          <ManageUsers/>
+          <ManageUsersContent />
         </div>
       </div>
     </>
