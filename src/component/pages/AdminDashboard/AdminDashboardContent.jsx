@@ -256,7 +256,7 @@ const AdminDashboardContent = () => {
         Toast("success", "Election deleted successfully.");
 
         //Hook to delete election
-        //deleteData("deleteElection", electionId, refetchHandler, ToastHandler);
+       // deleteData(`deleteElection/${electionId}` , refetchHandler, ToastHandler);
 
         // const deleteElection = async () => {
         //   try {
