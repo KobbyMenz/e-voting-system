@@ -1,4 +1,3 @@
-import AdminDashboardContent from "./AdminDashboardContent";
 import MainHeader from "../../MainHeader/MainHeader";
 import Navigation from "../../Navigation/Navigation";
 import "../../Layout/Layout.css";
@@ -10,7 +9,7 @@ import AddVoterIcon from "../../UI/Icons/AddVoterIcon";
 import AddUserIcon from "../../UI/Icons/AddUserIcon";
 import UserIcon from "../../UI/Icons/UserIcon";
 
-const AdminDashboard = () => {
+const RegisterVoters = () => {
   return (
     <>
       <div className="wrapper">
@@ -19,7 +18,7 @@ const AdminDashboard = () => {
             <li>
               <ToolTip title="Dashboard" placement="bottom">
                 <NavLink to={"/admin/dashboard"}>
-                  <div className={` ${classes.link} ${classes.current}`}>
+                  <div className={` ${classes.link}`}>
                     <div className={classes.link__icon}>
                       <DashboardIcon />
                     </div>
@@ -33,7 +32,7 @@ const AdminDashboard = () => {
             <li>
               <ToolTip title="Register Voter" placement="bottom">
                 <NavLink to={"/admin/register"}>
-                  <div className={` ${classes.link} `}>
+                  <div className={` ${classes.link}  ${classes.current}`}>
                     <div className={classes.link__icon}>
                       <AddVoterIcon />
                     </div>
@@ -61,10 +60,10 @@ const AdminDashboard = () => {
         </MainHeader>
 
         <div className="content">
-          <AdminDashboardContent />
+          <h1>Register Voters</h1>
         </div>
       </div>
     </>
   );
 };
-export default AdminDashboard;
+export default RegisterVoters;
