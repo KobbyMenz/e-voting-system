@@ -118,7 +118,12 @@ const ElectionCard = ({
         <div className={classes.buttonContainer}>
           <Button
             className={classes.castVoteBtn}
-            onClick={() => handleCastVote(election._id || election.id)}
+            onClick={() =>
+              handleCastVote(
+                election._id || election.id,
+                election._id || election.id,
+              )
+            }
             disabled={!selectedCandidates[election._id || election.id]}
           >
             Cast Your Vote
