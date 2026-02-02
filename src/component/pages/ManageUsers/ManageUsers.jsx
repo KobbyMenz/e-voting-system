@@ -6,7 +6,7 @@ import ToolTip from "../../UI/ToolTip/ToolTip";
 import { NavLink } from "react-router-dom";
 import DashboardIcon from "../../UI/Icons/DashboardIcon";
 import AddVoterIcon from "../../UI/Icons/AddVoterIcon";
-import AddUserIcon from "../../UI/Icons/AddUserIcon";
+//import AddUserIcon from "../../UI/Icons/AddUserIcon";
 import UserIcon from "../../UI/Icons/UserIcon";
 
 const ManageUsers = () => {

@@ -14,9 +14,11 @@ function App() {
     <ThemeProvider>
       <main className="App">
         <ToastContainer />
+        
         <Routes>
           {/* Define your routes here /admin/manage-users */}
           <Route path="/" element={<SignIn />} />
+          
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           <Route path="/voter/dashboard" element={<VoterDashboard />} />
