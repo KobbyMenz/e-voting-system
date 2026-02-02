@@ -60,7 +60,7 @@ const RegisterVoters = () => {
         </MainHeader>
 
         <div className="content">
-          <h1>Register Voters</h1>
+          <RegisterVoters />
         </div>
       </div>
     </>

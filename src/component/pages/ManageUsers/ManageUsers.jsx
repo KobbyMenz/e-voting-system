@@ -60,7 +60,7 @@ const ManageUsers = () => {
         </MainHeader>
 
         <div className="content">
-          <h1>Manage Users</h1>
+          <ManageUsers/>
         </div>
       </div>
     </>
