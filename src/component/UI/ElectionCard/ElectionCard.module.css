@@ -50,7 +50,7 @@
   margin-bottom: 1rem;
 }
 
-.electionDescription {
+.electionDescription,.electionDate {
   color: #666;
   font-size: 1.3rem;
   margin: 0.5rem 0 1rem 0;

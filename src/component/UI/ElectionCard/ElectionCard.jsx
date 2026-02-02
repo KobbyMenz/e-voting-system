@@ -37,21 +37,6 @@ const ElectionCard = ({
               {election.status}
             </span>
           </Box>
-
-          <Box>
-            <div
-              style={{ fontSize: "1.2rem", fontWeight: "500", opacity: 0.8 }}
-            >
-              Election Period:{" "}
-              <strong>
-                <em>{formatDateTime(election.startDate)}</em>
-              </strong>{" "}
-              to{" "}
-              <strong>
-                <em>{formatDateTime(election.endDate)}</em>
-              </strong>
-            </div>
-          </Box>
         </Box>
 
         <p className={classes.electionDescription}>
@@ -96,7 +81,12 @@ const ElectionCard = ({
                     </div>
 
                     <div className={classes.candidateInfo}>
-                      <ImageBox src={candidate.image} width="13rem" height="14rem" alt={candidate.name} />
+                      <ImageBox
+                        src={candidate.image}
+                        width="13rem"
+                        height="14rem"
+                        alt={candidate.name}
+                      />
 
                       <Box>
                         <h2>{candidate.name}</h2>
@@ -119,6 +109,11 @@ const ElectionCard = ({
         ) : (
           <p>No candidates available for this election</p>
         )}
+
+        <p className={classes.electionDate}>
+          Election Period: {formatDateTime(election.startDate)} to{" "}
+          {formatDateTime(election.endDate)}
+        </p>
 
         <div className={classes.buttonContainer}>
           <Button

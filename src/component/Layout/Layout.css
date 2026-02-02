@@ -2,6 +2,7 @@
 
 .wrapper {
   display: flex;
+  padding: 1.5rem 9%;
   /* flex-direction: column; */
 }
 
@@ -74,6 +75,10 @@
     font-size: 52%;
   }
 
+  .wrapper {
+    padding: 1.5rem 0rem;
+  }
+
   .header_container {
     padding-right: 1rem;
   }
@@ -89,7 +94,7 @@
 
   .content {
     margin-top: 6.5rem;
-   padding: 0 1%;
+    padding: 0 1%;
   }
 }
 

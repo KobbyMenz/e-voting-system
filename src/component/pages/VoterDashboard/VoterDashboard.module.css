@@ -4,7 +4,7 @@
   background: var(--bg-color2);
   border-radius: 1rem;
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.1);
-  margin: 2rem auto;
+  /* margin: 2rem auto; */
 }
 
 .card h1 {
@@ -46,6 +46,5 @@
 
   .card {
     padding: 1.5rem;
-    margin: 1.5rem auto;
   }
 }

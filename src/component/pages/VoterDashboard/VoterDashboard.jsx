@@ -6,20 +6,18 @@ import QuestionModal from "../../UI/Modals/QuestionModal";
 import MainHeader from "../../MainHeader/MainHeader";
 import Navigation from "../../Navigation/Navigation";
 import ToolTip from "../../UI/ToolTip/ToolTip";
-import navigationClasses from "../../Navigation/Navigation.module.css";
+//import navigationClasses from "../../Navigation/Navigation.module.css";
 import "../../Layout/Layout.css";
 import VoterDashboardContent from "./VoterDashboardContent";
 
-
 const VoterDashboard = () => {
   const navigate = useNavigate();
-  
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
- 
 
-  const handleLogoutClick = () => {
-    setShowLogoutModal(true);
-  };
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  // const handleLogoutClick = () => {
+  //   setShowLogoutModal(true);
+  // };
 
   const handleConfirmLogout = () => {
     localStorage.removeItem("user");
@@ -34,8 +32,6 @@ const VoterDashboard = () => {
     setShowLogoutModal(false);
   };
 
- 
-
   return (
     <Fragment>
       {showLogoutModal && (
@@ -45,12 +41,10 @@ const VoterDashboard = () => {
         />
       )}
 
-      
-
       <div className="wrapper">
         <MainHeader>
           <Navigation>
-            <li>
+            {/* <li>
               <ToolTip title="Voting" placement="bottom">
                 <NavLink to={"/voter/dashboard"}>
                   <div className={`${navigationClasses.link}`}>
@@ -101,7 +95,7 @@ const VoterDashboard = () => {
                   <div className={navigationClasses.link_title}>Logout</div>
                 </div>
               </ToolTip>
-            </li>
+            </li> */}
           </Navigation>
         </MainHeader>
 
