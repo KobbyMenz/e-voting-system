@@ -4,14 +4,13 @@ import app_api_url from "../../app_api_url";
 const useUpdateMultiPartsHook = () => {
   const updateMultiPartsData = async (
     apiEndPointName,
-    id,
     dataToUpdate,
     refreshTable,
     toastModal,
   ) => {
     try {
       const response = await axios.put(
-        `${app_api_url}/${apiEndPointName}/${id}`,
+        `${app_api_url}/${apiEndPointName}`,
         dataToUpdate,
         {
           headers: {
