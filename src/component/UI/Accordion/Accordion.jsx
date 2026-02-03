@@ -139,19 +139,24 @@ export default function AccordionExpandDefault({
                   },
                 }}
               >
-                <span
-                  style={{
-                    fontSize: "1.3rem",
-                    opacity: 0.9,
-                    fontWeight: "400",
-                    // color: "var(--text-color)",
-                  }}
-                >
-                  Start Date
-                </span>
-                <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
-                  {formatDateTime(startDate)}
-                </span>
+                <Typography>
+                  <span
+                    style={{
+                      fontSize: "1.3rem",
+                      opacity: 0.9,
+                      fontWeight: "400",
+                      // color: "var(--text-color)",
+                    }}
+                  >
+                    Start Date:
+                  </span>
+                </Typography>
+
+                <Typography>
+                  <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                    {formatDateTime(startDate)}
+                  </span>
+                </Typography>
               </Box>
 
               <Box
@@ -174,25 +179,30 @@ export default function AccordionExpandDefault({
                   },
                 }}
               >
-                <span
-                  style={{
-                    fontSize: "1.3rem",
-                    opacity: 0.9,
-                    fontWeight: "400",
-                    // color: "var(--text-color)",
-                  }}
-                >
-                  End Date
-                </span>
-                <span
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "600",
-                    // color: "var(--text-color)",
-                  }}
-                >
-                  {formatDateTime(endDate)}
-                </span>
+                <Typography>
+                  <span
+                    style={{
+                      fontSize: "1.3rem",
+                      opacity: 0.9,
+                      fontWeight: "400",
+                      // color: "var(--text-color)",
+                    }}
+                  >
+                    End Date:
+                  </span>
+                </Typography>
+
+                <Typography>
+                  <span
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
+                      // color: "var(--text-color)",
+                    }}
+                  >
+                    {formatDateTime(endDate)}
+                  </span>
+                </Typography>
               </Box>
             </Box>
           </Box>

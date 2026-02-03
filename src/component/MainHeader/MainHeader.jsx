@@ -5,7 +5,7 @@ import ProfileCard from "../UI/ProfileCard/ProfileCard";
 import Navigation from "../Navigation/Navigation";
 import { Box } from "@mui/material";
 import ThemeToggle from "../UI/ThemeToggle/ThemeToggle";
-import logo from "../../assets/images/KM_Inventory_logo_new.ico";
+import logo from "../../assets/images/KMZ.jpg";
 //import { useNavigate } from "react-router-dom";
 // import Menu from "./M";
 // import Button from "../UI/Button";

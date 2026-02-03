@@ -18,6 +18,10 @@
   align-items: center;
 }
 
+.logo_container img {
+  border-radius: 50%;
+}
+
 @media (max-width: 750px) {
   html {
     font-size: 52%;

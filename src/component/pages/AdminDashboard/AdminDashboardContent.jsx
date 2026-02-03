@@ -73,13 +73,13 @@ const election = [
   createElectionInstance(
     "SRC Presidential",
     "Namong SRC Presidential Election",
-    "2026-02-23T07:00",
-    "2026-02-27T19:00",
+    "2026-01-23T07:00",
+    "2026-01-27T19:00",
   ),
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Sanitation Prefect Election",
-    "2026-02-23T07:00",
+    "2026-02-02T07:00",
     "2026-02-27T19:00",
   ),
 ];
@@ -255,7 +255,7 @@ const AdminDashboardContent = () => {
         Toast("success", "Election deleted successfully.");
 
         //Hook to delete election
-       // deleteData(`deleteElection/${electionId}` , refetchHandler, ToastHandler);
+        // deleteData(`deleteElection/${electionId}` , refetchHandler, ToastHandler);
 
         // const deleteElection = async () => {
         //   try {
