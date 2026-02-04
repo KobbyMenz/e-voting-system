@@ -5,11 +5,7 @@
   gap: 1.2rem;
 }
 
-.card__wrapper {
-  padding: 1rem 2.5rem;
-  position: relative;
-  background: var(--bg-color2);
-}
+
 
 
 
@@ -94,13 +90,18 @@ p {
   height: 12.5rem;
   padding: 1rem 2rem;
   transition: all 0.5s ease-in-out;
+   border: 0.2rem solid var(--border-color);
   /* background: #666; */
 }
 
 .card__box:hover {
-  transform: translateY(-0.5rem);
+  transform: translateY(-0.2rem);
   /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26); */
   transition: all 0.5s ease-in-out;
+
+  border-color: var(--primary);
+  box-shadow: 0 0.4rem 1.2rem rgba(102, 126, 234, 0.2);
+  /* transform: translateY(-2px); */
   /* border: 1px solid #666; */
   /* outline:1px solid #666;
     outline-offset: -4px; */

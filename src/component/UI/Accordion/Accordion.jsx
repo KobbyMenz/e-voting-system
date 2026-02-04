@@ -41,6 +41,8 @@ export default function AccordionExpandDefault({
           marginBottom: "0.2rem",
           borderRadius: "1rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
+          // border: "0.2rem solid var(--border-color)",
+
           "@media (max-width: 600px)": {
             boxShadow: "0rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15)",
           },
@@ -82,9 +84,11 @@ export default function AccordionExpandDefault({
             }}
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-              <h3 style={{ fontWeight: "600", color: "var(--text-color)" }}>
-                {electionTitle}
-              </h3>{" "}
+              <Typography variant="h4" color="initial">
+                <h5 style={{ fontWeight: "600", color: "var(--text-color)" }}>
+                  {electionTitle}
+                </h5>{" "}
+              </Typography>
               <div
                 style={{
                   background: status === "Active" ? "#06882d" : "#ca0202",
@@ -145,7 +149,7 @@ export default function AccordionExpandDefault({
                       fontSize: "1.3rem",
                       opacity: 0.9,
                       fontWeight: "400",
-                      // color: "var(--text-color)",
+                      color: "#fff",
                     }}
                   >
                     Start Date:
@@ -153,7 +157,13 @@ export default function AccordionExpandDefault({
                 </Typography>
 
                 <Typography>
-                  <span style={{ fontSize: "1.5rem", fontWeight: "600" }}>
+                  <span
+                    style={{
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
+                      color: "#fff",
+                    }}
+                  >
                     {formatDateTime(startDate)}
                   </span>
                 </Typography>
@@ -185,6 +195,7 @@ export default function AccordionExpandDefault({
                       fontSize: "1.3rem",
                       opacity: 0.9,
                       fontWeight: "400",
+                      color: "#fff",
                       // color: "var(--text-color)",
                     }}
                   >
@@ -197,6 +208,7 @@ export default function AccordionExpandDefault({
                     style={{
                       fontSize: "1.5rem",
                       fontWeight: "600",
+                      color: "#fff",
                       // color: "var(--text-color)",
                     }}
                   >

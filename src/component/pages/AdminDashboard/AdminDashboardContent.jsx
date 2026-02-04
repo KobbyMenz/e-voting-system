@@ -317,7 +317,7 @@ const AdminDashboardContent = () => {
       )}
 
       <div className={classes.content__container}>
-        <Card className={classes.card__wrapper}>
+        <Card className={"card__wrapper"}>
           {/* {loading ? (
             <WelcomeMessageSkeleton />
           ) :  */}
@@ -340,7 +340,7 @@ const AdminDashboardContent = () => {
         </Card>
 
         <div
-          className={`${classes.card__wrapper} ${classes.system_overview_card}`}
+          className={` ${classes.system_overview_card}`}
         >
           {
             <section>
@@ -486,7 +486,7 @@ const AdminDashboardContent = () => {
 
         {/*===top 10 products table===*/}
         <section>
-          <Card className={classes.card__wrapper}>
+          <Card className="card__wrapper">
             <div className={classes.message_container}>
               <div className={classes.welcome_text}>
                 <h1>Election Management</h1>

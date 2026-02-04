@@ -80,6 +80,27 @@ header .close_btn:hover svg {
   color: #fff;
 }
 
+/*===========================================*/
+.form_container_left_right {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 4rem;
+  margin-top: 0rem;
+  padding: 2rem 0rem;
+}
+
+.form_right {
+  margin-top: 0.6rem;
+}
+
+.profile_form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 0.5rem;
+  column-gap: 4rem;
+  padding: 2rem 1.8rem 4rem 1.8rem;
+}
+
 .heading {
   font-size: 1.6rem;
   /* font-weight: 200; */
@@ -92,12 +113,17 @@ header .close_btn:hover svg {
   position: relative;
 }
 
+
 .modal .content,
 .addUserModal .content {
   padding: 1rem 2rem;
   /* text-align: center; */
   font-size: 1.6rem;
   position: relative;
+}
+
+.addUserModal {
+  background: var(--bg-color2);
 }
 
 /* .modal .content {

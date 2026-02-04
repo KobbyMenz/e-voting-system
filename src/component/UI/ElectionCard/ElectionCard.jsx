@@ -1,7 +1,7 @@
 import React from "react";
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import classes from "../ElectionCard/ElectionCard.module.css";
 import Toast from "../../UI/Notification/Toast";
 import ImageBox from "../../UI/ImageBox/ImageBox";
@@ -110,10 +110,12 @@ const ElectionCard = ({
           <p>No candidates available for this election</p>
         )}
 
-        <p className={classes.electionDate}>
-          Election Period: {formatDateTime(election.startDate)} to{" "}
-          {formatDateTime(election.endDate)}
-        </p>
+        <Typography variant="p" color="initial">
+          <p className={classes.electionDate}>
+            Election Period: {formatDateTime(election.startDate)} to{" "}
+            {formatDateTime(election.endDate)}
+          </p>
+        </Typography>
 
         <div className={classes.buttonContainer}>
           <Button

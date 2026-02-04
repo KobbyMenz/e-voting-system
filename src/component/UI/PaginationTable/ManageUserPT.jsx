@@ -19,8 +19,8 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CustomButton from "../Button";
-import SearchBar from "../SeachBar";
+import CustomButton from "../Button/Button";
+import SearchBar from "../SearchBar/SeachBar";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import AddIcon from "../Icons/AddIcon";
@@ -144,7 +144,7 @@ const ManageUserPT = ({
                     fontWeight: "bolder",
                     fontSize: "1.5rem",
                     backgroundColor: "var(--primary)",
-                    display: col.type === "userName" ? "none" : "",
+                    display: col.type === "userName"||col.type === "role" ? "none" : "",
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
                   }}
@@ -187,7 +187,7 @@ const ManageUserPT = ({
                           fontSize: "1.5rem",
                           color: "var(--text-color)",
                           borderBottom: "0.1rem solid var(--bg-color)",
-                          display: col.type === "userName" ? "none" : "",
+                          display: col.type === "userName"||col.type === "role" ? "none" : "",
                           borderLeft: "0.1rem solid var(--bg-color)",
                         }}
                         key={col.field}

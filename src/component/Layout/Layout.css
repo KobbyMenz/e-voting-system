@@ -6,6 +6,16 @@
   /* flex-direction: column; */
 }
 
+/* .card__wrapper {
+  padding: 1rem 0rem;
+} */
+
+.card__wrapper {
+  padding: 1rem 2.5rem;
+  position: relative;
+  background: var(--bg-color2);
+}
+
 .header {
   grid-area: header;
   position: relative;

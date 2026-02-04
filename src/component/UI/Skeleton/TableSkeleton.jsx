@@ -1,5 +1,5 @@
 import { Skeleton, Box } from "@mui/material";
-import Card from "../Card";
+import Card from "../Card/Card";
 
 const TableSkeleton = () => (
   <Card style={{ padding: "2rem" }}>
