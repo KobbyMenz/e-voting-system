@@ -9,6 +9,7 @@ import { Box, IconButton } from "@mui/material";
 import Button from "../Button/Button";
 import StopIcon from "../Icons/StopIcon";
 import PlayIcon from "../Icons/PlayIcon";
+import classes from "../Accordion/Accordion.module.css";
 //import DeleteIcon from "../Icons/DeleteIcon";
 import { Delete, Edit } from "@mui/icons-material";
 import ToolTip from "../ToolTip/ToolTip";
@@ -32,7 +33,7 @@ export default function AccordionExpandDefault({
   onEditElection,
 }) {
   return (
-    <Card>
+    <Card className={classes.card}>
       <Accordion
         sx={{
           backgroundColor: "var(--bg-color3)",

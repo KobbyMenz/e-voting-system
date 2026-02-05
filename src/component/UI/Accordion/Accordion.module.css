@@ -1,0 +1,4 @@
+.card:hover {
+  border-left: 0.2rem solid var(--primary);
+  border-start-end-radius: 1rem;
+}
