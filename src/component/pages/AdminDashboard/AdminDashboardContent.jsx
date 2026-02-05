@@ -15,6 +15,7 @@ import Toast from "../../UI/Notification/Toast";
 //import formatDateTime from "../../Functions/formatDateTime";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import dayjs from "dayjs";
+import Loader from "../../UI/Loader/Loader";
 //import useDeleteHook from "../../CustomHooks/useDeleteHook";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
@@ -91,6 +92,7 @@ const AdminDashboardContent = () => {
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  //const [loading, setLoading] = useState(true);
 
   //const { deleteData } = useDeleteHook();
 
@@ -339,9 +341,7 @@ const AdminDashboardContent = () => {
           </div>
         </Card>
 
-        <div
-          className={` ${classes.system_overview_card}`}
-        >
+        <div className={` ${classes.system_overview_card}`}>
           {
             <section>
               {/* {

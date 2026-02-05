@@ -22,6 +22,16 @@
   border-radius: 50%;
 }
 
+@media (max-width: 992px) {
+  html {
+    font-size: 53%;
+  }
+  .wrapper {
+    padding: 1.5rem 4%;
+    /* flex-direction: column; */
+  }
+}
+
 @media (max-width: 750px) {
   html {
     font-size: 52%;

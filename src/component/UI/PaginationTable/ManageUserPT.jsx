@@ -42,8 +42,8 @@ const ManageUserPT = ({
   // Filter rows based on search
   const filteredRows = rows.filter((row) =>
     Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(search.toLowerCase())
-    )
+      String(value).toLowerCase().includes(search.toLowerCase()),
+    ),
   );
 
   const handleChangePage = (event, newPage) => {
@@ -70,6 +70,19 @@ const ManageUserPT = ({
         backgroundColor: "var(--bg-color2)",
         color: "var(--text-color)",
         // fontSize: "1.4rem",
+
+        // Mobile responsive
+        "@media (max-width: 600px)": {
+          pr: 1,
+          pl: 1,
+          pt: 1,
+        },
+        // Tablet responsive
+        "@media (max-width: 768px)": {
+          pr: 1.5,
+          pl: 1.5,
+          pt: 1.5,
+        },
       }}
     >
       {/* Header section */}
@@ -81,6 +94,18 @@ const ManageUserPT = ({
         justifyContent="space-between"
         alignItems="center"
         mb={2}
+        sx={{
+          // Mobile responsive
+          "@media (max-width: 600px)": {
+            columnGap: "10%",
+            rowGap: 0.5,
+          },
+          // Tablet responsive
+          "@media (max-width: 768px)": {
+            columnGap: "15%",
+            rowGap: 0.75,
+          },
+        }}
       >
         <Typography
           variant="subtitle1"
@@ -88,6 +113,15 @@ const ManageUserPT = ({
             fontWeight: "bolder",
             fontSize: "1.5rem",
             color: "var(--text-color)",
+
+            // Mobile responsive
+            "@media (max-width: 600px)": {
+              fontSize: "1.1rem",
+            },
+            // Tablet responsive
+            "@media (max-width: 768px)": {
+              fontSize: "1.3rem",
+            },
           }}
         >
           Number of Items: {FormatNumber(filteredRows.length)}
@@ -101,6 +135,17 @@ const ManageUserPT = ({
           // flexWrap={"wrap-reverse"}
           alignItems={"center"}
           //   justifyContent={"space-between"}
+
+          sx={{
+            // Mobile responsive
+            "@media (max-width: 600px)": {
+              gap: 0.5,
+            },
+            // Tablet responsive
+            "@media (max-width: 768px)": {
+              gap: 0.75,
+            },
+          }}
         >
           <div style={{ flexGlow: "1", width: "65%" }}>
             <SearchBar
@@ -144,7 +189,10 @@ const ManageUserPT = ({
                     fontWeight: "bolder",
                     fontSize: "1.5rem",
                     backgroundColor: "var(--primary)",
-                    display: col.type === "userName"||col.type === "role" ? "none" : "",
+                    display:
+                      col.type === "userName" || col.type === "role"
+                        ? "none"
+                        : "",
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
                   }}
@@ -187,7 +235,10 @@ const ManageUserPT = ({
                           fontSize: "1.5rem",
                           color: "var(--text-color)",
                           borderBottom: "0.1rem solid var(--bg-color)",
-                          display: col.type === "userName"||col.type === "role" ? "none" : "",
+                          display:
+                            col.type === "userName" || col.type === "role"
+                              ? "none"
+                              : "",
                           borderLeft: "0.1rem solid var(--bg-color)",
                         }}
                         key={col.field}
@@ -220,14 +271,14 @@ const ManageUserPT = ({
                                 row[col.field] === "Enabled"
                                   ? "green"
                                   : row[col.field] === "Disabled"
-                                  ? "#ee0000ff"
-                                  : "",
+                                    ? "#ee0000ff"
+                                    : "",
                               backgroundColor:
                                 row[col.field] === "Enabled"
                                   ? "#0080003d"
                                   : row[col.field] === "Disabled"
-                                  ? "#ff000021"
-                                  : "#0080003d",
+                                    ? "#ff000021"
+                                    : "#0080003d",
 
                               border:
                                 row[col.field] === "Enabled"
@@ -318,7 +369,7 @@ const ManageUserPT = ({
                                 row.userName,
                                 row.email,
                                 row.contact,
-                                row.role
+                                row.role,
                               )
                             }
                           >
@@ -416,7 +467,7 @@ ManageUserPT.propTypes = {
     PropTypes.shape({
       field: PropTypes.string.isRequired,
       headerName: PropTypes.string.isRequired,
-    })
+    }),
   ).isRequired,
   rows: PropTypes.arrayOf(PropTypes.object).isRequired,
   onEdit: PropTypes.func,

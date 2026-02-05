@@ -78,6 +78,10 @@
   html {
     font-size: 53%;
   }
+  .wrapper {
+    padding: 1.5rem 4%;
+    /* flex-direction: column; */
+  }
 }
 
 @media (max-width: 750px) {
