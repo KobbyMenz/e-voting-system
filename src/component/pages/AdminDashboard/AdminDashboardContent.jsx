@@ -79,8 +79,8 @@ const election = [
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Sanitation Prefect Election",
-    "2026-02-02T07:00",
-    "2026-02-27T19:00",
+    "2026-02-04T07:00",
+    "2026-02-05T19:00",
   ),
 ];
 

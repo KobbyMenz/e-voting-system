@@ -37,9 +37,9 @@ const AddElectionModal = (props) => {
   }, []);
 
   /////////////////////////////////////////
-  // ADDING CUSTOMER
+  // ADDING ELECTION
   /////////////////////////////////////////
-  const onAddCustomerHandler = useCallback(
+  const onAddElectionHandler = useCallback(
     (e) => {
       e.preventDefault();
 
@@ -86,7 +86,7 @@ const AddElectionModal = (props) => {
           Create a new election by filling in the details below.
         </p>
 
-        <form onSubmit={onAddCustomerHandler}>
+        <form onSubmit={onAddElectionHandler}>
           <div className={classes.content}>
             <div className={classes.form_control}>
               <label className={classes.label} htmlFor="title">
