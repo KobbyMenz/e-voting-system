@@ -61,9 +61,9 @@ const PaginationTable = ({
         pr: 2,
         pl: 2,
         pt: 2,
+        border: "none",
         borderRadius: 2,
         backgroundColor: "var(--bg-color2)",
-        border: "0.1rem solid var(--bg-color)",
         color: "var(--text-color)",
         // Mobile responsive
         "@media (max-width: 600px)": {
@@ -169,13 +169,12 @@ const PaginationTable = ({
       {/* Table */}
       <TableContainer>
         <Table
-          // stickyHeader
+          stickyHeader
           sx={{
             borderTop: "0.1rem solid var(--bg-color)",
             borderRight: "0.1rem solid var(--bg-color)",
             borderBottom: "0.1rem solid var(--bg-color)",
-            // borderTopLeftRadius: "1rem",
-            // borderTopRightRadius: "1rem",
+            borderRadius: "1rem",
           }}
         >
           <TableHead>

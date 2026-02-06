@@ -298,7 +298,7 @@ const ManageUsersContent = () => {
             <NavTabs tabs={tabs} />
           </Card> */}
 
-          <div className={classes.product_table}>
+          <div className="table_wrapper">
             {
               // loading ? (
               //   <TableSkeleton />
