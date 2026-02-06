@@ -7,11 +7,11 @@
 :root {
   --bg-color: #e9ebf4; /*#E9EBF4*/
   --bg-color2: #fff;
-  --bg-color3:#fff;
+  --bg-color3: #fff;
   --text-color: #1a1a1a;
-  
+
   --primary: #0c007c;
-  --primary-deep:#0a0063;
+  --primary-deep: #0a0063;
   --secondary: #007aba;
   --nav-bg: hsla(246, 100%, 24%, 0.938);
   --hover-color: #c4c4c48f; /*#c4c4c48f*/
@@ -36,11 +36,11 @@
 [data-theme="dark"] {
   --bg-color: #263341; /* #263341 #191A1C #5495b8ff*/
   --bg-color2: #1b222a; /*  */
-   --bg-color3:#12191fd8;
+  --bg-color3: #12191fd8;
   --text-color: #ffffff;
-  
+
   --primary: #007aba; /*,,  #007aba*/
-  --primary-deep:#0068a0;
+  --primary-deep: #0068a0;
   --secondary: #0c007c;
   --nav-bg: rgba(0, 121, 186, 0.952);
   --hover-color: #12191f; /*#12191f*/
@@ -105,6 +105,10 @@ html::-webkit-scrollbar-thumb {
   font-size: 3.2em;
   line-height: 1.1;
 } */
+
+input[type="date"]::picker:hover {
+  cursor: pointer;
+}
 
 /*======== Toast Notification styles starts =========*/
 .Toastify__close-button {

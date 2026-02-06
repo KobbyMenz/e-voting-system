@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import classes from "../../UI/Modals/AddModal.module.css";
@@ -8,9 +8,10 @@ import Toast from "../Notification/Toast";
 // import classes from "../../pages/AdminStaff/AdminStaffContent.module.css";
 //import axios from "axios";
 import CloseIcon from "../Icons/CloseIcon";
-import AddIcon from "../Icons/AddIcon";
+//import AddIcon from "../Icons/AddIcon";
 import CancelIcon from "../Icons/CancelIcon";
 import DeleteIcon from "../Icons/DeleteIcon";
+import SaveIcon from "../Icons/SaveIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import dayjs from "dayjs";
@@ -18,13 +19,11 @@ import dayjs from "dayjs";
 
 const EditVoterModal = (props) => {
   const [formData, setFormData] = useState({
-    id: props.submitEditData.id,
-    image: props.submitEditData.image,
-    name: props.submitEditData.name,
-    bob: dayjs(props.submitEditData.dob).format("YYYY-MM-DD"),
+    id: "",
+    image: "",
+    name: "",
+    dob: "",
   });
-
-  console.log(formData);
 
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -35,16 +34,22 @@ const EditVoterModal = (props) => {
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
-        [name]:
-          name === "phone"
-            ? value.replace(
-                /[\s-+=?,></.(){}_qwertyuiopasdfghjkl;zxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM]/g,
-                "",
-              )
-            : value,
+        [name]: value,
       };
     });
   }, []);
+
+  /////////////////////////////////////////
+  ////////////////////////////////////////
+  useEffect(() => {
+    setFormData({
+      id: props.submitEditData.id,
+      image: props.submitEditData.image,
+      name: props.submitEditData.name,
+      dob: dayjs(props.submitEditData.dob).format("YYYY-MM-DD"),
+    });
+  }, [props]);
+  ///////////////////////////////////////
 
   //function to change profile image
   const profilePictureChangeHandler = useCallback(
@@ -58,7 +63,7 @@ const EditVoterModal = (props) => {
         fileReader.onloadend = () => {
           setFormData((prev) => ({
             ...prev,
-            image: fileReader.result,
+            image: fileReader.result ? fileReader.result : "",
           }));
         };
 
@@ -71,21 +76,24 @@ const EditVoterModal = (props) => {
   );
 
   /////////////////////////////////////////
-  // ADDING CANDIDATE
+  // EDIT VOTER
   /////////////////////////////////////////
-  const onAddCustomerHandler = useCallback(
+  const onSaveHandler = useCallback(
     (e) => {
       e.preventDefault();
 
       if (window.confirm("Are you sure you want to add a new candidate?")) {
         const candidateData = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: formData.id,
           image: formData.image,
           name: formData.name,
+          dob: formData.dob,
         };
 
-        props.onAddCandidate(candidateData);
-        props.toastModal("success", `Candidate added successfully`);
+        console.log(candidateData);
+
+        //props.onAddCandidate(candidateData);
+        props.toastModal("success", `Saved successfully`);
 
         // Clear form after successful submission
         setFormData({
@@ -96,12 +104,12 @@ const EditVoterModal = (props) => {
         props.onCloseModal();
       }
     },
-    [props, formData.name, formData.image],
+    [props, formData],
   );
 
-  ///////////////////////////////
+  ////////////////////////////////
   //DELETE PROFILE PICTURE FILE
-  /////////////////////////
+  ///////////////////////////////
   const deleteProfilePictureHandler = useCallback(async () => {
     if (file || formData.image) {
       setFormData((prev) => {
@@ -140,7 +148,7 @@ const EditVoterModal = (props) => {
 
         <p className={classes.heading}>Update voter details.</p>
 
-        <form onSubmit={onAddCustomerHandler}>
+        <form onSubmit={onSaveHandler}>
           <div className={classes.content}>
             <div className="profile_picture_container">
               <div className="profile_picture">
@@ -175,7 +183,7 @@ const EditVoterModal = (props) => {
                       type="file"
                       onChange={profilePictureChangeHandler}
                       accept="image/*"
-                      required
+                      // required
                     />
                   </div>
 
@@ -227,7 +235,7 @@ const EditVoterModal = (props) => {
               <input
                 name="dob"
                 id="dob"
-                value={formData.bob}
+                value={formData.dob}
                 type="date"
                 placeholder="Enter date of birth..."
                 onChange={onFormDataChangeHandler}
@@ -254,9 +262,9 @@ const EditVoterModal = (props) => {
 
           <div className={classes.btn_container}>
             <Button className={classes.btn}>
-              <AddIcon />
+              <SaveIcon />
 
-              <span>Add</span>
+              <span>Save</span>
             </Button>
 
             <Button

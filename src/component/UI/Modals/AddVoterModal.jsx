@@ -17,9 +17,10 @@ import ToolTip from "../ToolTip/ToolTip";
 
 const AddVoterModal = (props) => {
   const [formData, setFormData] = useState({
-    name: "",
+    // id: "",
     image: "",
-    position: "",
+    name: "",
+    dob: "",
   });
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -30,13 +31,7 @@ const AddVoterModal = (props) => {
     setFormData((prevFormData) => {
       return {
         ...prevFormData,
-        [name]:
-          name === "phone"
-            ? value.replace(
-                /[\s-+=?,></.(){}_qwertyuiopasdfghjkl;zxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM]/g,
-                "",
-              )
-            : value,
+        [name]: value,
       };
     });
   }, []);
@@ -66,9 +61,9 @@ const AddVoterModal = (props) => {
   );
 
   /////////////////////////////////////////
-  // ADDING CANDIDATE
+  // ADDING VOTER
   /////////////////////////////////////////
-  const onAddCustomerHandler = useCallback(
+  const onAddHandler = useCallback(
     (e) => {
       e.preventDefault();
 
@@ -77,9 +72,11 @@ const AddVoterModal = (props) => {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           image: formData.image,
           name: formData.name,
+          dob: formData.dob,
         };
 
-        props.onAddCandidate(candidateData);
+        console.log(candidateData);
+        // props.onAddCandidate(candidateData);
         props.toastModal("success", `Candidate added successfully`);
 
         // Clear form after successful submission
@@ -91,7 +88,7 @@ const AddVoterModal = (props) => {
         props.onCloseModal();
       }
     },
-    [props, formData.name, formData.image],
+    [props, formData],
   );
 
   ///////////////////////////////
@@ -135,7 +132,7 @@ const AddVoterModal = (props) => {
 
         <p className={classes.heading}>Register a voter for this election.</p>
 
-        <form onSubmit={onAddCustomerHandler}>
+        <form onSubmit={onAddHandler}>
           <div className={classes.content}>
             <div className="profile_picture_container">
               <div className="profile_picture">
@@ -170,7 +167,7 @@ const AddVoterModal = (props) => {
                       type="file"
                       onChange={profilePictureChangeHandler}
                       accept="image/*"
-                      required
+                      // required
                     />
                   </div>
 
@@ -214,15 +211,15 @@ const AddVoterModal = (props) => {
             </div>
 
             <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="position">
+              <label className={classes.label} htmlFor="dob">
                 Date of Birth
                 <span className={classes.required_field}>*</span>
               </label>
 
               <input
-                name="position"
-                id="position"
-                value={formData.position}
+                name="dob"
+                id="dob"
+                value={formData.dob}
                 type="date"
                 placeholder="Enter date of birth..."
                 onChange={onFormDataChangeHandler}
@@ -274,7 +271,7 @@ const AddVoterModal = (props) => {
 AddVoterModal.propTypes = {
   toastModal: PropTypes.func.isRequired,
   onCloseModal: PropTypes.func.isRequired,
-  onAddCandidate: PropTypes.func.isRequired,
+  // onAddCandidate: PropTypes.func.isRequired,
   setRefetch: PropTypes.func,
 };
 

@@ -1,9 +1,10 @@
 import dayjs from "dayjs";
 //import formatDateTime from "../../Functions/formatDateTime";
 import PaginationTable from "../../UI/PaginationTable/PaginationTable";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import AddVoterModal from "../../UI/Modals/AddVoterModal";
 import EditVoterModal from "../../UI/Modals/EditVoterModal";
+import Toast from "../../UI/Notification/Toast";
 
 const allVoters = [
   {
@@ -33,13 +34,11 @@ const RegisterVotersContent = () => {
     setShowAddVoterModal(true);
   };
 
+  const ToastHandler = useCallback((type, message) => {
+    Toast(type, message);
+  }, []);
+
   const onEditVoterHandler = (id, image, name, dob) => {
-    // console.log({
-    //   id: id,
-    //   image: image,
-    //   name: name,
-    //   dob: dob,
-    // });
     setShowEditVoterModal(true);
 
     setSubmitEditData({
@@ -83,7 +82,7 @@ const RegisterVotersContent = () => {
           onAddVoter={(voterData) =>
             onAddVoterHandler(showAddVoterModal, voterData)
           }
-          //toastModal={ToastHandler}
+          toastModal={ToastHandler}
           onCloseModal={closeShowAddVoterModalHandler}
         />
       )}
@@ -93,7 +92,7 @@ const RegisterVotersContent = () => {
           // onAddCandidate={(voterData) =>
           //   onEditVoterHandler(showEditVoterModal, voterData)
           // }
-          //toastModal={ToastHandler}
+          toastModal={ToastHandler}
           submitEditData={submitEditData}
           onCloseModal={closeShowEditVoterModalHandler}
         />

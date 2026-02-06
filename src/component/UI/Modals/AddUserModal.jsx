@@ -169,7 +169,7 @@ const AddUserModal = (props) => {
 
           props.onCloseModal(); //Closing modal after insertion
 
-          clearForm();
+          //clearForm();
         } catch (err) {
           if (err.response && err.response.data && err.response.data.error) {
             props.toastModal("error", err.response.data.error);
@@ -197,21 +197,21 @@ const AddUserModal = (props) => {
   ///////////////////////////////////////////////////////////////////////
 
   //function to clear input fields
-  const clearForm = () => {
-    setFormData({
-      userId: "",
-      fullName: "",
-      userName: "",
-      email: "",
-      phoneNumber: "",
-      loginType: "",
-      pass: "",
-      confirmPass: "",
-    });
+  // const clearForm = () => {
+  //   setFormData({
+  //     userId: "",
+  //     fullName: "",
+  //     userName: "",
+  //     email: "",
+  //     phoneNumber: "",
+  //     loginType: "",
+  //     pass: "",
+  //     confirmPass: "",
+  //   });
 
-    setFile(null);
-    fileInputRef.current.value = null; //clearing image path
-  };
+  //   setFile(null);
+  //   fileInputRef.current.value = null; //clearing image path
+  // };
 
   ///////////////////////////////
   //DELETE PROFILE PICTURE FILE
