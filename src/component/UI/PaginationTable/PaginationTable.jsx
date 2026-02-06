@@ -313,7 +313,9 @@ const PaginationTable = ({
                               border: "0.3rem solid #ffffff4d",
                               // mr: 1,
                             }}
-                            onClick={() => onEdit(row.id, row.name, row.phone)}
+                            onClick={() =>
+                              onEdit(row.id, row.image, row.name, row.dob)
+                            }
                           >
                             <EditIcon sx={{ fontSize: "1.8rem" }} />
                           </IconButton>

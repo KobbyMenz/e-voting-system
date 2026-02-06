@@ -1,6 +1,9 @@
 import dayjs from "dayjs";
 //import formatDateTime from "../../Functions/formatDateTime";
 import PaginationTable from "../../UI/PaginationTable/PaginationTable";
+import { useState } from "react";
+import AddVoterModal from "../../UI/Modals/AddVoterModal";
+import EditVoterModal from "../../UI/Modals/EditVoterModal";
 
 const allVoters = [
   {
@@ -21,7 +24,40 @@ const allVoters = [
 ];
 
 const RegisterVotersContent = () => {
+  const [showAddVoterModal, setShowAddVoterModal] = useState(false);
+  const [showEditVoterModal, setShowEditVoterModal] = useState(false);
+  const [submitEditData, setSubmitEditData] = useState({});
   //columns for pagination table (ManageUserPT)
+
+  const onAddVoterHandler = () => {
+    setShowAddVoterModal(true);
+  };
+
+  const onEditVoterHandler = (id, image, name, dob) => {
+    // console.log({
+    //   id: id,
+    //   image: image,
+    //   name: name,
+    //   dob: dob,
+    // });
+    setShowEditVoterModal(true);
+
+    setSubmitEditData({
+      id: id,
+      image: image,
+      name: name,
+      dob: dob,
+    });
+  };
+
+  const closeShowEditVoterModalHandler = () => {
+    setShowEditVoterModal(false);
+  };
+
+  const closeShowAddVoterModalHandler = () => {
+    setShowAddVoterModal(false);
+  };
+
   const columns = [
     { field: "sn", headerName: "S/N" },
     { field: "id", headerName: "ID" },
@@ -42,14 +78,35 @@ const RegisterVotersContent = () => {
 
   return (
     <>
+      {showAddVoterModal && (
+        <AddVoterModal
+          onAddVoter={(voterData) =>
+            onAddVoterHandler(showAddVoterModal, voterData)
+          }
+          //toastModal={ToastHandler}
+          onCloseModal={closeShowAddVoterModalHandler}
+        />
+      )}
+
+      {showEditVoterModal && (
+        <EditVoterModal
+          // onAddCandidate={(voterData) =>
+          //   onEditVoterHandler(showEditVoterModal, voterData)
+          // }
+          //toastModal={ToastHandler}
+          submitEditData={submitEditData}
+          onCloseModal={closeShowEditVoterModalHandler}
+        />
+      )}
+
       <div className="table_wrapper">
         <PaginationTable
           // key={id}
           columns={columns}
           rows={rows}
-          // onEdit={onEdit}
+          onEdit={onEditVoterHandler}
           // onDelete={onDelete}
-          // onAdd={onAdd}
+          onAdd={onAddVoterHandler}
         />
       </div>
     </>
