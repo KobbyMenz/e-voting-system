@@ -183,9 +183,7 @@ input,textarea
   color: var(--text-color);
 }
 
-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-}
+
 
 /* .select:user-invalid {
   outline: 1px solid red;
