@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import SignIn from "./component/pages/SignIn/SignIn";
 import NotFoundPage from "./component/pages/NotFound/NotFoundPage";
@@ -8,17 +8,96 @@ import RegisterVoters from "./component/pages/RegisterVoters/RegisterVoters";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./context/ThemeContext";
 import ManageUsers from "./component/pages/ManageUsers/ManageUsers";
+import { useCallback, useEffect, useRef } from "react";
+//import useLogoutTimer from "./components/CustomHooks/useLogoutTimer";
 
 function App() {
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [logoutTimer, setLogoutTimer] = useState(10);
+  //const [autoTheme, setAutoTheme] = useState("");
+
+  // Inactivity timeout (15 minutes)
+  const INACTIVITY_TIME = 15 * 60 * 1000; // 15 minutes
+
+  // Inactivity timeout (15 minutes)
+  const inactivityTimerRef = useRef(null);
+
+  /////////////////////////////////////////////
+  //Logout function
+  ////////////////////////////////////////
+  const navigate = useNavigate();
+  const logoutHandler = useCallback(() => {
+    navigate("/");
+    sessionStorage.clear();
+    //localStorage.removeItem("user");
+
+    // clear inactivity timer
+    if (inactivityTimerRef.current) {
+      clearTimeout(inactivityTimerRef.current);
+      inactivityTimerRef.current = null;
+    }
+  }, [navigate]);
+
+  ////////////////////////////////////////////////////////////////
+  //==== Inactivity auto-logout: reset on user activity====
+  ////////////////////////////////////////////////////////////
+  useEffect(() => {
+    //if (!isLoggedIn) return; // Only track when logged in
+    // const localStorageAutoLogoutTime = +localStorage.getItem("autoLogoutTime");
+
+    const events = [
+      "mousemove",
+      "mousedown",
+      "keydown",
+      "touchstart",
+      "scroll",
+      "click",
+    ];
+
+    const resetInactivity = () => {
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+      }
+
+      // set a new inactivity timeout
+      inactivityTimerRef.current = setTimeout(() => {
+        logoutHandler();
+      }, INACTIVITY_TIME);
+
+      // Also update stored expiryTime so other tabs/logic can read it
+      // try {
+      //   const expiryTimestamp = Date.now() + localStorageAutoLogoutTime;
+      //   localStorage.setItem("expiryTime", JSON.stringify(expiryTimestamp));
+      // } catch {
+      //   // ignore
+      // }
+    };
+
+    // attach listeners
+    events.forEach((ev) => window.addEventListener(ev, resetInactivity));
+
+    // start initial timer
+    resetInactivity();
+
+    return () => {
+      events.forEach((ev) => window.removeEventListener(ev, resetInactivity));
+      if (inactivityTimerRef.current) {
+        clearTimeout(inactivityTimerRef.current);
+        inactivityTimerRef.current = null;
+      }
+    };
+  }, [INACTIVITY_TIME, logoutHandler]);
+  ///////////////////////////////////////////////
+
   return (
     <ThemeProvider>
       <main className="App">
         <ToastContainer />
-        
+
         <Routes>
           {/* Define your routes here /admin/manage-users */}
           <Route path="/" element={<SignIn />} />
-          
+
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           <Route path="/voter/dashboard" element={<VoterDashboard />} />
