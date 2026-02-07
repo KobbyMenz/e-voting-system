@@ -36,7 +36,7 @@ const PaginationTable = ({
   placeholder,
 }) => {
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [search, setSearch] = useState("");
 
   // Filter rows based on search
@@ -51,7 +51,7 @@ const PaginationTable = ({
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 5));
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -246,6 +246,12 @@ const PaginationTable = ({
                 .map((row) => (
                   <TableRow
                     key={row.id}
+                    // sx={{
+                    //   "&:nth-of-type(odd)": {
+                    //     backgroundColor: "var(--table-strip)",
+                    //   },
+                    //   "&:hover": { backgroundColor: "var(--hover-color)" },
+                    // }}
                     sx={{
                       "&:nth-of-type(odd)": {
                         backgroundColor: "var(--table-strip)",
@@ -280,7 +286,7 @@ const PaginationTable = ({
                         {/* {row[col.field]} */}
                         {col.type === "image" ? (
                           <ImageBox
-                            background="transparent"
+                            // background="transparent"
                             src={`${row[col.field]}`}
                             alt={row.name}
                           />

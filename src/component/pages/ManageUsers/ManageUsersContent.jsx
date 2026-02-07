@@ -314,9 +314,8 @@ const ManageUsersContent = () => {
             }
           </div>
 
-          <div className={`${classes.card__wrapper} ${classes.footer_card}`}>
-            <Footer />
-          </div>
+          {/* Footer */}
+          <Footer />
         </div>
       }
     </Fragment>

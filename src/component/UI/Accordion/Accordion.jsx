@@ -38,14 +38,23 @@ export default function AccordionExpandDefault({
         sx={{
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
-          borderBottom: "0.2rem solid var(--bg-color)",
-          marginBottom: "0.2rem",
+         // borderBottom: "0.2rem solid var(--bg-color)",
+          marginBottom: "0.5rem",
           borderRadius: "1rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
-          // border: "0.2rem solid var(--border-color)",
+          border: "0.2rem solid var(--bg-color)",
 
           "@media (max-width: 600px)": {
             boxShadow: "0rem 0.1rem 0.5rem rgba(0, 0, 0, 0.15)",
+          },
+
+          "&:hover": {
+            transition: "all 0.3s ease-in-out",
+            // border: "0.1rem solid var(--primary)",
+            // transform: "translateY(-0.2rem)",
+            borderColor: "var(--primary)",
+            boxShadow: "0 0.4rem 1.2rem rgba(102, 126, 234, 0.2)",
+            // borderLeft: "0.5rem solid var(--primary)",
           },
           // "@media (max-width: 768px)": {
 
@@ -86,9 +95,15 @@ export default function AccordionExpandDefault({
           >
             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
               <Typography variant="h4" color="initial">
-                <h5 style={{ fontWeight: "600", color: "var(--text-color)" }}>
+                <p
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: "700",
+                    color: "var(--text-color)",
+                  }}
+                >
                   {electionTitle}
-                </h5>{" "}
+                </p>{" "}
               </Typography>
               <div
                 style={{

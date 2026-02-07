@@ -72,7 +72,7 @@ const createElectionInstance = (
 
 const election = [
   createElectionInstance(
-    "SRC Presidential",
+    "Boys Prefect",
     "Namong SRC Presidential Election",
     "2026-01-23T07:00",
     "2026-01-27T19:00",
@@ -567,9 +567,9 @@ const AdminDashboardContent = () => {
 
         {/*======= usage log ========*/}
 
-        <Card className={`${classes.card__wrapper} ${classes.footer_card}`}>
+        <div style={{ marginTop: "-1rem" }}>
           <Footer />
-        </Card>
+        </div>
       </div>
     </Fragment>
   );

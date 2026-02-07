@@ -5,6 +5,7 @@ import { useCallback, useState } from "react";
 import AddVoterModal from "../../UI/Modals/AddVoterModal";
 import EditVoterModal from "../../UI/Modals/EditVoterModal";
 import Toast from "../../UI/Notification/Toast";
+import Footer from "../../Footer/Footer";
 
 const allVoters = [
   {
@@ -107,6 +108,10 @@ const RegisterVotersContent = () => {
           // onDelete={onDelete}
           onAdd={onAddVoterHandler}
         />
+      </div>
+
+      <div >
+        <Footer />
       </div>
     </>
   );
