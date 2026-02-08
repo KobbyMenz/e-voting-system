@@ -288,7 +288,7 @@ const AddUserModal = (props) => {
                           style={{ padding: "1rem" }}
                           id="photo"
                           ref={fileInputRef}
-                          name="profilePicture"
+                          name="photo"
                           type="file"
                           onChange={profilePictureChangeHandler}
                           accept="image/*"
@@ -324,7 +324,7 @@ const AddUserModal = (props) => {
                   </label>
 
                   <input
-                    name="fullName"
+                    name="name"
                     id="name"
                     value={formData.fullName}
                     type="text"
@@ -333,22 +333,6 @@ const AddUserModal = (props) => {
                     required
                   />
                 </div>
-
-                {/* <div className={classes.form_control}>
-                  <label htmlFor="userName">
-                    User Name<span className={classes.required_field}>*</span>
-                  </label>
-
-                  <input
-                    name="userName"
-                    id="userName"
-                    type="text"
-                    placeholder="eg. Kobby ( No spaces,- + = ? > < allowed )"
-                    onChange={onFormDataChangeHandler}
-                    value={formData.userName}
-                    required
-                  />
-                </div> */}
               </div>
 
               <div className={classes.form_right}>
@@ -374,7 +358,7 @@ const AddUserModal = (props) => {
                   </label>
 
                   <input
-                    name="phoneNumber"
+                    name="phone"
                     id="phone"
                     type="tel"
                     onChange={onFormDataChangeHandler}
@@ -384,27 +368,6 @@ const AddUserModal = (props) => {
                   />
                 </div>
 
-                {/* <div className={classes.form_control}>
-                  <label htmlFor="loginType">
-                    Role Type<span className={classes.required_field}>*</span>
-                  </label>
-
-                  <select
-                    className={classes.select}
-                    id="loginType"
-                    name="loginType"
-                    onChange={onFormDataChangeHandler}
-                    value={formData.loginType}
-                    required
-                  >
-                    <option value="">------ Select an option ------</option>
-
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="User">User</option>
-                  </select>
-                </div> */}
-
                 <div className={classes.form_control}>
                   <label htmlFor="password">
                     Password<span className={classes.required_field}>*</span>
@@ -412,7 +375,7 @@ const AddUserModal = (props) => {
 
                   <PasswordInput
                     onChange={onFormDataChangeHandler}
-                    name="pass"
+                    name="password"
                     value={formData.pass ? formData.pass : ""}
                     id="password"
                     placeholder="Enter password"

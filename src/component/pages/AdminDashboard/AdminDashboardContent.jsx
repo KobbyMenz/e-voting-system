@@ -515,10 +515,11 @@ const AdminDashboardContent = () => {
                 flexWrap="wrap-reverse"
                 alignItems="center"
               >
-                <div style={{flexGrow:"1"}}>
+                <div style={{ flexGrow: "1" }}>
                   <SearchBar
                     placeholder="Search for election..."
                     type="search"
+                    id="searchElection"
                     name="searchElection"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}

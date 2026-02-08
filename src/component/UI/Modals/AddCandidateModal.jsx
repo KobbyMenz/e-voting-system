@@ -168,7 +168,7 @@ const AddCandidateModal = (props) => {
                       style={{ padding: "1rem" }}
                       id="photo"
                       ref={fileInputRef}
-                      name="profilePicture"
+                      name="photo"
                       type="file"
                       onChange={profilePictureChangeHandler}
                       accept="image/*"
@@ -231,22 +231,6 @@ const AddCandidateModal = (props) => {
                 required
               />
             </div>
-
-            {/* <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="description">
-                Description<span className={classes.required_field}>*</span>
-              </label>
-
-              <input
-                name="description"
-                id="description"
-                value={formData.description}
-                type="text"
-                placeholder="Brief details about this election..."
-                onChange={onFormDataChangeHandler}
-                required
-              />
-            </div> */}
           </div>
 
           <div className={classes.btn_container}>

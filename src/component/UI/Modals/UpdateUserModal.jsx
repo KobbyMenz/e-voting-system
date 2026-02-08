@@ -146,7 +146,7 @@ const UpdateUserModal = (props) => {
 
               props.onCloseModal(); //Close modal after update
 
-              clearForm();
+              
             } catch (err) {
               if (
                 err.response &&
@@ -213,7 +213,7 @@ const UpdateUserModal = (props) => {
 
               props.onCloseModal(); //Close modal after update
 
-              clearForm();
+              
             } catch (err) {
               if (
                 err.response &&
@@ -246,22 +246,22 @@ const UpdateUserModal = (props) => {
   ///////////////////////////////////////////////////////////////////////
 
   //function to clear input fields
-  const clearForm = () => {
-    setFormData({
-      userId: "",
-      fullName: "",
-      userName: "",
-      email: "",
-      phoneNumber: "",
-      loginType: "",
-      pass: "",
-      confirmPass: "",
-    });
+  // const clearForm = () => {
+  //   setFormData({
+  //     userId: "",
+  //     fullName: "",
+  //     userName: "",
+  //     email: "",
+  //     phoneNumber: "",
+  //     loginType: "",
+  //     pass: "",
+  //     confirmPass: "",
+  //   });
 
-    // setSelectedImage(null);
-    setFile(null);
-    fileInputRef.current.value = null;
-  };
+  //   // setSelectedImage(null);
+  //   setFile(null);
+  //   fileInputRef.current.value = null;
+  // };
 
   ///////////////////////////////
   //DELETE PROFILE PICTURE FILE
@@ -397,7 +397,7 @@ const UpdateUserModal = (props) => {
                           style={{ padding: "1rem" }}
                           id="photo"
                           ref={fileInputRef}
-                          name=""
+                          name="photo"
                           type="file"
                           onChange={profilePictureChangeHandler}
                           accept="image/*"
@@ -482,7 +482,7 @@ const UpdateUserModal = (props) => {
                   </label>
 
                   <input
-                    name="phoneNumber"
+                    name="phone"
                     id="phone"
                     type="tel"
                     onChange={onFormDataChangeHandler}
@@ -492,45 +492,16 @@ const UpdateUserModal = (props) => {
                   />
                 </div>
 
-                {/* <div className={classes.form_control}>
-                  <label htmlFor="loginType">
-                    Role Type<span className={classes.required_field}>*</span>
-                  </label>
-
-                  <select
-                    className={classes.select}
-                    id="loginType"
-                    name="loginType"
-                    onChange={onFormDataChangeHandler}
-                    value={formData.loginType}
-                    required
-                  >
-                    <option value="">------ Select an option ------</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Manager">Manager</option>
-                    <option value="User">User</option>
-                  </select>
-                </div> */}
-
                 <div className={classes.form_control}>
                   <label htmlFor="password">Password</label>
 
                   <PasswordInput
                     onChange={onFormDataChangeHandler}
-                    name="pass"
+                    name="password"
                     value={formData.pass ? formData.pass : ""}
                     id="password"
                     placeholder="Enter password"
                   />
-
-                  {/* <input
-                    onChange={onFormDataChangeHandler}
-                    name="pass"
-                    value={formData.pass ? formData.pass : ""}
-                    id="password"
-                    type="password"
-                    placeholder="Enter password"
-                  /> */}
                 </div>
 
                 <div className={classes.form_control}>
@@ -543,15 +514,6 @@ const UpdateUserModal = (props) => {
                     id="confirmPass"
                     placeholder="Confirm password"
                   />
-
-                  {/* <input
-                    onChange={onFormDataChangeHandler}
-                    value={formData.confirmPass ? formData.confirmPass : ""}
-                    name="confirmPass"
-                    id="confirmPass"
-                    type="password"
-                    placeholder="Confirm password"
-                  /> */}
                 </div>
               </div>
             </div>
