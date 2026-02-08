@@ -292,6 +292,7 @@ const AdminDashboardContent = () => {
     ],
   );
 
+
   const totalCandidates = addElection
     .map((item) => item.candidates.length)
     .slice(0, -1)
