@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -32,9 +33,13 @@ export default function AccordionExpandDefault({
   onDeleteElection,
   onEditElection,
 }) {
+  const [expanded, setExpanded] = useState(false);
+
   return (
     <Card className={classes.card}>
       <Accordion
+        expanded={expanded}
+        onChange={(event, isExpanded) => setExpanded(isExpanded)}
         sx={{
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
@@ -53,7 +58,7 @@ export default function AccordionExpandDefault({
             // border: "0.1rem solid var(--primary)",
             // transform: "translateY(-0.2rem)",
             borderColor: "var(--primary)",
-            boxShadow: "0 0.4rem 1.2rem rgba(102, 126, 234, 0.2)",
+            boxShadow: "0 0.4rem 1.2rem var(--shadow-color)",
             // borderLeft: "0.5rem solid var(--primary)",
           },
           // "@media (max-width: 768px)": {
@@ -63,14 +68,16 @@ export default function AccordionExpandDefault({
       >
         <AccordionSummary
           expandIcon={
-            <ExpandMoreIcon
-              sx={{
-                color: "#fff",
-                background: "var(--primary)",
-                fontSize: "2.5rem",
-                borderRadius: "50%",
-              }}
-            />
+            <ToolTip title={expanded ? "Show less" : "Show more"}>
+              <ExpandMoreIcon
+                sx={{
+                  color: "#fff",
+                  background: "var(--primary)",
+                  fontSize: "2.5rem",
+                  borderRadius: "50%",
+                }}
+              />
+            </ToolTip>
           }
           aria-controls={`panel${id}-content`}
           id={`panel${id}-header`}
@@ -343,7 +350,7 @@ export default function AccordionExpandDefault({
                         height: "3.6rem",
                         border: "0.3rem solid #ffffff4d",
                         backgroundColor: "#ca0202",
-                        color: "var(text-color)",
+                        color: "var(--text-color)",
                         "&:hover": { backgroundColor: "#f52b1cff" },
                       }}
                       onClick={() => onDeleteElection(id)}

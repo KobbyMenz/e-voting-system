@@ -9,6 +9,7 @@
   --bg-color2: #fff;
   --bg-color3: #fff;
   --text-color: #1a1a1a;
+  --shadow-color: hsla(246, 100%, 24%, 0.397);
 
   --primary: #0c007c;
   --primary-deep: #0a0063;
@@ -38,7 +39,7 @@
   --bg-color2: #1b222a; /*  */
   --bg-color3: #12191fd8;
   --text-color: #ffffff;
-
+  --shadow-color: rgba(102, 126, 234, 0.2);
   --primary: #007aba; /*,,  #007aba*/
   --primary-deep: #0068a0;
   --secondary: #0c007c;

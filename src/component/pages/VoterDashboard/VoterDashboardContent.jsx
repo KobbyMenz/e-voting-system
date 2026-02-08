@@ -151,6 +151,7 @@ const VoterDashboardContent = () => {
         Toast("warning", "Please select a candidate first");
         return;
       }
+      
       setCurrentElectionId(electionId);
       // setVotingInProgress(true);
 

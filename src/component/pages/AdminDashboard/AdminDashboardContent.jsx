@@ -16,6 +16,7 @@ import Toast from "../../UI/Notification/Toast";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import dayjs from "dayjs";
 import Loader from "../../UI/Loader/Loader";
+import SearchBar from "../../UI/SearchBar/SeachBar";
 //import useDeleteHook from "../../CustomHooks/useDeleteHook";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
@@ -92,6 +93,7 @@ const AdminDashboardContent = () => {
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState("");
   //const [loading, setLoading] = useState(true);
 
   //const { deleteData } = useDeleteHook();
@@ -133,6 +135,17 @@ const AdminDashboardContent = () => {
   const closeShowAddCandidateModalHandler = useCallback(() => {
     setShowAddCandidateModal(false);
   }, []);
+
+  // const onChangeHandler = (e) => {
+  //   ;
+  // };
+
+  // Filter added election rows based on search
+  const filteredElectionRows = addElection.filter((row) =>
+    Object.values(row).some((value) =>
+      String(value).toLowerCase().includes(search.toLowerCase()),
+    ),
+  );
 
   /////////////////////////////////////////////////////////
   //* Handler to add a candidate to a specific election*/
@@ -496,16 +509,34 @@ const AdminDashboardContent = () => {
                 </p>
               </div>
 
-              <Button onClick={onShowAddElectionModalHandler}>
-                {" "}
-                <AddIcon /> New Election
-              </Button>
+              <Box
+                display="flex"
+                gap="1rem"
+                flexWrap="wrap-reverse"
+                alignItems="center"
+              >
+                <div style={{flexGrow:"1"}}>
+                  <SearchBar
+                    placeholder="Search for election..."
+                    type="search"
+                    name="searchElection"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
+                </div>
+
+                <Button onClick={onShowAddElectionModalHandler}>
+                  {" "}
+                  <AddIcon /> New Election
+                </Button>
+              </Box>
             </div>
 
             <Box sx={{ padding: "1rem 0" }}>
-              {Array.isArray(addElection) && addElection.length > 0 ? (
+              {Array.isArray(filteredElectionRows) &&
+              filteredElectionRows.length > 0 ? (
                 <>
-                  {addElection.map((item) => (
+                  {filteredElectionRows.map((item) => (
                     <AccordionExpandDefault
                       key={item.id}
                       id={item.id}

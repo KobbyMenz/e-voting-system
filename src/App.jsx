@@ -8,11 +8,11 @@ import RegisterVoters from "./component/pages/RegisterVoters/RegisterVoters";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./context/ThemeContext";
 import ManageUsers from "./component/pages/ManageUsers/ManageUsers";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 //import useLogoutTimer from "./components/CustomHooks/useLogoutTimer";
 
 function App() {
-  // const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   // const [logoutTimer, setLogoutTimer] = useState(10);
   //const [autoTheme, setAutoTheme] = useState("");
 
@@ -42,7 +42,10 @@ function App() {
   //==== Inactivity auto-logout: reset on user activity====
   ////////////////////////////////////////////////////////////
   useEffect(() => {
-    //if (!isLoggedIn) return; // Only track when logged in
+    //const isLoggedInSessionStorage = ;
+    setIsLoggedIn(JSON.parse(sessionStorage.getItem("isLoggedIn")));
+
+    if (!isLoggedIn) return; // Only track when logged in
     // const localStorageAutoLogoutTime = +localStorage.getItem("autoLogoutTime");
 
     const events = [
@@ -86,8 +89,38 @@ function App() {
         inactivityTimerRef.current = null;
       }
     };
-  }, [INACTIVITY_TIME, logoutHandler]);
+  }, [INACTIVITY_TIME, logoutHandler, isLoggedIn]);
   ///////////////////////////////////////////////
+
+  ///////////////////////////////////////
+  //Disabling right click and keyboard shortcuts
+  ///////////////////////////////////////
+  // useEffect(() => {
+  //   const handleContextMenu = (e) => {
+  //     e.preventDefault();
+  //   };
+
+  //   document.addEventListener("contextmenu", handleContextMenu);
+
+  //   const disableShortcuts = (e) => {
+  //     if (
+  //       (e.ctrlKey && e.shiftKey && e.key === "I") ||
+  //       (e.ctrlKey && e.shiftKey && e.key === "J") ||
+  //       (e.ctrlKey && e.key === "U") ||
+  //       e.key === "F12"
+  //     ) {
+  //       e.preventDefault();
+  //     }
+  //   };
+
+  //   document.addEventListener("keydown", disableShortcuts);
+
+  //   return () => {
+  //     document.removeEventListener("contextmenu", handleContextMenu);
+  //     document.removeEventListener("keydown", disableShortcuts);
+  //   };
+  // }, []);
+  //////////////////////////////////////////////
 
   return (
     <ThemeProvider>
@@ -98,13 +131,25 @@ function App() {
           {/* Define your routes here /admin/manage-users */}
           <Route path="/" element={<SignIn />} />
 
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route
+            path="/admin/dashboard"
+            element={isLoggedIn && <AdminDashboard />}
+          />
 
-          <Route path="/voter/dashboard" element={<VoterDashboard />} />
+          <Route
+            path="/voter/dashboard"
+            element={isLoggedIn && <VoterDashboard />}
+          />
 
-          <Route path="/admin/register" element={<RegisterVoters />} />
+          <Route
+            path="/admin/register"
+            element={isLoggedIn && <RegisterVoters />}
+          />
 
-          <Route path="/admin/manage_users" element={<ManageUsers />} />
+          <Route
+            path="/admin/manage_users"
+            element={isLoggedIn && <ManageUsers />}
+          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

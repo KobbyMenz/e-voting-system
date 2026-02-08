@@ -111,6 +111,7 @@ const ElectionCard = ({
                       </Box>
                     </div>
 
+                      {/* */}
                     {isSelected && (
                       <div className={classes.selectIndicator}>
                         {isSelected ? (

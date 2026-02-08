@@ -61,9 +61,11 @@ const SignIn = () => {
     e.preventDefault();
 
     if (userName === "KobbyMenz" && pass === "11111111") {
+      sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
       navigate("/admin/dashboard");
 
     }else if (userName === "Ronyx" && pass === "22222222") {
+      sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
       navigate("/voter/dashboard");
      } else {
       Toast("error", "Wrong credentials");
