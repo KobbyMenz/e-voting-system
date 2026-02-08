@@ -45,12 +45,13 @@
 }
 
 .content h4 {
-  color:  var(--text-color);
+  color: var(--text-color);
   margin-top: 1.5rem;
   margin-bottom: 1rem;
 }
 
-.electionDescription,.electionDate {
+.electionDescription,
+.electionDate {
   color: #666;
   font-size: 1.3rem;
   margin: 0.5rem 0 1rem 0;
@@ -76,6 +77,9 @@
 .status.closed {
   background-color: #dc3545;
 }
+.status.upcoming {
+  background-color: var(--primary);
+}
 
 .candidatesContainer {
   display: grid;
@@ -87,7 +91,7 @@
 .candidateCard {
   position: relative;
   padding: 1.5rem;
-  background:  var(--bg-color3);
+  background: var(--bg-color3);
   border: 0.2rem solid var(--border-color);
   border-radius: 0.8rem;
   cursor: pointer;

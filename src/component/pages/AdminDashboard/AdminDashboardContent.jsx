@@ -57,7 +57,7 @@ const createElectionInstance = (
   id: generateUniqueId(),
   title: title,
   dateCreated: dayjs().format("YYYY-MM-DDTHH:mm"),
-  status: "Active",
+  status: "Upcoming",
   description: description,
   startDate: startDate,
   endDate: endDate,

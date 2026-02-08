@@ -25,13 +25,19 @@ const ElectionCard = ({
           gap="1rem"
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            {/*Election title*/}
             <h1>{election.title || "Election"}</h1>
 
+            {/* Election status */}
             <span
               className={
                 election.status === "Active"
                   ? `${classes.status} ${classes.active}`
-                  : `${classes.status} ${classes.closed}`
+                  : election.status === "Closed"
+                    ? `${classes.status} ${classes.closed}`
+                    : election.status === "Upcoming"
+                      ? `${classes.status} ${classes.upcoming}`
+                      : ""
               }
             >
               {election.status}
@@ -39,12 +45,14 @@ const ElectionCard = ({
           </Box>
         </Box>
 
+        {/*Election description*/}
         <p className={classes.electionDescription}>
           {election.description || ""}
         </p>
 
         <h2>Select a Candidate to Vote</h2>
 
+        {/**/}
         {election.candidates && election.candidates.length > 0 ? (
           <div className={classes.candidatesContainer}>
             {election.candidates.map((candidate) => {
@@ -61,12 +69,21 @@ const ElectionCard = ({
                       isSelected ? classes.selected : ""
                     }`}
                     onClick={() => {
-                      election.status === "Closed";
+                      // election.status === "Closed";
+
+                      //Preventing voter to vote when election status is closed
                       if (election.status === "Closed") {
                         Toast("error", "Election is closed");
                         return;
                       }
 
+                      //Preventing voter to vote when election status is upcoming
+                      if (election.status === "Upcoming") {
+                        Toast("error", "Election is yet to commence");
+                        return;
+                      }
+
+                      //Function to handle selected candidate
                       handleSelectCandidate(
                         election._id || election.id,
                         candidateId,

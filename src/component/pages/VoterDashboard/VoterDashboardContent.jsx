@@ -62,9 +62,32 @@ const VoterDashboardContent = () => {
 
     {
       id: 3,
+      title: "Dinning Hall Prefect",
+      description: "Namong Dinning Hall Election",
+      status: "Upcoming",
+      startDate: "2026-02-23 07:00:00",
+      endDate: "2026-02-27 19:00:00",
+      candidates: [
+        {
+          candidateId: 1,
+          name: "John Doe",
+          image: "",
+          position: "Dinning Hall Prefect",
+        },
+        {
+          candidateId: 2,
+          name: "Jane Smith",
+          image: "",
+          position: "Dinning Hall Prefect",
+        },
+      ],
+    },
+
+    {
+      id: 4,
       title: "Sanitation Prefect",
       description: "Namong Sanitation Prefect Election",
-      status: "Active",
+      status: "Upcoming",
       startDate: "2026-02-23 07:00:00",
       endDate: "2026-02-27 19:00:00",
       candidates: [
@@ -184,8 +207,6 @@ const VoterDashboardContent = () => {
           onCloseModal={handleCloseVoteModal}
         />
       )} */}
-
-      
 
       {loading ? (
         <Loader />

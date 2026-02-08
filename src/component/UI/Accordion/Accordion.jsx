@@ -38,7 +38,7 @@ export default function AccordionExpandDefault({
         sx={{
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
-         // borderBottom: "0.2rem solid var(--bg-color)",
+          // borderBottom: "0.2rem solid var(--bg-color)",
           marginBottom: "0.5rem",
           borderRadius: "1rem",
           boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
@@ -107,8 +107,15 @@ export default function AccordionExpandDefault({
               </Typography>
               <div
                 style={{
-                  background: status === "Active" ? "#06882d" : "#ca0202",
-                  padding: "0.3rem 1.2rem",
+                  background:
+                    status === "Active"
+                      ? "#06882d"
+                      : status === "Upcoming"
+                        ? "var(--primary)"
+                        : status === "Closed"
+                          ? "#ca0202"
+                          : "",
+                  padding: "0.5rem 1.2rem",
                   fontSize: "1.4rem",
                   borderRadius: "1.5rem",
                   height: "fit-content",
@@ -277,8 +284,14 @@ export default function AccordionExpandDefault({
                 >
                   <h2>Status Control:</h2>
                   <p>
-                    Election is currently{" "}
-                    {status === "Active" ? "open for voting" : "closed"}
+                    Election is{" "}
+                    {status === "Active"
+                      ? " currently open for voting"
+                      : status === "Closed"
+                        ? " currently closed"
+                        : status === "Upcoming"
+                          ? " yet to commence"
+                          : ""}
                   </p>
                 </Box>
               </Box>
