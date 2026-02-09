@@ -390,7 +390,7 @@ const AdminDashboardContent = () => {
                   <Card className={classes.card__box}>
                     <div className={classes.description__container}>
                       <div className={classes.description}>
-                        <p>Active Election:</p>
+                        <p>Number of Elections:</p>
                         <p className={classes.amount2}>{addElection.length}</p>
                       </div>
                     </div>
