@@ -48,6 +48,7 @@ function App() {
     if (!isLoggedIn) return; // Only track when logged in
     // const localStorageAutoLogoutTime = +localStorage.getItem("autoLogoutTime");
 
+    
     const events = [
       "mousemove",
       "mousedown",

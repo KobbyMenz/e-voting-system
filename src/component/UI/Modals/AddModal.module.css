@@ -113,7 +113,6 @@ header .close_btn:hover svg {
   position: relative;
 }
 
-
 .modal .content,
 .addUserModal .content {
   padding: 1rem 2rem;
@@ -182,8 +181,6 @@ input,textarea
   background: var(--bg-color);
   color: var(--text-color);
 }
-
-
 
 /* .select:user-invalid {
   outline: 1px solid red;
@@ -280,11 +277,6 @@ option:not(:invalid) {
 option {
   color: var(--text-color);
   background: var(--bg-color);
-}
-
-/* .modal  */
-.content p {
-  color: #020202;
 }
 
 /* .modal  */

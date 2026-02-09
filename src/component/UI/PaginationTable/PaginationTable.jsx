@@ -196,7 +196,7 @@ const PaginationTable = ({
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
                     display:
-                      col.field === "id" || col.field === "position"
+                      col.field === "id" 
                         ? "none"
                         : "table-cell",
                     // Mobile responsive
@@ -267,7 +267,7 @@ const PaginationTable = ({
                           borderBottom: "1px solid var(--bg-color)",
                           borderLeft: "0.1rem solid var(--bg-color)",
                           display:
-                            col.field === "id" || col.field === "position"
+                            col.field === "id" 
                               ? "none"
                               : "table-cell",
                           // Mobile responsive
@@ -320,7 +320,13 @@ const PaginationTable = ({
                               // mr: 1,
                             }}
                             onClick={() =>
-                              onEdit(row.id, row.image, row.name, row.dob)
+                              onEdit(
+                                row.id,
+                                row.image,
+                                row.name,
+                                row.dob,
+                                row.position,
+                              )
                             }
                           >
                             <EditIcon sx={{ fontSize: "1.8rem" }} />

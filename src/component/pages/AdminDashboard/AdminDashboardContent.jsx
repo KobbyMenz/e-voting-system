@@ -17,6 +17,7 @@ import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import dayjs from "dayjs";
 import Loader from "../../UI/Loader/Loader";
 import SearchBar from "../../UI/SearchBar/SeachBar";
+import EditCandidateModal from "../../UI/Modals/EditCandidateModal";
 //import useDeleteHook from "../../CustomHooks/useDeleteHook";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
@@ -94,6 +95,8 @@ const AdminDashboardContent = () => {
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
+  const [submitCandidateData, setSubmitCandidateData] = useState({});
+  const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
   //const [loading, setLoading] = useState(true);
 
   //const { deleteData } = useDeleteHook();
@@ -116,8 +119,27 @@ const AdminDashboardContent = () => {
     setShowAddElectionModal(true);
   }, []);
 
+  const onEditCandidateHandler = useCallback(
+    (id, image, name, dob, position) => {
+      setShowEditCandidateModal(true);
+
+      setSubmitCandidateData({
+        id: id,
+        name: name,
+        image: image,
+        dob: dob,
+        position: position,
+      });
+    },
+    [],
+  );
+
   const closeShowAddElectionModalHandler = useCallback(() => {
     setShowAddElectionModal(false);
+  }, []);
+
+  const closeShowEditCandidateModalHandler = useCallback(() => {
+    setShowEditCandidateModal(false);
   }, []);
 
   const closeShowEditElectionModalHandler = useCallback(() => {
@@ -157,7 +179,8 @@ const AdminDashboardContent = () => {
       candidateData !== null &&
       candidateData.id &&
       candidateData.image &&
-      candidateData.name
+      candidateData.name &&
+      candidateData.position
     ) {
       setAddElection((prev) => {
         return Array.isArray(prev)
@@ -172,6 +195,7 @@ const AdminDashboardContent = () => {
                       id: candidateData.id,
                       image: candidateData.image,
                       name: candidateData.name,
+                      position: candidateData.position,
                     },
                   ],
                 };
@@ -292,7 +316,6 @@ const AdminDashboardContent = () => {
     ],
   );
 
-
   const totalCandidates = addElection
     .map((item) => item.candidates.length)
     .slice(0, -1)
@@ -329,6 +352,14 @@ const AdminDashboardContent = () => {
           }
           toastModal={ToastHandler}
           onCloseModal={closeShowAddCandidateModalHandler}
+        />
+      )}
+
+      {showEditCandidateModal && (
+        <EditCandidateModal
+          onSubmitCandidateData={submitCandidateData}
+          toastModal={ToastHandler}
+          onCloseModal={closeShowEditCandidateModalHandler}
         />
       )}
 
@@ -550,6 +581,7 @@ const AdminDashboardContent = () => {
                       columns={columns}
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
+                      onEdit={onEditCandidateHandler}
                       onChangeStatus={() => onClickElectionStatus(item.id)}
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}

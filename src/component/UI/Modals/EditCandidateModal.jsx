@@ -8,18 +8,20 @@ import Toast from "../Notification/Toast";
 // import classes from "../../pages/AdminStaff/AdminStaffContent.module.css";
 //import axios from "axios";
 import CloseIcon from "../Icons/CloseIcon";
-import AddIcon from "../Icons/AddIcon";
+//import AddIcon from "../Icons/AddIcon";
 import CancelIcon from "../Icons/CancelIcon";
 import DeleteIcon from "../Icons/DeleteIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
+import SaveIcon from "../Icons/SaveIcon";
 //import app_api_url from "../../../app_api_url";
 
-const AddCandidateModal = (props) => {
+const EditCandidateModal = (props) => {
   const [formData, setFormData] = useState({
-    name: "",
-    image: "",
-    position: "",
+    id: props.onSubmitCandidateData.id,
+    name: props.onSubmitCandidateData.name,
+    image: props.onSubmitCandidateData.image,
+    position: props.onSubmitCandidateData.position,
   });
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -66,13 +68,13 @@ const AddCandidateModal = (props) => {
   );
 
   /////////////////////////////////////////
-  // ADDING CANDIDATE
+  // UPDATING CANDIDATE DETAILS
   /////////////////////////////////////////
-  const onAddCustomerHandler = useCallback(
+  const onUpdateHandler = useCallback(
     (e) => {
       e.preventDefault();
 
-      if (window.confirm("Are you sure you want to add a new candidate?")) {
+      if (window.confirm("Are you sure you want to updating candidate?")) {
         const candidateData = {
           id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
           image: formData.image,
@@ -80,8 +82,10 @@ const AddCandidateModal = (props) => {
           position: formData.position,
         };
 
-        props.onAddCandidate(candidateData);
-        props.toastModal("success", `Candidate added successfully`);
+        console.log(candidateData);
+
+        //props.onAddCandidate(candidateData);
+        props.toastModal("success", `Candidate update successfully`);
 
         // Clear form after successful submission
         setFormData({
@@ -127,18 +131,16 @@ const AddCandidateModal = (props) => {
 
       <Card className={`${classes.modal}`}>
         <header>
-          <span>Add New Candidate</span>
+          <span>Update Candidate</span>
 
           <div onClick={props.onCloseModal} className={classes.close_btn}>
             <CloseIcon />
           </div>
         </header>
 
-        <p className={classes.heading}>
-          Register a candidate for this election.
-        </p>
+        <p className={classes.heading}>Update candidate for details.</p>
 
-        <form onSubmit={onAddCustomerHandler}>
+        <form onSubmit={onUpdateHandler}>
           <div className={classes.content}>
             <div className="profile_picture_container">
               <div className="profile_picture">
@@ -173,7 +175,7 @@ const AddCandidateModal = (props) => {
                       type="file"
                       onChange={profilePictureChangeHandler}
                       accept="image/*"
-                      required
+                      //   required
                     />
                   </div>
 
@@ -236,9 +238,9 @@ const AddCandidateModal = (props) => {
 
           <div className={classes.btn_container}>
             <Button className={classes.btn}>
-              <AddIcon />
+              <SaveIcon />
 
-              <span>Add</span>
+              <span>Save</span>
             </Button>
 
             <Button
@@ -258,11 +260,12 @@ const AddCandidateModal = (props) => {
   );
 };
 
-AddCandidateModal.propTypes = {
+EditCandidateModal.propTypes = {
   toastModal: PropTypes.func.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   onAddCandidate: PropTypes.func.isRequired,
   setRefetch: PropTypes.func,
+  onSubmitCandidateData: PropTypes.object,
 };
 
-export default AddCandidateModal;
+export default EditCandidateModal;
