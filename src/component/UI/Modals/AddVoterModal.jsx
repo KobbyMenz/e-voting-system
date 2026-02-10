@@ -77,7 +77,7 @@ const AddVoterModal = (props) => {
 
         console.log(candidateData);
         // props.onAddCandidate(candidateData);
-        props.toastModal("success", `Candidate added successfully`);
+        props.toastModal("success", `Added successfully`);
 
         // Clear form after successful submission
         setFormData({

@@ -13,7 +13,6 @@ const allVoters = [
     image: "",
     name: "Adu-Boahen Charles",
     dob: "2006-10-02",
-    hasVoted: "true",
   },
 
   {
@@ -21,7 +20,6 @@ const allVoters = [
     image: "",
     name: "Emmanuella 09",
     dob: "2010-05-07",
-    hasVoted: "false",
   },
 ];
 
@@ -64,7 +62,6 @@ const RegisterVotersContent = () => {
     { field: "image", headerName: "Photo", type: "image" },
     { field: "name", headerName: "Full Name" },
     { field: "dob", headerName: "DOB", type: "dob" },
-    { field: "hasVoted", headerName: "Has Voted" },
   ];
 
   const rows = allVoters.map((voter, index) => ({
@@ -73,7 +70,6 @@ const RegisterVotersContent = () => {
     image: voter.image,
     name: voter.name,
     dob: dayjs(voter.dob).format("DD MMM, YYYY"),
-    hasVoted: voter.hasVoted,
   }));
 
   return (
@@ -110,7 +106,7 @@ const RegisterVotersContent = () => {
         />
       </div>
 
-      <div >
+      <div>
         <Footer />
       </div>
     </>
