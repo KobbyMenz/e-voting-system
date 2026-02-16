@@ -20,6 +20,7 @@ import Card from "../Card/Card";
 export default function AccordionExpandDefault({
   electionTitle,
   status,
+  description,
   dateCreated,
   startDate,
   endDate,
@@ -337,7 +338,17 @@ export default function AccordionExpandDefault({
                         color: "var(--text-color)",
                         "&:hover": { backgroundColor: "#06882d" },
                       }}
-                      onClick={() => onEditElection(id)}
+                      onClick={() =>
+                        onEditElection(
+                          id,
+                          electionTitle,
+                          description,
+                          // status,
+                          dateCreated,
+                          startDate,
+                          endDate,
+                        )
+                      }
                     >
                       <Edit sx={{ fontSize: "1.8rem" }} />
                     </IconButton>
@@ -379,6 +390,7 @@ export default function AccordionExpandDefault({
 }
 AccordionExpandDefault.propTypes = {
   electionTitle: PropTypes.string,
+  description: PropTypes.string,
   dateCreated: PropTypes.string,
   startDate: PropTypes.string,
   endDate: PropTypes.string,

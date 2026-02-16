@@ -58,9 +58,9 @@ const createElectionInstance = (
 ) => ({
   id: generateUniqueId(),
   title: title,
+  description: description,
   dateCreated: dayjs().format("YYYY-MM-DDTHH:mm"),
   status: "Upcoming",
-  description: description,
   startDate: startDate,
   endDate: endDate,
   candidates: candidates.map((candidate, index) => ({
@@ -82,8 +82,8 @@ const election = [
   createElectionInstance(
     "Sanitation Prefect",
     "Namong SRC Sanitation Prefect Election",
-    "2026-02-04T07:00",
-    "2026-02-05T19:00",
+    "2026-02-04T08:00",
+    "2026-02-05T20:00",
   ),
 ];
 
@@ -97,6 +97,7 @@ const AdminDashboardContent = () => {
   const [search, setSearch] = useState("");
   const [submitCandidateData, setSubmitCandidateData] = useState({});
   const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
+  const [submitElectionData, setSubmitElectionData] = useState({});
   //const [loading, setLoading] = useState(true);
 
   //const { deleteData } = useDeleteHook();
@@ -239,18 +240,34 @@ const AdminDashboardContent = () => {
   //Edit Election
   /////////////////////////////////////////////
   const onShowEditElectionHandler = useCallback(
-    (electionId) => {
-      //console.log("electionId: ", electionId);
+    (
+      electionId,
+      title,
+      description,
+      // status,
+      dateCreated,
+      startDate,
+      endDate,
+    ) => {
       setShowEditElectionModal(true);
 
-      addElection.filter((item) => {
-        const electionData = item.electionId === electionId;
-
-        //console.log("electionData: ", electionData);
-        return electionData;
+      setSubmitElectionData({
+        electionId: electionId,
+        title: title,
+        dateCreated: dateCreated,
+        // status: status,
+        description: description,
+        startDate: startDate,
+        endDate: endDate,
       });
+      // addElection.filter((item) => {
+      //   const electionData = item.electionId === electionId;
+
+      //   //console.log("electionData: ", electionData);
+      //   return electionData;
+      // });
     },
-    [addElection],
+    [],
   );
 
   /////////////////////////////////////////////////////////
@@ -338,6 +355,7 @@ const AdminDashboardContent = () => {
 
       {showEditElectionModal && (
         <EditElectionModal
+          submitElectionData={submitElectionData}
           // onEditElection={onEditElectionHandler}
           toastModal={ToastHandler}
           //setRefetch={refetchHandler}
@@ -574,6 +592,7 @@ const AdminDashboardContent = () => {
                       key={item.id}
                       id={item.id}
                       electionTitle={item.title}
+                      description={item.description}
                       dateCreated={item.dateCreated}
                       startDate={item.startDate}
                       endDate={item.endDate}

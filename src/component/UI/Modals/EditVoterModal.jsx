@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useRef, useState } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import classes from "../../UI/Modals/AddModal.module.css";
@@ -19,10 +19,10 @@ import dayjs from "dayjs";
 
 const EditVoterModal = (props) => {
   const [formData, setFormData] = useState({
-    id: "",
-    image: "",
-    name: "",
-    dob: "",
+    id: props.submitEditData.id,
+    image: props.submitEditData.image,
+    name: props.submitEditData.name,
+    dob: dayjs(props.submitEditData.dob).format("YYYY-MM-DD"),
   });
 
   const fileInputRef = useRef(null);
@@ -38,18 +38,6 @@ const EditVoterModal = (props) => {
       };
     });
   }, []);
-
-  /////////////////////////////////////////
-  ////////////////////////////////////////
-  useEffect(() => {
-    setFormData({
-      id: props.submitEditData.id,
-      image: props.submitEditData.image,
-      name: props.submitEditData.name,
-      dob: dayjs(props.submitEditData.dob).format("YYYY-MM-DD"),
-    });
-  }, [props]);
-  ///////////////////////////////////////
 
   //function to change profile image
   const profilePictureChangeHandler = useCallback(

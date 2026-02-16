@@ -16,10 +16,11 @@ import dayjs from "dayjs";
 
 const EditElectionModal = (props) => {
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    startDate: "",
-    endDate: "",
+    electionId: props.submitElectionData.electionId,
+    title: props.submitElectionData.title,
+    description: props.submitElectionData.description,
+    startDate: props.submitElectionData.startDate,
+    endDate: props.submitElectionData.endDate,
   });
 
   const onFormDataChangeHandler = useCallback((e) => {
@@ -189,6 +190,7 @@ EditElectionModal.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   setRefetch: PropTypes.func,
   onEditElection: PropTypes.func.isRequired,
+  submitElectionData: PropTypes.object,
 };
 
 export default EditElectionModal;

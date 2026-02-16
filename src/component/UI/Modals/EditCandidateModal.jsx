@@ -138,7 +138,7 @@ const EditCandidateModal = (props) => {
           </div>
         </header>
 
-        <p className={classes.heading}>Update candidate for details.</p>
+        <p className={classes.heading}>Update candidate details.</p>
 
         <form onSubmit={onUpdateHandler}>
           <div className={classes.content}>
