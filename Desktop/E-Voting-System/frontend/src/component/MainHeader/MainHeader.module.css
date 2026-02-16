@@ -1,0 +1,40 @@
+.main-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 16;
+  background: var(--header-color);
+  -webkit-backdrop-filter: blur(0.8rem);
+  backdrop-filter: blur(0.8rem);
+  padding: 1rem 9%;
+  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.192);
+  transition: all 0.5s ease-in-out;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 750px) {
+  html {
+    font-size: 52%;
+  }
+
+  .main-header {
+    /* position: fixed; */
+    padding: 1rem 0;
+  }
+
+  .logo_container {
+    margin-left: 5rem;
+  }
+}
+
+@media (max-width: 340px) {
+  html {
+    font-size: 50%;
+  }
+}
