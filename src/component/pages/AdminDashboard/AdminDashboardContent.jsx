@@ -279,10 +279,10 @@ const AdminDashboardContent = () => {
   /////////////////////////////////////////////////////////
   //* Handler to change election status */
   /////////////////////////////////////////////////////
-  const onClickElectionStatus = useCallback((electionId) => {
+  const onClickElectionStatus = useCallback((electionId, status) => {
     if (
       window.confirm(
-        "Are you sure you want to change the status of this election?",
+        `Are you sure you want to ${status === "Upcoming" ? "start" : status === "Active" ? "close" : "start"} election?`,
       )
     ) {
       setAddElection((prev) => {
@@ -294,7 +294,7 @@ const AdminDashboardContent = () => {
                 Toast(
                   "success",
                   `${election.title} election ${
-                    newStatus === "Active" ? "started" : "ended"
+                    newStatus === "Active" ? "started" : "closed"
                   } successfully.`,
                 );
                 return {
@@ -613,7 +613,9 @@ const AdminDashboardContent = () => {
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onEdit={onEditCandidateHandler}
-                      onChangeStatus={() => onClickElectionStatus(item.id)}
+                      onChangeStatus={() =>
+                        onClickElectionStatus(item.id, item.status)
+                      }
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}
                       expanded={expandedId === item.id}
