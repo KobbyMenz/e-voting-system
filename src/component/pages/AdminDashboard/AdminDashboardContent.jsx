@@ -148,6 +148,7 @@ const AdminDashboardContent = () => {
     setShowEditElectionModal(false);
   }, []);
 
+  //Function to handle accordion expand/collapse and ensure only one is expanded at a time
   const onAccordionExpandChange = useCallback((id, isExpanded) => {
     setExpandedId(isExpanded ? id : null);
   }, []);
@@ -279,27 +280,33 @@ const AdminDashboardContent = () => {
   //* Handler to change election status */
   /////////////////////////////////////////////////////
   const onClickElectionStatus = useCallback((electionId) => {
-    setAddElection((prev) => {
-      return Array.isArray(prev)
-        ? prev.map((election) => {
-            if (election.id === electionId) {
-              const newStatus =
-                election.status === "Active" ? "Closed" : "Active";
-              Toast(
-                "success",
-                `${election.title} election ${
-                  newStatus === "Active" ? "started" : "ended"
-                } successfully.`,
-              );
-              return {
-                ...election,
-                status: newStatus,
-              };
-            }
-            return election;
-          })
-        : prev;
-    });
+    if (
+      window.confirm(
+        "Are you sure you want to change the status of this election?",
+      )
+    ) {
+      setAddElection((prev) => {
+        return Array.isArray(prev)
+          ? prev.map((election) => {
+              if (election.id === electionId) {
+                const newStatus =
+                  election.status === "Active" ? "Closed" : "Active";
+                Toast(
+                  "success",
+                  `${election.title} election ${
+                    newStatus === "Active" ? "started" : "ended"
+                  } successfully.`,
+                );
+                return {
+                  ...election,
+                  status: newStatus,
+                };
+              }
+              return election;
+            })
+          : prev;
+      });
+    }
   }, []);
 
   /////////////////////////////////////////

@@ -35,6 +35,12 @@ export default function AccordionExpandDefault({
   expanded,
   onExpandChange,
 }) {
+  // const [expandedId, setExpandedId] = useState(null);
+
+  // const onExpandChange = useCallback((id, isExpanded) => {
+  //   setExpandedId(isExpanded ? id : null);
+  // }, []);
+
   return (
     <Card className={classes.card}>
       <Accordion
