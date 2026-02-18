@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -33,14 +32,14 @@ export default function AccordionExpandDefault({
   onChangeStatus,
   onDeleteElection,
   onEditElection,
+  expanded,
+  onExpandChange,
 }) {
-  const [expanded, setExpanded] = useState(false);
-
   return (
     <Card className={classes.card}>
       <Accordion
         expanded={expanded}
-        onChange={(event, isExpanded) => setExpanded(isExpanded)}
+        onChange={(event, isExpanded) => onExpandChange(id, isExpanded)}
         sx={{
           backgroundColor: "var(--bg-color3)",
           transition: "all 0.3s ease-in-out",
@@ -404,4 +403,6 @@ AccordionExpandDefault.propTypes = {
   onChangeStatus: PropTypes.func,
   onDeleteElection: PropTypes.func,
   onEditElection: PropTypes.func,
+  expanded: PropTypes.bool,
+  onExpandChange: PropTypes.func,
 };

@@ -91,6 +91,7 @@ const AdminDashboardContent = () => {
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
   const [showEditElectionModal, setShowEditElectionModal] = useState(false);
   const [addElection, setAddElection] = useState(election);
+  const [expandedId, setExpandedId] = useState(null);
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -145,6 +146,10 @@ const AdminDashboardContent = () => {
 
   const closeShowEditElectionModalHandler = useCallback(() => {
     setShowEditElectionModal(false);
+  }, []);
+
+  const onAccordionExpandChange = useCallback((id, isExpanded) => {
+    setExpandedId(isExpanded ? id : null);
   }, []);
 
   const ToastHandler = useCallback((type, message) => {
@@ -604,6 +609,8 @@ const AdminDashboardContent = () => {
                       onChangeStatus={() => onClickElectionStatus(item.id)}
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}
+                      expanded={expandedId === item.id}
+                      onExpandChange={onAccordionExpandChange}
                     />
                   ))}
                   {/* <ul>

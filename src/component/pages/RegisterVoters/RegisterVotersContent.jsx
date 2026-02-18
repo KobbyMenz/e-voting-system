@@ -18,7 +18,21 @@ const allVoters = [
   {
     id: 2025002,
     image: "",
+    name: "Martha Kwayisi",
+    dob: "2010-05-07",
+  },
+
+  {
+    id: 2025003,
+    image: "",
     name: "Emmanuella 09",
+    dob: "2010-05-07",
+  },
+
+  {
+    id: 2025004,
+    image: "",
+    name: "Cecilia Boateng",
     dob: "2010-05-07",
   },
 ];

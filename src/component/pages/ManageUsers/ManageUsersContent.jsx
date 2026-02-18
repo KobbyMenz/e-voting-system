@@ -63,6 +63,34 @@ const ManageUsersContent = () => {
         dateCreated: formatDateTime("2026-02-02T02:00"),
         lastLogin: formatDateTime("2026-02-02T02:00"),
       },
+
+      {
+        id: 2024003,
+        image: "",
+        name: "Emmanuel Adu Darkwah",
+        userName: "emmanueladu@gmail.com",
+        email: "enoch@email",
+        contact: "0546163240",
+        // role: "Admin",
+        userStatus: "Enabled",
+        dateCreated: formatDateTime("2026-02-02T02:00"),
+        lastLogin: formatDateTime("2026-02-02T02:00"),
+      },
+
+      {
+        id: 2024004,
+        image: "",
+        name: "Alex Baah",
+        userName: "KobbyMenz",
+        email: "Alexakwasi@gmail.com",
+        contact: "0546163240",
+        // role: "Admin",
+        userStatus: "Disabled",
+        dateCreated: formatDateTime("2026-02-02T02:00"),
+        lastLogin: formatDateTime("2026-02-02T02:00"),
+      },
+
+      
     ],
     [],
   );
