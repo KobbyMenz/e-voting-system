@@ -330,9 +330,10 @@ const ManageUserPT = ({
                             sx={{
                               backgroundColor: "var(--primary)",
                               border: "0.3rem solid #ffffff4d",
+                              borderRadius: "1rem",
                               color: "var(text-color)",
                               "&:hover": {
-                                backgroundColor: "var(--secondary)",
+                                backgroundColor: "var(--primary-deep)",
                               },
                               // ml: 1,
                             }}
@@ -355,6 +356,7 @@ const ManageUserPT = ({
                             sx={{
                               backgroundColor: "#06882dff",
                               border: "0.3rem solid #ffffff4d",
+                              borderRadius: "1rem",
                               color: "var(text-color)",
                               "&:hover": { backgroundColor: "#079b33" },
                               width: "3.6rem",
@@ -382,6 +384,7 @@ const ManageUserPT = ({
                             sx={{
                               backgroundColor: "#ca0202",
                               border: "0.3rem solid #ffffff4d",
+                              borderRadius: "1rem",
                               color: "var(text-color)",
                               "&:hover": { backgroundColor: "#f52b1cff" },
                               width: "3.6rem",

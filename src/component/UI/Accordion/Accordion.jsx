@@ -51,7 +51,7 @@ export default function AccordionExpandDefault({
         transition: "all 0.3s ease-in-out",
         // borderBottom: "0.2rem solid var(--bg-color)",
         marginBottom: "0.5rem",
-        borderRadius: "1rem",
+        borderRadius: "0.5rem",
         boxShadow: "0rem 0.2rem 1rem rgba(0, 0, 0, 0.25)",
         border: "0.2rem solid var(--bg-color)",
 
@@ -87,7 +87,7 @@ export default function AccordionExpandDefault({
         }
         aria-controls={`panel${id}-content`}
         id={`panel${id}-header`}
-        sx={{ transition: "all 0.3s ease-in-out" }}
+        sx={{ transition: "all 0.3s ease-in-out", borderRadius: "1rem" }}
       >
         <Box
           sx={{
@@ -258,7 +258,11 @@ export default function AccordionExpandDefault({
       </AccordionSummary>
 
       <AccordionDetails
-        sx={{ marginBottom: "2rem", transition: "all 0.3s ease-in-out" }}
+        sx={{
+          marginBottom: "2rem",
+          transition: "all 0.3s ease-in-out",
+          borderRadius: "0 0 1rem 1rem",
+        }}
       >
         <Box>
           <Box
@@ -341,6 +345,7 @@ export default function AccordionExpandDefault({
                       border: "0.3rem solid #ffffff4d",
                       backgroundColor: " #006323",
                       color: "var(--text-color)",
+                      borderRadius: "1rem",
                       "&:hover": { backgroundColor: "#06882d" },
                     }}
                     onClick={() =>
@@ -367,6 +372,7 @@ export default function AccordionExpandDefault({
                       border: "0.3rem solid #ffffff4d",
                       backgroundColor: "#ca0202",
                       color: "var(--text-color)",
+                      borderRadius: "1rem",
                       "&:hover": { backgroundColor: "#f52b1cff" },
                     }}
                     onClick={() => onDeleteElection(id)}

@@ -1,4 +1,4 @@
-import { Fragment, useState, useRef, useCallback, useEffect } from "react";
+import { Fragment, useState, useRef, useCallback } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import classes from "../../UI/Modals/AddModal.module.css";
@@ -20,15 +20,22 @@ const UpdateUserModal = (props) => {
   const [file, setFile] = useState("");
 
   const [formData, setFormData] = useState({
-    userId: "",
-    fullName: "",
-    userName: "",
-    email: "",
-    phoneNumber: "",
-    loginType: "",
+    userId: props.userData.id,
+    profilePicture: props.userData.image,
+    fullName: props.userData.name,
+    userName: props.userData.userName,
+    email: props.userData.email,
+    phoneNumber: props.userData.contact,
+    loginType: props.userData.role,
+    // userId: "",
+    // fullName: "",
+    // userName: "",
+    // email: "",
+    // phoneNumber: "",
+    // loginType: "",
     pass: "",
     confirmPass: "",
-    profilePicture: "",
+    // profilePicture: "",
     userStatus: "Enabled",
   });
 
@@ -65,19 +72,19 @@ const UpdateUserModal = (props) => {
     }
   };
 
-  useEffect(() => {
-    /*receiving from AdminStaff component and setting User data
-     into useState after clicking on edit button*/
-    setFormData({
-      userId: props.userData.id,
-      profilePicture: props.userData.image,
-      fullName: props.userData.name,
-      userName: props.userData.userName,
-      email: props.userData.email,
-      phoneNumber: props.userData.contact,
-      loginType: props.userData.role,
-    });
-  }, [props.userData]);
+  // useEffect(() => {
+  //   /*receiving from AdminStaff component and setting User data
+  //    into useState after clicking on edit button*/
+  //   setFormData({
+  //     userId: props.userData.id,
+  //     profilePicture: props.userData.image,
+  //     fullName: props.userData.name,
+  //     userName: props.userData.userName,
+  //     email: props.userData.email,
+  //     phoneNumber: props.userData.contact,
+  //     loginType: props.userData.role,
+  //   });
+  // }, [props.userData]);
 
   ////////////////////////////////////////////////////
   //  UPDATE USER DATA
@@ -145,8 +152,6 @@ const UpdateUserModal = (props) => {
               props.toastModal("success", response.data.message);
 
               props.onCloseModal(); //Close modal after update
-
-              
             } catch (err) {
               if (
                 err.response &&
@@ -212,8 +217,6 @@ const UpdateUserModal = (props) => {
               props.toastModal("success", response.data.message);
 
               props.onCloseModal(); //Close modal after update
-
-              
             } catch (err) {
               if (
                 err.response &&
@@ -350,7 +353,7 @@ const UpdateUserModal = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.backdrop} />
+      <div className={classes.backdrop} onClick={props.onCloseModal} />
 
       <Card className={`${classes.addUserModal}`}>
         <header>
