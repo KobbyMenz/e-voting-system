@@ -103,6 +103,10 @@
     padding-right: 1rem;
   }
 
+  .card__wrapper {
+    padding: 1rem 1.2rem;
+  }
+
   .title h3 {
     font-size: 1.2rem;
   }
@@ -121,6 +125,10 @@
 @media (max-width: 400px) {
   html {
     font-size: 50%;
+  }
+
+  .card__wrapper {
+    padding: 1rem;
   }
 
   .title {
