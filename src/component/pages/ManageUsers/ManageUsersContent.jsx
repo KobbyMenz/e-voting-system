@@ -89,8 +89,6 @@ const ManageUsersContent = () => {
         dateCreated: formatDateTime("2026-02-02T02:00"),
         lastLogin: formatDateTime("2026-02-02T02:00"),
       },
-
-      
     ],
     [],
   );
@@ -205,11 +203,7 @@ const ManageUsersContent = () => {
           if (
             !(err.response && err.response.data && err.response.data.message)
           ) {
-            Toast(
-              "error",
-              `User cannot be deleted whiles account has been tied to sales records. 
-                You can disable user account to prevent login access instead of deleting.`,
-            );
+            Toast("error", `User cannot be deleted.`);
           }
         }
       };
