@@ -14,6 +14,7 @@ import PlayIcon from "../Icons/PlayIcon";
 import { Delete, Edit } from "@mui/icons-material";
 import ToolTip from "../ToolTip/ToolTip";
 import formatDateTime from "../../Functions/formatDateTime";
+import BarChartCompo from "../Chart/BarChartCompo";
 // import Card from "../Card/Card";
 
 export default function AccordionExpandDefault({
@@ -343,10 +344,10 @@ export default function AccordionExpandDefault({
                       width: "3.6rem",
                       height: "3.6rem",
                       border: "0.3rem solid #ffffff4d",
-                      backgroundColor: " #006323",
+                      backgroundColor: " #007a25",
                       color: "var(--text-color)",
                       borderRadius: "1rem",
-                      "&:hover": { backgroundColor: "#06882d" },
+                      "&:hover": { backgroundColor: "#079b33" },
                     }}
                     onClick={() =>
                       onEditElection(
@@ -393,6 +394,16 @@ export default function AccordionExpandDefault({
               onDelete={onDelete}
               onAdd={onAdd}
             />
+          </div>
+
+          <div
+            style={{ margin: "2rem auto", maxWidth: "98vw", width: " 100%" }}
+          >
+            <h2 style={{ color: "var(--text-color)" }}>
+              Total Votes for Candidates
+            </h2>
+
+            <BarChartCompo />
           </div>
         </Box>
         <Typography sx={{ fontSize: "1.1rem" }}></Typography>
