@@ -7,7 +7,7 @@ import Button from "../Button/Button";
 // import styles from "../../pages/AdminStaff/AdminStaffContent.module.css";
 //import axios from "axios";
 import CloseIcon from "../Icons/CloseIcon";
-import AddIcon from "../Icons/AddIcon";
+import SaveIcon from "../Icons/SaveIcon";
 import CancelIcon from "../Icons/CancelIcon";
 import DateTimeInput from "../DateTimeInput/DateTimeInput";
 import dayjs from "dayjs";
@@ -164,9 +164,9 @@ const EditElectionModal = (props) => {
 
           <div className={classes.btn_container}>
             <Button className={classes.btn}>
-              <AddIcon />
+              <SaveIcon />
 
-              <span>Add</span>
+              <span>Save</span>
             </Button>
 
             <Button

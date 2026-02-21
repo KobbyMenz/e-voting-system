@@ -44,7 +44,7 @@ const columns = [
   { field: "sn", headerName: "S/N" },
   { field: "id", headerName: "ID" },
   { field: "image", headerName: "Photo", type: "image" },
-  { field: "name", headerName: "Candidate Name" },
+  { field: "name", headerName: "Candidate Name", type: "candidateName" },
   { field: "position", headerName: "Position", type: "position" },
 ];
 
