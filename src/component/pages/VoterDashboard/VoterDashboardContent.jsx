@@ -16,8 +16,8 @@ const VoterDashboardContent = () => {
   const [elections, setElections] = useState([
     {
       id: 1,
-      title: "SRC Presidential",
-      description: "Namong SRC Presidential Election",
+      title: "Boys Prefect",
+      description: "Namong Boys Prefect Election",
       status: "Active",
       startDate: "2026-01-30 07:00:00",
       endDate: "2026-02-27 19:00:00",
@@ -39,6 +39,32 @@ const VoterDashboardContent = () => {
 
     {
       id: 2,
+      title: "Girls Prefect",
+      description: "Namong Girls Prefect Election",
+      status: "Active",
+      startDate: "2026-02-23 07:00:00",
+      endDate: "2026-02-27 19:00:00",
+      candidates: [
+        {
+          candidateId: 1,
+          name: "John Doe",
+          image: "",
+          position: "Dinning Hall Prefect",
+        },
+        {
+          candidateId: 2,
+          name: "Jane Smith",
+          image: "",
+          position: "Dinning Hall Prefect",
+        },
+      ],
+
+      voterId: 2026001,
+      hasVoted: true,
+    },
+
+    {
+      id: 3,
       title: "Dinning Hall Prefect",
       description: "Namong Dinning Hall Election",
       status: "Closed",
@@ -61,7 +87,7 @@ const VoterDashboardContent = () => {
     },
 
     {
-      id: 3,
+      id: 4,
       title: "Dinning Hall Prefect",
       description: "Namong Dinning Hall Election",
       status: "Upcoming",
@@ -84,7 +110,7 @@ const VoterDashboardContent = () => {
     },
 
     {
-      id: 4,
+      id: 5,
       title: "Sanitation Prefect",
       description: "Namong Sanitation Prefect Election",
       status: "Upcoming",
@@ -105,6 +131,8 @@ const VoterDashboardContent = () => {
         // },
       ],
     },
+
+    
   ]);
 
   const [selectedCandidates, setSelectedCandidates] = useState({});
@@ -151,11 +179,15 @@ const VoterDashboardContent = () => {
         Toast("warning", "Please select a candidate first");
         return;
       }
-      
+
       setCurrentElectionId(electionId);
       // setVotingInProgress(true);
 
-      if (window.confirm("Are you sure you want to cast your vote?")) {
+      if (
+        window.confirm(
+          "Are you sure you want to vote for this candidate? This action cannot be undone.",
+        )
+      ) {
         const castVote = async () => {
           try {
             // setVotingInProgress(false);
