@@ -29,7 +29,7 @@ function App() {
   const logoutHandler = useCallback(() => {
     navigate("/");
     sessionStorage.clear();
-    //localStorage.removeItem("user");
+    localStorage.removeItem("user");
 
     // clear inactivity timer
     if (inactivityTimerRef.current) {

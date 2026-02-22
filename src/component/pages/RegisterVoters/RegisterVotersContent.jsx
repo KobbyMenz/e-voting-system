@@ -9,28 +9,28 @@ import Footer from "../../Footer/Footer";
 
 const allVoters = [
   {
-    id: 2025001,
+    id: 2026001,
     image: "",
     name: "Adu-Boahen Charles",
     dob: "2006-10-02",
   },
 
   {
-    id: 2025002,
+    id: 2026002,
     image: "",
     name: "Martha Kwayisi",
     dob: "2010-05-07",
   },
 
   {
-    id: 2025003,
+    id: 2026003,
     image: "",
     name: "Emmanuella 09",
     dob: "2010-05-07",
   },
 
   {
-    id: 2025004,
+    id: 2026004,
     image: "",
     name: "Cecilia Boateng",
     dob: "2010-05-07",

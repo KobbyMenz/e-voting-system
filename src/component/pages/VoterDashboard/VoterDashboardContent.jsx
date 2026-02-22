@@ -189,6 +189,7 @@ const VoterDashboardContent = () => {
         console.log({
           electionId: electionId,
           candidateId: selectedCandidates[electionId],
+          voterId: JSON.parse(localStorage.getItem("user")).userId,
         });
         const castVote = async () => {
           try {

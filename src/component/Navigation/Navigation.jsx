@@ -37,7 +37,7 @@ const Navigation = (props) => {
     // props.logoutTimeData.stopTimer();
     navigate("/");
     sessionStorage.clear();
-    //localStorage.removeItem("user");
+    localStorage.removeItem("user");
     // sessionStorage.removeItem("token");
     // sessionStorage.removeItem("expiryTime");
     // sessionStorage.removeItem("isLoggedIn");

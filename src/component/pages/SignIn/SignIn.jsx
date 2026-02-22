@@ -61,13 +61,28 @@ const SignIn = () => {
     e.preventDefault();
 
     if (userName === "KobbyMenz" && pass === "11111111") {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: 2025001,
+          userName: "KobbyMenz",
+          fullName: "Augustine Mensah",
+        }),
+      );
       sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
       navigate("/admin/dashboard");
-
-    }else if (userName === "Ronyx" && pass === "22222222") {
+    } else if (userName === "Ronyx" && pass === "22222222") {
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          userId: 2026001,
+          userName: "Ronyx",
+          fullName: "Ronyx Mensah",
+        }),
+      );
       sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
       navigate("/voter/dashboard");
-     } else {
+    } else {
       Toast("error", "Wrong credentials");
     }
 

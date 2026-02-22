@@ -123,6 +123,7 @@ const ProfileCard = () => {
     setShowQuestionModal(false);
     navigate("/");
     sessionStorage.clear();
+    localStorage.removeItem("user");
   };
 
   //Handler to show logout modal
@@ -205,11 +206,11 @@ const ProfileCard = () => {
                         {
                           color: "#fff",
                         },
-                        "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root:hover p":
+                      "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root:hover p":
                         {
                           color: "#fff",
                         },
-                        
+
                       "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root svg": {
                         color: "var(--text-color)",
                       },
