@@ -163,8 +163,8 @@ const ElectionCard = ({
             className={classes.castVoteBtn}
             onClick={() =>
               handleCastVote(
-                election._id || election.id,
-                election._id || election.id,
+                election._id || election.id
+                
               )
             }
             disabled={!selectedCandidates[election._id || election.id]}

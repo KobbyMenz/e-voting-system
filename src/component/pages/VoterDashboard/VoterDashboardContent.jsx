@@ -23,13 +23,13 @@ const VoterDashboardContent = () => {
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
-          candidateId: 1,
+          candidateId: 2024001,
           name: "John Doe",
           image: "",
           position: "President",
         },
         {
-          candidateId: 2,
+          candidateId: 2024002,
           name: "Jane Smith",
           image: "",
           position: "President",
@@ -46,13 +46,13 @@ const VoterDashboardContent = () => {
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
-          candidateId: 1,
+          candidateId: 2024003,
           name: "John Doe",
           image: "",
           position: "Dinning Hall Prefect",
         },
         {
-          candidateId: 2,
+          candidateId: 2024004,
           name: "Jane Smith",
           image: "",
           position: "Dinning Hall Prefect",
@@ -72,13 +72,13 @@ const VoterDashboardContent = () => {
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
-          candidateId: 1,
+          candidateId: 2024005,
           name: "John Doe",
           image: "",
           position: "Dinning Hall Prefect",
         },
         {
-          candidateId: 2,
+          candidateId: 2024006,
           name: "Jane Smith",
           image: "",
           position: "Dinning Hall Prefect",
@@ -88,23 +88,23 @@ const VoterDashboardContent = () => {
 
     {
       id: 4,
-      title: "Dinning Hall Prefect",
-      description: "Namong Dinning Hall Election",
-      status: "Upcoming",
+      title: "Entertainment Prefect",
+      description: "Namong Entertainment Election",
+      status: "Active",
       startDate: "2026-02-23 07:00:00",
       endDate: "2026-02-27 19:00:00",
       candidates: [
         {
-          candidateId: 1,
+          candidateId: 2024007,
           name: "John Doe",
           image: "",
-          position: "Dinning Hall Prefect",
+          position: "Entertainment Prefect",
         },
         {
-          candidateId: 2,
+          candidateId: 2024008,
           name: "Jane Smith",
           image: "",
-          position: "Dinning Hall Prefect",
+          position: "Entertainment Prefect",
         },
       ],
     },
@@ -131,14 +131,12 @@ const VoterDashboardContent = () => {
         // },
       ],
     },
-
-    
   ]);
 
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [loading, setLoading] = useState(true);
   // const [votingInProgress, setVotingInProgress] = useState(false);
-  const [currentElectionId, setCurrentElectionId] = useState(null);
+  // const [currentElectionId, setCurrentElectionId] = useState(null);
 
   // Fetch elections and candidates from backend
   useEffect(() => {
@@ -164,10 +162,10 @@ const VoterDashboardContent = () => {
 
   // Handle candidate selection per election
   const handleSelectCandidate = (electionId, candidateId) => {
-    setSelectedCandidates((prev) => ({
-      ...prev,
+    setSelectedCandidates({
+      // ...prev,
       [electionId]: candidateId,
-    }));
+    });
   };
 
   //////////////////////////////////////////////////
@@ -180,7 +178,7 @@ const VoterDashboardContent = () => {
         return;
       }
 
-      setCurrentElectionId(electionId);
+      //setCurrentElectionId(electionId);
       // setVotingInProgress(true);
 
       if (
@@ -188,14 +186,19 @@ const VoterDashboardContent = () => {
           "Are you sure you want to vote for this candidate? This action cannot be undone.",
         )
       ) {
+        console.log({
+          electionId: electionId,
+          candidateId: selectedCandidates[electionId],
+        });
         const castVote = async () => {
           try {
             // setVotingInProgress(false);
             const response = await axios.post(
               `${app_api_url}/vote`,
               {
-                electionId: currentElectionId,
-                candidateId: selectedCandidates[currentElectionId],
+                electionId: electionId,
+                candidateId: selectedCandidates[electionId],
+                // candidateId: selectedCandidates[electionId],
               },
               {
                 headers: {
@@ -209,7 +212,7 @@ const VoterDashboardContent = () => {
               Toast("success", "Your vote has been recorded successfully!");
               setSelectedCandidates((prev) => ({
                 ...prev,
-                [currentElectionId]: null,
+                [electionId]: null,
               }));
             }
           } catch (err) {
@@ -223,7 +226,7 @@ const VoterDashboardContent = () => {
         castVote();
       }
     },
-    [currentElectionId, selectedCandidates, token],
+    [selectedCandidates, token],
   );
 
   // Confirm vote after clicking cast vote
