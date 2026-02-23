@@ -195,10 +195,11 @@ const VoterDashboardContent = () => {
           try {
             // setVotingInProgress(false);
             const response = await axios.post(
-              `${app_api_url}/vote`,
+              `${app_api_url}/insertVote/${electionId}`,
               {
-                electionId: electionId,
+                // electionId: electionId,
                 candidateId: selectedCandidates[electionId],
+                voterId: JSON.parse(localStorage.getItem("user")).userId,
                 // candidateId: selectedCandidates[electionId],
               },
               {
@@ -251,8 +252,8 @@ const VoterDashboardContent = () => {
         <Card className={classes.card}>
           <h1>Voter Dashboard</h1>
           <Card className={classes.userInfo}>
-            <h2>Welcome, {user.name || "Guest"}!</h2>
-            <p>Voter ID: {user.voterId || "N/A"}</p>
+            <h2>Welcome, {user.fullName || "Guest"}!</h2>
+            <p>Voter ID: {user.userId || "N/A"}</p>
           </Card>
 
           {elections.length === 0 ? (
