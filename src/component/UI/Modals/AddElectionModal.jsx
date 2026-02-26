@@ -10,15 +10,20 @@ import CloseIcon from "../Icons/CloseIcon";
 import AddIcon from "../Icons/AddIcon";
 import CancelIcon from "../Icons/CancelIcon";
 import dayjs from "dayjs";
+import useInsertHook from "../../CustomHooks/useInsertHook";
 //import app_api_url from "../../../app_api_url";
 
 const AddElectionModal = (props) => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
+    // dateCreated:"",
+    // status:"",
     startDate: "",
     endDate: "",
   });
+
+  const { insertData } = useInsertHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -47,26 +52,23 @@ const AddElectionModal = (props) => {
         const electionData = {
           // id: Date.now().toString(),
           title: formData.title,
-          // dateCreated: new Date().toLocaleDateString(),
-          // status: "Active",
           description: formData.description,
+          dateCreated: dayjs().format("YYYY-MM-DDTHH:mm"),
+          status: "Upcoming",
           startDate: formData.startDate,
           endDate: formData.endDate,
         };
-        console.log("electionData: ", electionData);
+        //console.log("electionData: ", electionData);
         props.onAddElection(electionData);
         props.toastModal("success", `Election added successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          title: "",
-          description: "",
-        });
+        //sending election details to be inserted into the database at the backend
+        insertData(`insertElection`, electionData, props.toastModal);
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, insertData],
   );
 
   return (

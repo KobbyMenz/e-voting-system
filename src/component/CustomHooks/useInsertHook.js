@@ -3,10 +3,10 @@ import app_api_url from "../../app_api_url";
 
 const useInsertHook = () => {
   const insertData = async (
-    dataToInsert,
     apiEndPointName,
-    refreshTable,
+    dataToInsert,
     toastModal,
+    refreshTable,
   ) => {
     try {
       const response = await axios.post(
@@ -19,6 +19,7 @@ const useInsertHook = () => {
         //   },
         // },
       );
+
       refreshTable();
 
       toastModal("success", `${response.data.message}`);

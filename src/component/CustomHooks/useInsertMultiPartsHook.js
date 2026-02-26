@@ -5,8 +5,9 @@ const useInsertMultiPartsHook = () => {
   const insertMultiPartsData = async (
     apiEndPointName,
     dataToInsert,
-    refreshTable,
     toastModal,
+    refreshTable,
+    
   ) => {
     try {
       const response = await axios.post(

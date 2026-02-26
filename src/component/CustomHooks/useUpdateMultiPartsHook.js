@@ -5,8 +5,8 @@ const useUpdateMultiPartsHook = () => {
   const updateMultiPartsData = async (
     apiEndPointName,
     dataToUpdate,
-    refreshTable,
     toastModal,
+    refreshTable,
   ) => {
     try {
       const response = await axios.put(

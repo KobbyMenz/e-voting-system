@@ -15,6 +15,7 @@ import SaveIcon from "../Icons/SaveIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import dayjs from "dayjs";
+import useUpdateMultiPartsHook from "../../CustomHooks/useUpdateMultiPartsHook";
 //import app_api_url from "../../../app_api_url";
 
 const EditVoterModal = (props) => {
@@ -28,6 +29,8 @@ const EditVoterModal = (props) => {
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
   const [file, setFile] = useState("");
+
+  const { updateMultiPartsData } = useUpdateMultiPartsHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -83,16 +86,17 @@ const EditVoterModal = (props) => {
         //props.onAddCandidate(candidateData);
         props.toastModal("success", `Saved successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          name: "",
-          image: "",
-        });
+        //sending voter details to be updated into the database at the backend
+        updateMultiPartsData(
+          `updateVoter/${formData.id}`,
+          candidateData,
+          props.toastModal,
+        );
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, updateMultiPartsData],
   );
 
   ////////////////////////////////

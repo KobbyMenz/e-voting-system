@@ -188,7 +188,8 @@ const ProfileCard = () => {
                       mt: "4.5rem",
 
                       "& .MuiMenu-paper": {
-                        backgroundColor: "var(--bg-color)",
+                        backgroundColor: "var(--bg-color2)",
+                        border: "1px solid var(--border-color)",
                         boxShadow: "0rem 0.5rem 1.5rem rgba(0, 0, 0, 0.51)",
                       },
                       // "& .MuiMenu-paper .MuiMenu-list": {

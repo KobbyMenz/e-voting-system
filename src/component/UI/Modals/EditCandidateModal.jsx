@@ -14,6 +14,7 @@ import DeleteIcon from "../Icons/DeleteIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import SaveIcon from "../Icons/SaveIcon";
+import useUpdateMultiPartsHook from "../../CustomHooks/useUpdateMultiPartsHook";
 //import app_api_url from "../../../app_api_url";
 
 const EditCandidateModal = (props) => {
@@ -26,6 +27,8 @@ const EditCandidateModal = (props) => {
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
   const [file, setFile] = useState("");
+
+  const { updateMultiPartsData } = useUpdateMultiPartsHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -87,16 +90,17 @@ const EditCandidateModal = (props) => {
         //props.onAddCandidate(candidateData);
         props.toastModal("success", `Candidate update successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          name: "",
-          image: "",
-        });
+        //sending candidate details to be updated into the database at the backend
+        updateMultiPartsData(
+          `updateCandidate/${formData.id}`,
+          candidateData,
+          props.toastModal,
+        );
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, updateMultiPartsData],
   );
 
   ///////////////////////////////

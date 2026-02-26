@@ -11,6 +11,7 @@ import SaveIcon from "../Icons/SaveIcon";
 import CancelIcon from "../Icons/CancelIcon";
 import DateTimeInput from "../DateTimeInput/DateTimeInput";
 import dayjs from "dayjs";
+import useUpdateHook from "../../CustomHooks/useUpdateHook";
 //import DateTimeInput from "../DateTimeInput/DateTimeInput";
 //import app_api_url from "../../../app_api_url";
 
@@ -22,6 +23,8 @@ const EditElectionModal = (props) => {
     startDate: props.submitElectionData.startDate,
     endDate: props.submitElectionData.endDate,
   });
+
+  const { updateData } = useUpdateHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -40,7 +43,7 @@ const EditElectionModal = (props) => {
   }, []);
 
   /////////////////////////////////////////
-  // ADDING CUSTOMER
+  // UPDATING ELECTION
   /////////////////////////////////////////
   const onEditElectionHandler = useCallback(
     (e) => {
@@ -57,19 +60,20 @@ const EditElectionModal = (props) => {
           endDate: formData.endDate,
         };
 
-        props.onEditElection(electionData);
+       // props.onEditElection(electionData);
         props.toastModal("success", `Election updated successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          title: "",
-          description: "",
-        });
+        //sending election details to be updated into the database at the backend
+        updateData(
+          `updateElection/${formData.electionId}`,
+          electionData,
+          props.toastModal,
+        );
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, updateData],
   );
 
   return (

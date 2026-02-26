@@ -4,10 +4,10 @@ import classes from "../../UI/Modals/AddModal.module.css";
 import Card from "./../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
 //import classes from "../AdminStaff/AdminStaffContent.module.css";
-import axios from "axios";
+//import axios from "axios";
 //import defaultProfilePicture from "../../../assets/images/profilePicture.png";
 //import moment from "moment";
-import app_api_url from "../../../app_api_url";
+//import app_api_url from "../../../app_api_url";
 import CloseIcon from "../../UI/Icons/CloseIcon";
 import AddIcon from "../../UI/Icons/AddIcon";
 import CancelIcon from "../../UI/Icons/CancelIcon";
@@ -17,6 +17,7 @@ import ToolTip from "../../UI/ToolTip/ToolTip";
 import Toast from "../../UI/Notification/Toast";
 import PasswordInput from "../../UI/PasswordInput/PasswordInput";
 import dayjs from "dayjs";
+import useInsertMultiPartsHook from "../../CustomHooks/useInsertMultiPartsHook";
 
 const AddUserModal = (props) => {
   const [file, setFile] = useState("");
@@ -28,7 +29,7 @@ const AddUserModal = (props) => {
     email: "",
     phoneNumber: "",
     loginType: "",
-    pass: "",
+    password: "",
     confirmPass: "",
     profilePicture: "",
     userStatus: "Enabled",
@@ -37,6 +38,7 @@ const AddUserModal = (props) => {
   const allUsers = props.allUsers;
 
   const fileInputRef = useRef(null);
+  const { insertMultiPartsData } = useInsertMultiPartsHook();
 
   const onFormDataChangeHandler = (e) => {
     const { name, value } = e.target;
@@ -80,11 +82,11 @@ const AddUserModal = (props) => {
       if (
         // +formData.userId.length === 0 ||
         +formData.fullName.length === 0 ||
-        +formData.userName.length === 0 ||
+        // +formData.userName.length === 0 ||
         +formData.email.length === 0 ||
         +formData.phoneNumber.length === 0 ||
-        +formData.loginType.length === 0 ||
-        +formData.pass.length === 0
+        // +formData.loginType.length === 0 ||
+        +formData.password.length === 0
         // formData.pass === ""
       ) {
         props.toastModal(
@@ -120,14 +122,14 @@ const AddUserModal = (props) => {
       }
 
       //Checking for password confirmation
-      if (formData.pass !== formData.confirmPass) {
+      if (formData.password !== formData.confirmPass) {
         props.toastModal("error", "Passwords do not match!");
 
         return;
       }
 
       //Checking for password length
-      if (+formData.pass.length < 8) {
+      if (+formData.password.length < 8) {
         props.toastModal(
           "error",
           "Password must be at least 8 characters long",
@@ -151,67 +153,16 @@ const AddUserModal = (props) => {
           dayjs().format("YYYY-MM-DDTHH:mm"),
         );
 
-        try {
-          const response = await axios.post(
-            `${app_api_url}/addUser`,
-            profileFormData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            },
-          );
+        //sending user details to be inserted into the database at the backend
+        insertMultiPartsData(`addUser`, profileFormData, props.toastModal);
 
-          props.setRefetch(); //Refreshing table after insertion
-
-          //Displaying success message after insertion
-          props.toastModal("success", response.data.message);
-
-          props.onCloseModal(); //Closing modal after insertion
-
-          //clearForm();
-        } catch (err) {
-          if (err.response && err.response.data && err.response.data.error) {
-            props.toastModal("error", err.response.data.error);
-          } else {
-            props.toastModal("error", `Error adding user ${err}`);
-          }
-        }
+        props.onCloseModal(); //Closing modal after insertion
       }
     },
-    [
-      file,
-      formData.confirmPass,
-      formData.email,
-      formData.fullName,
-      formData.loginType,
-      formData.phoneNumber,
-      formData.pass,
-      formData.userName,
-      props,
-      formData.userStatus,
-      allUsers,
-    ],
+    [file, formData, props, allUsers, insertMultiPartsData],
   );
   ////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////
-
-  //function to clear input fields
-  // const clearForm = () => {
-  //   setFormData({
-  //     userId: "",
-  //     fullName: "",
-  //     userName: "",
-  //     email: "",
-  //     phoneNumber: "",
-  //     loginType: "",
-  //     pass: "",
-  //     confirmPass: "",
-  //   });
-
-  //   setFile(null);
-  //   fileInputRef.current.value = null; //clearing image path
-  // };
 
   ///////////////////////////////
   //DELETE PROFILE PICTURE FILE
@@ -319,13 +270,13 @@ const AddUserModal = (props) => {
                 </div>
 
                 <div className={classes.form_control}>
-                  <label htmlFor="name">
+                  <label htmlFor="fullName">
                     Full Name<span className={classes.required_field}>*</span>
                   </label>
 
                   <input
-                    name="name"
-                    id="name"
+                    name="fullName"
+                    id="fullName"
                     value={formData.fullName}
                     type="text"
                     placeholder="eg. Kobby Mensah Junior"
@@ -353,13 +304,13 @@ const AddUserModal = (props) => {
                 </div>
 
                 <div className={classes.form_control}>
-                  <label htmlFor="phone">
+                  <label htmlFor="phoneNumber">
                     Phone<span className={classes.required_field}>*</span>
                   </label>
 
                   <input
-                    name="phone"
-                    id="phone"
+                    name="phoneNumber"
+                    id="phoneNumber"
                     type="tel"
                     onChange={onFormDataChangeHandler}
                     value={formData.phoneNumber}
@@ -376,7 +327,7 @@ const AddUserModal = (props) => {
                   <PasswordInput
                     onChange={onFormDataChangeHandler}
                     name="password"
-                    value={formData.pass ? formData.pass : ""}
+                    value={formData.password ? formData.password : ""}
                     id="password"
                     placeholder="Enter password"
                     required

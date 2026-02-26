@@ -5,8 +5,10 @@ from app.api.ws.live import manager
 from core.database import get_db
 from models.vote import Vote
 from models.candidate import Candidate
+from models.election import Election
 from models.audit_log import AuditLog
 from core.crypto import hash_vote, generate_salt
+from services.election_service import get_election_with_updated_status
 
 router = APIRouter(prefix="/vote", tags=["Voting"])
 
@@ -22,6 +24,15 @@ async def cast_vote(
     candidate = db.query(Candidate).filter(Candidate.id == candidate_id).first()
     if not candidate:
         raise HTTPException(404, "Candidate not found")
+
+    # Get election and update its status
+    election = get_election_with_updated_status(db, candidate.election_id)
+    if not election:
+        raise HTTPException(404, "Election not found")
+
+    # Check if election is active
+    if election.status != "active":
+        raise HTTPException(400, f"Election is not active. Current status: {election.status}")
 
     # Check if voter already voted
     existing_vote = db.query(Vote).filter(Vote.voter_id == voter_id).first()

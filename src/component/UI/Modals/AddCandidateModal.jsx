@@ -13,6 +13,7 @@ import CancelIcon from "../Icons/CancelIcon";
 import DeleteIcon from "../Icons/DeleteIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
+import useInsertMultiPartsHook from "../../CustomHooks/useInsertMultiPartsHook";
 //import app_api_url from "../../../app_api_url";
 
 const AddCandidateModal = (props) => {
@@ -24,6 +25,8 @@ const AddCandidateModal = (props) => {
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
   const [file, setFile] = useState("");
+
+  const { insertMultiPartsData } = useInsertMultiPartsHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -83,16 +86,16 @@ const AddCandidateModal = (props) => {
         props.onAddCandidate(candidateData);
         props.toastModal("success", `Candidate added successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          name: "",
-          image: "",
-        });
+        insertMultiPartsData(
+          `insertCandidate`,
+          candidateData,
+          props.toastModal,
+        );
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, insertMultiPartsData],
   );
 
   ///////////////////////////////

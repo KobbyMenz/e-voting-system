@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import classes from "./Navigation.module.css";
 import Menu from "../MainHeader/Menu";
 import QuestionModal from "../UI/Modals/QuestionModal";
@@ -9,11 +9,11 @@ import { NavLink, useNavigate } from "react-router-dom";
 import ToolTip from "../UI/ToolTip/ToolTip";
 import Modal from "../UI/Modals/Modal";
 //import logo from "./../../assets/images/KM_Inventory_logo_new.ico";
-import axios from "axios";
+//import axios from "axios";
 import Button from "../UI/Button/Button";
 import ArrowRightIcon from "../UI/Icons/RightArrowIcon";
 import ArrowLeftIcon from "../UI/Icons/LeftArrowIcon";
-import app_api_url from "../../app_api_url";
+//import app_api_url from "../../app_api_url";
 
 //import NavLi from "./NavLi";
 
@@ -22,9 +22,9 @@ const Navigation = (props) => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   //const [active, setActive] = useState(null);
   const [toggle, setToggle] = useState(false);
-  const [formData, setFormData] = useState({
-    logo: "",
-  });
+  // const [formData, setFormData] = useState({
+  //   logo: "",
+  // });
 
   const onClickHandler = useCallback(() => {
     setToggle((prevToggle) => !prevToggle);
@@ -55,28 +55,28 @@ const Navigation = (props) => {
     setShowQuestionModal(false);
   };
 
-  useEffect(() => {
-    const getSettings = async () => {
-      try {
-        const response = await axios.get(`${app_api_url}/getSettings`);
+  // useEffect(() => {
+  //   const getSettings = async () => {
+  //     try {
+  //       const response = await axios.get(`${app_api_url}/getSettings`);
 
-        setFormData((prev) => {
-          return {
-            ...prev,
+  //       setFormData((prev) => {
+  //         return {
+  //           ...prev,
 
-            logo: response.data?.logo || "",
-          };
-        });
+  //           logo: response.data?.logo || "",
+  //         };
+  //       });
 
-        // if (response.data) {
-        //   setLoading(false);
-        // }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getSettings();
-  }, []);
+  //       // if (response.data) {
+  //       //   setLoading(false);
+  //       // }
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   };
+  //   getSettings();
+  // }, []);
 
   // const onClickLinkHandler = (index) => {
   //   setActive(index);
@@ -115,7 +115,7 @@ const Navigation = (props) => {
             {/* <div className={classes.arrow} onClick={onClickHandler}>
               {toggle ? <ArrowLeftIcon /> : <ArrowRightIcon />}
             </div> */}
-            <div className={` ${classes.logo_container} `}>
+            {/* <div className={` ${classes.logo_container} `}>
               <div className={classes.logo}>
                 {formData.logo ? (
                   <img src={props.propsLogo || formData.logo} alt="logo" />
@@ -123,7 +123,7 @@ const Navigation = (props) => {
                   <div className={classes.dummyImage}></div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             <div className={classes.li__container}>
               {props.children}

@@ -1,12 +1,13 @@
 import axios from "axios";
-import app_api_url from "../../../APP_API_URL";
+import app_api_url from "../../app_api_url";
+
 
 const useUpdateHook = () => {
   const updateData = async (
     apiEndPointName,
     dataToUpdate,
-    refreshTable,
     toastModal,
+    refreshTable,
   ) => {
     try {
       const response = await axios.put(

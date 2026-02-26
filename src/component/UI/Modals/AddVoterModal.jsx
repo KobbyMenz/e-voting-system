@@ -13,6 +13,7 @@ import CancelIcon from "../Icons/CancelIcon";
 import DeleteIcon from "../Icons/DeleteIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
+import useInsertMultiPartsHook from "../../CustomHooks/useInsertMultiPartsHook";
 //import app_api_url from "../../../app_api_url";
 
 const AddVoterModal = (props) => {
@@ -25,6 +26,8 @@ const AddVoterModal = (props) => {
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
   const [file, setFile] = useState("");
+
+  const { insertMultiPartsData } = useInsertMultiPartsHook();
 
   const onFormDataChangeHandler = useCallback((e) => {
     const { name, value } = e.target;
@@ -75,20 +78,17 @@ const AddVoterModal = (props) => {
           dob: formData.dob,
         };
 
-        console.log(candidateData);
+        //console.log(candidateData);
         // props.onAddCandidate(candidateData);
         props.toastModal("success", `Added successfully`);
 
-        // Clear form after successful submission
-        setFormData({
-          name: "",
-          image: "",
-        });
+         //sending voter details to be inserted into the database at the backend
+        insertMultiPartsData(`insertVoter`, candidateData, props.toastModal);
 
         props.onCloseModal();
       }
     },
-    [props, formData],
+    [props, formData, insertMultiPartsData],
   );
 
   ///////////////////////////////

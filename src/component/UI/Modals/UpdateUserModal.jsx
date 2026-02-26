@@ -15,6 +15,7 @@ import ToolTip from "../../UI/ToolTip/ToolTip";
 import DeleteIcon from "../../UI/Icons/DeleteIcon";
 import Toast from "../../UI/Notification/Toast";
 import PasswordInput from "../../UI/PasswordInput/PasswordInput";
+import useUpdateMultiPartsHook from "../../CustomHooks/useUpdateMultiPartsHook";
 
 const UpdateUserModal = (props) => {
   const [file, setFile] = useState("");
@@ -33,11 +34,13 @@ const UpdateUserModal = (props) => {
     // email: "",
     // phoneNumber: "",
     // loginType: "",
-    pass: "",
+    password: "",
     confirmPass: "",
     // profilePicture: "",
     userStatus: "Enabled",
   });
+
+  const { updateMultiPartsData } = useUpdateMultiPartsHook();
 
   const fileInputRef = useRef(null);
 
@@ -99,8 +102,8 @@ const UpdateUserModal = (props) => {
         +formData.fullName.length === 0 ||
         +formData.userName.length === 0 ||
         +formData.email.length === 0 ||
-        +formData.phoneNumber.length === 0 ||
-        +formData.loginType.length === 0
+        +formData.phoneNumber.length === 0
+        // +formData.loginType.length === 0
       ) {
         props.toastModal(
           "error",
@@ -109,10 +112,10 @@ const UpdateUserModal = (props) => {
       } else {
         //check if password field is empty
         if (
-          (formData.pass === undefined ||
-            formData.pass === "" ||
-            formData.pass === null ||
-            +formData.pass.length === 0) &&
+          (formData.password === undefined ||
+            formData.password === "" ||
+            formData.password === null ||
+            +formData.password.length === 0) &&
           (formData.confirmPass === undefined ||
             formData.confirmPass === "" ||
             formData.confirmPass === null ||
@@ -136,43 +139,52 @@ const UpdateUserModal = (props) => {
             profileFormData.append("phoneNumber", formData.phoneNumber);
             profileFormData.append("loginType", formData.loginType);
 
-            try {
-              const response = await axios.put(
-                `${app_api_url}/updateUser/${+formData.userId}`,
-                profileFormData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                },
-              );
+            //sending user details to be updated into the database at the backend
+            updateMultiPartsData(
+              `updateUser/${+formData.userId}`,
+              profileFormData,
+              props.toastModal,
+            );
 
-              props.setRefetch(); //Refreshing table after update
+            props.onCloseModal(); //Close modal after update
 
-              props.toastModal("success", response.data.message);
+            // try {
+            //   const response = await axios.put(
+            //     `${app_api_url}/updateUser/${+formData.userId}`,
+            //     profileFormData,
+            //     {
+            //       headers: {
+            //         "Content-Type": "multipart/form-data",
+            //       },
+            //     },
+            //   );
 
-              props.onCloseModal(); //Close modal after update
-            } catch (err) {
-              if (
-                err.response &&
-                err.response.data &&
-                err.response.data.error
-              ) {
-                props.toastModal("error", err.response.data.error);
-              } else {
-                props.toastModal("error", `Error updating records ${err}`);
-              }
-            }
+            //   props.setRefetch(); //Refreshing table after update
+
+            //   props.toastModal("success", response.data.message);
+
+            //   props.onCloseModal(); //Close modal after update
+            // } catch (err) {
+            //   if (
+            //     err.response &&
+            //     err.response.data &&
+            //     err.response.data.error
+            //   ) {
+            //     props.toastModal("error", err.response.data.error);
+            //   } else {
+            //     props.toastModal("error", `Error updating records ${err}`);
+            //   }
+            // }
           }
         } else {
           //Checking for password confirmation
-          if (formData.pass !== formData.confirmPass) {
+          if (formData.password !== formData.confirmPass) {
             props.toastModal("error", "Passwords do not match!");
             return;
           }
 
           //Checking for password length
-          if (+formData.pass.length < 8) {
+          if (+formData.password.length < 8) {
             props.toastModal(
               "error",
               "Password must be at least 8 characters long",
@@ -198,73 +210,53 @@ const UpdateUserModal = (props) => {
             profileFormData.append("userName", formData.userName);
             profileFormData.append("phoneNumber", formData.phoneNumber);
             profileFormData.append("loginType", formData.loginType);
-            profileFormData.append("pass", formData.pass);
+            profileFormData.append("password", formData.password);
             profileFormData.append("email", formData.email);
 
-            try {
-              const response = await axios.put(
-                `${app_api_url}/updateUserAndPass/${+userId}`,
-                profileFormData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                },
-              );
+            //sending user details to be updated into the database at the backend
+            updateMultiPartsData(
+              `updateUserAndPass/${+userId}`,
+              profileFormData,
+              props.toastModal,
+            );
 
-              props.setRefetch(); //Refreshing table after update
+            props.onCloseModal(); //Close modal after update
 
-              props.toastModal("success", response.data.message);
+            // try {
+            //   const response = await axios.put(
+            //     `${app_api_url}/updateUserAndPass/${+userId}`,
+            //     profileFormData,
+            //     {
+            //       headers: {
+            //         "Content-Type": "multipart/form-data",
+            //       },
+            //     },
+            //   );
 
-              props.onCloseModal(); //Close modal after update
-            } catch (err) {
-              if (
-                err.response &&
-                err.response.data &&
-                err.response.data.error
-              ) {
-                props.toastModal("error", err.response.data.error);
-              } else {
-                props.toastModal("error", `Error updating records ${err}`);
-              }
-            }
+            //   props.setRefetch(); //Refreshing table after update
+
+            //   props.toastModal("success", response.data.message);
+
+            //   props.onCloseModal(); //Close modal after update
+            // } catch (err) {
+            //   if (
+            //     err.response &&
+            //     err.response.data &&
+            //     err.response.data.error
+            //   ) {
+            //     props.toastModal("error", err.response.data.error);
+            //   } else {
+            //     props.toastModal("error", `Error updating records ${err}`);
+            //   }
+            // }
           }
         }
       }
     },
-    [
-      file,
-      formData.confirmPass,
-      formData.email,
-      formData.fullName,
-      formData.loginType,
-      formData.phoneNumber,
-      formData.pass,
-      formData.userName,
-      formData.userId,
-      props,
-    ],
+    [file, formData, props, updateMultiPartsData],
   );
   ////////////////////////////////////////////////////////////////////////
   ///////////////////////////////////////////////////////////////////////
-
-  //function to clear input fields
-  // const clearForm = () => {
-  //   setFormData({
-  //     userId: "",
-  //     fullName: "",
-  //     userName: "",
-  //     email: "",
-  //     phoneNumber: "",
-  //     loginType: "",
-  //     pass: "",
-  //     confirmPass: "",
-  //   });
-
-  //   // setSelectedImage(null);
-  //   setFile(null);
-  //   fileInputRef.current.value = null;
-  // };
 
   ///////////////////////////////
   //DELETE PROFILE PICTURE FILE
@@ -480,13 +472,13 @@ const UpdateUserModal = (props) => {
                 </div>
 
                 <div className={classes.form_control}>
-                  <label htmlFor="phone">
+                  <label htmlFor="phoneNumber">
                     Phone<span className={classes.required_field}>*</span>
                   </label>
 
                   <input
-                    name="phone"
-                    id="phone"
+                    name="phoneNumber"
+                    id="phoneNumber"
                     type="tel"
                     onChange={onFormDataChangeHandler}
                     value={formData.phoneNumber}
@@ -501,7 +493,7 @@ const UpdateUserModal = (props) => {
                   <PasswordInput
                     onChange={onFormDataChangeHandler}
                     name="password"
-                    value={formData.pass ? formData.pass : ""}
+                    value={formData.password ? formData.password : ""}
                     id="password"
                     placeholder="Enter password"
                   />

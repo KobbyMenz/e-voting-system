@@ -14,7 +14,7 @@ import Footer from "../../Footer/Footer";
 import Toast from "../../UI/Notification/Toast";
 //import formatDateTime from "../../Functions/formatDateTime";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 import Loader from "../../UI/Loader/Loader";
 import SearchBar from "../../UI/SearchBar/SeachBar";
 import EditCandidateModal from "../../UI/Modals/EditCandidateModal";
@@ -52,6 +52,8 @@ const columns = [
 const createElectionInstance = (
   title,
   description,
+  dateCreated,
+  status,
   startDate,
   endDate,
   candidates = DEFAULT_CANDIDATES,
@@ -59,10 +61,11 @@ const createElectionInstance = (
   id: generateUniqueId(),
   title: title,
   description: description,
-  dateCreated: dayjs().format("YYYY-MM-DDTHH:mm"),
-  status: "Upcoming",
+  dateCreated: dateCreated,
+  status: status,
   startDate: startDate,
   endDate: endDate,
+
   candidates: candidates.map((candidate, index) => ({
     sn: index + 1,
     id: candidate.id,
@@ -75,13 +78,17 @@ const createElectionInstance = (
 const election = [
   createElectionInstance(
     "Boys Prefect",
-    "Namong SRC Presidential Election",
+    "Namong Boys Prefect Election",
+    "2026-01-02T07:00",
+    "Upcoming",
     "2026-01-23T07:00",
     "2026-01-27T19:00",
   ),
   createElectionInstance(
-    "Sanitation Prefect",
-    "Namong SRC Sanitation Prefect Election",
+    "Girls Prefect",
+    "Namong Girls Prefect Election",
+    "2026-01-03T07:10",
+    "Upcoming",
     "2026-02-04T08:00",
     "2026-02-05T20:00",
   ),
@@ -224,6 +231,8 @@ const AdminDashboardContent = () => {
       electionData !== null &&
       electionData.title &&
       electionData.description &&
+      electionData.dateCreated &&
+      electionData.status &&
       electionData.startDate &&
       electionData.endDate
     ) {
@@ -231,10 +240,13 @@ const AdminDashboardContent = () => {
       const newElection = createElectionInstance(
         electionData.title,
         electionData.description,
+        electionData.dateCreated,
+        electionData.status,
         electionData.startDate,
         electionData.endDate,
         electionData.candidates || DEFAULT_CANDIDATES,
       );
+
       setAddElection((prev) => {
         // Ensure prev is an array before spreading
         return Array.isArray(prev) ? [...prev, newElection] : [newElection];

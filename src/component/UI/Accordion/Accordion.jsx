@@ -16,31 +16,56 @@ import ToolTip from "../ToolTip/ToolTip";
 import formatDateTime from "../../Functions/formatDateTime";
 import BarChartCompo from "../Chart/BarChartCompo";
 // import Card from "../Card/Card";
+import { useElectionStatus } from "../../CustomHooks/useElectionStatus";
+import { useEffect } from "react";
+import useUpdateHook from "../../CustomHooks/useUpdateHook";
+import Toast from "../Notification/Toast";
 
 export default function AccordionExpandDefault({
+  id,
   electionTitle,
   status,
   description,
   dateCreated,
   startDate,
   endDate,
-  id,
+
   columns,
   rows,
+
   onEdit,
   onDelete,
   onAdd,
-  onChangeStatus,
+  // onChangeStatus,
   onDeleteElection,
   onEditElection,
   expanded,
   onExpandChange,
 }) {
-  // const [expandedId, setExpandedId] = useState(null);
+  // Custom hook for updating election status
+  const { updateData } = useUpdateHook();
 
-  // const onExpandChange = useCallback((id, isExpanded) => {
-  //   setExpandedId(isExpanded ? id : null);
-  // }, []);
+  // Automatically calculate election status based on current time
+  const calculatedStatus = useElectionStatus(startDate, endDate, status);
+
+  useEffect(() => {
+    const toastModal = () => {
+      Toast(
+        calculatedStatus === "Upcoming"
+          ? "info"
+          : calculatedStatus === "Active"
+            ? "success"
+            : "error",
+        `${electionTitle} election status updated to ${calculatedStatus.split("")[0].toLowerCase() + calculatedStatus.slice(1)}`,
+      );
+    };
+    // Update the election status in the backend whenever it changes
+    updateData(
+      `updateElectionStatus/${id}`,
+      { status: calculatedStatus },
+      toastModal,
+    );
+  }, [calculatedStatus, id, updateData, electionTitle]);
 
   return (
     // <Card className={classes.card}>
@@ -112,41 +137,53 @@ export default function AccordionExpandDefault({
             },
           }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-            <Typography variant="h4" color="initial">
-              <p
+          <Box
+            sx={{
+              display: "flex",
+              // alignItems: "center",
+              gap: "0.5rem",
+              flexDirection: "column",
+            }}
+          >
+            <Box sx={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+              <Typography variant="h4" color="initial">
+                <p
+                  style={{
+                    fontSize: "1.8rem",
+                    fontWeight: "700",
+                    color: "var(--text-color)",
+                  }}
+                >
+                  {electionTitle}
+                </p>{" "}
+              </Typography>
+              <div
                 style={{
-                  fontSize: "1.8rem",
-                  fontWeight: "700",
-                  color: "var(--text-color)",
+                  background:
+                    calculatedStatus === "Active"
+                      ? "#06882d"
+                      : calculatedStatus === "Upcoming"
+                        ? "var(--primary)"
+                        : calculatedStatus === "Closed"
+                          ? "#ca0202"
+                          : "",
+                  padding: "0.5rem 1.2rem",
+                  fontSize: "1.4rem",
+                  borderRadius: "1.5rem",
+                  height: "fit-content",
+                  width: "fit-content",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
                 }}
               >
-                {electionTitle}
-              </p>{" "}
+                {calculatedStatus}
+              </div>{" "}
+            </Box>
+            <Typography variant="p" color="initial">
+              <p style={{ color: "#747474" }}>{description}</p>
             </Typography>
-            <div
-              style={{
-                background:
-                  status === "Active"
-                    ? "#06882d"
-                    : status === "Upcoming"
-                      ? "var(--primary)"
-                      : status === "Closed"
-                        ? "#ca0202"
-                        : "",
-                padding: "0.5rem 1.2rem",
-                fontSize: "1.4rem",
-                borderRadius: "1.5rem",
-                height: "fit-content",
-                width: "fit-content",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#fff",
-              }}
-            >
-              {status}
-            </div>{" "}
           </Box>
 
           <div style={{ fontSize: "1.5rem", color: "var(--text-color)" }}>
@@ -308,11 +345,11 @@ export default function AccordionExpandDefault({
                 <h2>Status Control:</h2>
                 <p>
                   Election is{" "}
-                  {status === "Active"
+                  {calculatedStatus === "Active"
                     ? " currently open for voting"
-                    : status === "Closed"
+                    : calculatedStatus === "Closed"
                       ? " currently closed"
-                      : status === "Upcoming"
+                      : calculatedStatus === "Upcoming"
                         ? " yet to commence"
                         : ""}
                 </p>
@@ -320,15 +357,17 @@ export default function AccordionExpandDefault({
             </Box>
 
             <Box display="flex" alignItems="center" gap="2rem">
-              <Button
+              {/* {<Button
                 onClick={onChangeStatus}
                 style={{
                   backgroundColor:
-                    status === "Active" ? "#ca0202" : "var(--primary)",
+                    calculatedStatus === "Active"
+                      ? "#ca0202"
+                      : "var(--primary)",
                 }}
               >
-                {/*Change button icon and text based on election status*/}
-                {status === "Active" ? <StopIcon /> : <PlayIcon />}
+               
+                {calculatedStatus === "Active" ? <StopIcon /> : <PlayIcon />}
                 <Typography
                   sx={{
                     fontSize: "1.5rem",
@@ -336,9 +375,11 @@ export default function AccordionExpandDefault({
                     color: "#fff",
                   }}
                 >
-                  {status === "Active" ? "End Election" : "Start Election"}
+                  {calculatedStatus === "Active"
+                    ? "End Election"
+                    : "Start Election"}
                 </Typography>
-              </Button>
+              </Button>} */}
 
               <Box
                 sx={{ display: "flex", alignItems: "center", gap: "0.5rem" }}

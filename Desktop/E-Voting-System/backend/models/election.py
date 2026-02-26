@@ -11,4 +11,5 @@ class Election(Base):
     start_time = Column(DateTime, nullable=False)
     end_time = Column(DateTime, nullable=False)
     is_active = Column(Boolean, default=False)
+    status = Column(String(20), default="draft")  # draft, active, closed
     created_at = Column(DateTime, default=datetime.utcnow)
