@@ -17,8 +17,6 @@ import formatDateTime from "../../Functions/formatDateTime";
 import BarChartCompo from "../Chart/BarChartCompo";
 // import Card from "../Card/Card";
 import { useElectionStatus } from "../../CustomHooks/useElectionStatus";
-import { useEffect } from "react";
-import useUpdateHook from "../../CustomHooks/useUpdateHook";
 import Toast from "../Notification/Toast";
 
 export default function AccordionExpandDefault({
@@ -42,30 +40,13 @@ export default function AccordionExpandDefault({
   expanded,
   onExpandChange,
 }) {
-  // Custom hook for updating election status
-  const { updateData } = useUpdateHook();
-
   // Automatically calculate election status based on current time
-  const calculatedStatus = useElectionStatus(startDate, endDate, status);
-
-  useEffect(() => {
-    const toastModal = () => {
-      Toast(
-        calculatedStatus === "Upcoming"
-          ? "info"
-          : calculatedStatus === "Active"
-            ? "success"
-            : "error",
-        `${electionTitle} election status updated to ${calculatedStatus.split("")[0].toLowerCase() + calculatedStatus.slice(1)}`,
-      );
-    };
-    // Update the election status in the backend whenever it changes
-    updateData(
-      `updateElectionStatus/${id}`,
-      { status: calculatedStatus },
-      toastModal,
-    );
-  }, [calculatedStatus, id, updateData, electionTitle]);
+  const calculatedStatus = useElectionStatus(
+    `updateElectionStatus/${id}`,
+    startDate,
+    endDate,
+    status,
+  );
 
   return (
     // <Card className={classes.card}>
