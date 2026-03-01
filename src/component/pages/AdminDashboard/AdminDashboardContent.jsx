@@ -79,29 +79,29 @@ const createElectionInstance = (
   })),
 });
 
-// const election = [
-//   createElectionInstance(
-//     "Boys Prefect",
-//     "Namong Boys Prefect Election",
-//     "2026-01-02T07:00",
-//     "Upcoming",
-//     "2026-01-23T07:00",
-//     "2026-01-27T19:00",
-//   ),
-//   createElectionInstance(
-//     "Girls Prefect",
-//     "Namong Girls Prefect Election",
-//     "2026-01-03T07:10",
-//     "Upcoming",
-//     "2026-02-04T08:00",
-//     "2026-02-05T20:00",
-//   ),
-// ];
+const election = [
+  createElectionInstance(
+    "Boys Prefect",
+    "Namong Boys Prefect Election",
+    "2026-01-02T07:00",
+    "Upcoming",
+    "2026-01-23T07:00",
+    "2026-01-27T19:00",
+  ),
+  createElectionInstance(
+    "Girls Prefect",
+    "Namong Girls Prefect Election",
+    "2026-01-03T07:10",
+    "Upcoming",
+    "2026-02-04T08:00",
+    "2026-02-05T20:00",
+  ),
+];
 
 const AdminDashboardContent = () => {
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
   const [showEditElectionModal, setShowEditElectionModal] = useState(false);
-  const [addElection, setAddElection] = useState([]);
+  const [addElection, setAddElection] = useState(election);
   const [expandedId, setExpandedId] = useState(null);
   //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
