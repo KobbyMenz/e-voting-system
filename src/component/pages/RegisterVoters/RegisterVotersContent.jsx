@@ -6,6 +6,9 @@ import AddVoterModal from "../../UI/Modals/AddVoterModal";
 import EditVoterModal from "../../UI/Modals/EditVoterModal";
 import Toast from "../../UI/Notification/Toast";
 import Footer from "../../Footer/Footer";
+import Button from "../../UI/Button/Button";
+import PrintIcon from "../../UI/Icons/PrintIcon";
+import { printVoters } from "../../Functions/printVoters";
 
 const allVoters = [
   {
@@ -41,6 +44,7 @@ const RegisterVotersContent = () => {
   const [showAddVoterModal, setShowAddVoterModal] = useState(false);
   const [showEditVoterModal, setShowEditVoterModal] = useState(false);
   const [submitEditData, setSubmitEditData] = useState({});
+  const [voters, setVoters] = useState(allVoters);
   //columns for pagination table (ManageUserPT)
 
   const onAddVoterHandler = () => {
@@ -70,6 +74,24 @@ const RegisterVotersContent = () => {
     setShowAddVoterModal(false);
   };
 
+  /////////////////////////////////////////////////////////
+  //* Handler to print all registered voters */
+  /////////////////////////////////////////////////////
+  const onPrintAllVotersHandler = useCallback(() => {
+    if (Array.isArray(voters) && voters.length > 0) {
+      // Format voters data for printing
+      const formattedVoters = voters.map((voter) => ({
+        id: voter.id,
+        name: voter.name,
+        dob: dayjs(voter.dob).format("DD MMM, YYYY"),
+      }));
+      printVoters(formattedVoters, "Registered Voters Report");
+    } else {
+      Toast("info", "No voters to print");
+    }
+  }, [voters]);
+
+  /// Define columns for the pagination table
   const columns = [
     { field: "sn", headerName: "S/N" },
     { field: "id", headerName: "ID" },
@@ -78,6 +100,7 @@ const RegisterVotersContent = () => {
     { field: "dob", headerName: "DOB", type: "dob" },
   ];
 
+  // Format rows for the pagination table
   const rows = allVoters.map((voter, index) => ({
     sn: index + 1,
     id: voter.id,
@@ -117,6 +140,11 @@ const RegisterVotersContent = () => {
           onEdit={onEditVoterHandler}
           // onDelete={onDelete}
           onAdd={onAddVoterHandler}
+          customHeaderButtons={
+            <Button onClick={onPrintAllVotersHandler}>
+              <PrintIcon size="20" /> Print
+            </Button>
+          }
         />
       </div>
 

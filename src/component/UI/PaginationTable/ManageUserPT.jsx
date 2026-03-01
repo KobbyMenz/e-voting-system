@@ -23,8 +23,9 @@ import CustomButton from "../Button/Button";
 import SearchBar from "../SearchBar/SeachBar";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
-import AddIcon from "../Icons/AddIcon";
+//import AddIcon from "../Icons/AddIcon";
 import FormatNumber from "../../Functions/FormatNumber";
+import AddUserIcon from "../Icons/AddUserIcon";
 //import Button from "../Button";
 
 const ManageUserPT = ({
@@ -157,7 +158,7 @@ const ManageUserPT = ({
           </div>
 
           <CustomButton className="add_btn" onClick={onAdd}>
-            <AddIcon /> Add
+            <AddUserIcon /> Add
           </CustomButton>
         </Box>
       </Box>

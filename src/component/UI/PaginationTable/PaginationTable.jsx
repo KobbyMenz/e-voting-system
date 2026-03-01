@@ -34,6 +34,7 @@ const PaginationTable = ({
   addButton,
   buttonStyle,
   placeholder,
+  customHeaderButtons,
 }) => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -162,6 +163,12 @@ const PaginationTable = ({
               onChange={(e) => setSearch(e.target.value)}
             />
           </Box>
+
+          {customHeaderButtons && (
+            <Box display="flex" gap={1} alignItems="center">
+              {customHeaderButtons}
+            </Box>
+          )}
 
           <CustomButton style={buttonStyle} className="add_btn" onClick={onAdd}>
             <AddUserIcon />
