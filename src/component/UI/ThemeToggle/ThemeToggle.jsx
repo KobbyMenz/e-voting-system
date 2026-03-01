@@ -3,7 +3,7 @@ import { useTheme } from "../../../context/useTheme";
 import { styled } from "@mui/material/styles";
 import ToolTip from "../ToolTip/ToolTip";
 
-const StyledSwitch = styled(Switch)(({ theme }) => ({
+const StyledSwitch = styled(Switch)(() => ({
   padding: 8,
   "& .MuiSwitch-track": {
     borderRadius: 22 / 2,
