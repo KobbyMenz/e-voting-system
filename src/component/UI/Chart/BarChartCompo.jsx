@@ -109,7 +109,7 @@ const BarChartCompo = () => {
                 // color: "#000",
                 backgroundColor: isDarkTheme ? "var(--bg-color2)" : "var(--bg-color2)",
                 border: "0.1rem solid #ccc",
-                borderRadius: "0.5rem",
+                borderRadius: "0.8rem",
               }}
             />
             <Bar dataKey="total_vote" fill="var(--primary)" barSize={"100"} />
