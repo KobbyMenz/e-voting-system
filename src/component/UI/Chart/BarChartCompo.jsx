@@ -21,11 +21,13 @@ import PropTypes from "prop-types";
 import FormatCurrency from "../../Functions/FormatCurrency";
 import ChartSkeleton from "../Skeleton/ChartSkeleton";
 import formatNumberToK from "../../Functions/formatNumberToK";
+import { useTheme } from "../../../context/useTheme";
 //import app_api_url from "../../../app_api_url";
 
 //import FormatCurrency from "../../Functions/FormatCurrency";
 
 const BarChartCompo = () => {
+  const { isDarkTheme } = useTheme();
   // const { topProducts, loading } = useTopProducts(); setRefetch
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -101,7 +103,15 @@ const BarChartCompo = () => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
             <YAxis tickFormatter={formatNumberToK} />
-            <Tooltip formatter={(value) => formatNumberToK(value)} />
+            <Tooltip
+              formatter={(value) => formatNumberToK(value)}
+              contentStyle={{
+                // color: "#000",
+                backgroundColor: isDarkTheme ? "var(--bg-color2)" : "var(--bg-color2)",
+                border: "0.1rem solid #ccc",
+                borderRadius: "0.5rem",
+              }}
+            />
             <Bar dataKey="total_vote" fill="var(--primary)" barSize={"100"} />
           </BarChart>
         </ResponsiveContainer>
