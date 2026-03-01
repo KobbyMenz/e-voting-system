@@ -78,6 +78,17 @@ export const printElectionResults = (
 ) => {
   // Open a new window for printing
   const printWindow = window.open("", "_blank");
+
+  // Handle case where popup is blocked or unavailable (e.g., on mobile)
+  if (!printWindow) {
+    console.error("Print window could not be opened. Popups may be blocked.");
+    // Fallback: Use the browser's native print for the current page
+    // In a real app, you might want to show a Toast notification here
+    // For now, we'll use window.print() directly
+    window.print();
+    return;
+  }
+
   const currentDate = dayjs()
     .format("ddd, DD MMM, YYYY @ hh:mm a")
     .toLocaleString();
@@ -162,11 +173,16 @@ export const printElectionResults = (
   `;
 
   // Write the HTML content to the new window and trigger print
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
+  try {
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
 
-  // Trigger print dialog after a short delay to ensure content is loaded
-  setTimeout(() => {
-    printWindow.print();
-  }, 250);
+    // Trigger print dialog after a short delay to ensure content is loaded
+    setTimeout(() => {
+      printWindow.print();
+    }, 250);
+  } catch (error) {
+    console.error("Error writing to print window:", error);
+    printWindow.close();
+  }
 };
