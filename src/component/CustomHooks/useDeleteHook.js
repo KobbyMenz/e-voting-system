@@ -2,12 +2,15 @@ import axios from "axios";
 import app_api_url from "../../app_api_url";
 
 const useDeleteHook = () => {
-  const deleteData = async (apiEndPointName, refreshTable, toastModal) => {
+  const deleteData = async (apiEndPointName, toastModal, refreshTable) => {
     try {
       const response = await axios.delete(`${app_api_url}/${apiEndPointName}`);
       refreshTable();
 
-      toastModal("success", `${response.data.message}`);
+      if (response.data.message) {
+        toastModal("success", `${response.data.message}`);
+      }
+      
     } catch (err) {
       if (err.response?.data?.error) {
         toastModal("error", err.response.data.error);

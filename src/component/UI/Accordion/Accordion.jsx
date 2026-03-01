@@ -32,7 +32,7 @@ export default function AccordionExpandDefault({
   rows,
 
   onEdit,
-  onDelete,
+  onDeleteCandidate,
   onAdd,
   // onChangeStatus,
   onDeleteElection,
@@ -418,7 +418,7 @@ export default function AccordionExpandDefault({
               columns={columns}
               rows={rows}
               onEdit={onEdit}
-              onDelete={onDelete}
+              onDelete={onDeleteCandidate}
               onAdd={onAdd}
             />
           </div>
@@ -450,7 +450,7 @@ AccordionExpandDefault.propTypes = {
   columns: PropTypes.array,
   rows: PropTypes.array,
   onEdit: PropTypes.func,
-  onDelete: PropTypes.func,
+  onDeleteCandidate: PropTypes.func,
   onAdd: PropTypes.func,
   onChangeStatus: PropTypes.func,
   onDeleteElection: PropTypes.func,

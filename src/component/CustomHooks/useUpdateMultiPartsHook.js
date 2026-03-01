@@ -20,7 +20,10 @@ const useUpdateMultiPartsHook = () => {
       );
 
       refreshTable();
-      toastModal("success", response.data.message);
+
+      if (response.data.message) {
+        toastModal("success", `${response.data.message}`);
+      }
     } catch (err) {
       if (err.response?.data?.error) {
         toastModal("error", err.response.data.error);

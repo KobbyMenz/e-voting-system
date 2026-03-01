@@ -5,6 +5,7 @@ import classes from "../AdminDashboard/AdminDashboardContent.module.css";
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
 import AddIcon from "../../UI/Icons/AddIcon";
+import PrintIcon from "../../UI/Icons/PrintIcon";
 import Modal from "../../UI/Modals/Modal";
 import AddElectionModal from "../../UI/Modals/AddElectionModal";
 import AddCandidateModal from "../../UI/Modals/AddCandidateModal";
@@ -18,7 +19,8 @@ import EditElectionModal from "../../UI/Modals/EditElectionModal";
 import Loader from "../../UI/Loader/Loader";
 import SearchBar from "../../UI/SearchBar/SeachBar";
 import EditCandidateModal from "../../UI/Modals/EditCandidateModal";
-//import useDeleteHook from "../../CustomHooks/useDeleteHook";
+import useDeleteHook from "../../CustomHooks/useDeleteHook";
+import { printElectionResults } from "../../Functions/printElectionResults";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
 // import useFetch from "../../Hooks/useFetch";
@@ -46,6 +48,7 @@ const columns = [
   { field: "image", headerName: "Photo", type: "image" },
   { field: "name", headerName: "Candidate Name", type: "candidateName" },
   { field: "position", headerName: "Position", type: "position" },
+  { field: "votes", headerName: "No. of Votes", type: "votes" },
 ];
 
 // Function to create a new election instance with candidates
@@ -72,6 +75,7 @@ const createElectionInstance = (
     image: candidate.photo ? candidate.photo : "",
     name: candidate.name,
     position: candidate.position ? candidate.position : "N/A",
+    votes: candidate.votes ? candidate.votes : 0,
   })),
 });
 
@@ -108,7 +112,7 @@ const AdminDashboardContent = () => {
   const [submitElectionData, setSubmitElectionData] = useState({});
   //const [loading, setLoading] = useState(true);
 
-  //const { deleteData } = useDeleteHook();
+  const { deleteData } = useDeleteHook();
 
   //  const { data, loading, setRefetch } = useFetch(
   //   `${app_api_url}/getAllElections`,
@@ -210,6 +214,7 @@ const AdminDashboardContent = () => {
                       image: candidateData.image,
                       name: candidateData.name,
                       position: candidateData.position,
+                      votes: 0,
                     },
                   ],
                 };
@@ -291,35 +296,35 @@ const AdminDashboardContent = () => {
   /////////////////////////////////////////////////////////
   //* Handler to change election status */
   /////////////////////////////////////////////////////
-  const onClickElectionStatus = useCallback((electionId, status) => {
-    if (
-      window.confirm(
-        `Are you sure you want to ${status === "Upcoming" ? "start" : status === "Active" ? "close" : "start"} election?`,
-      )
-    ) {
-      setAddElection((prev) => {
-        return Array.isArray(prev)
-          ? prev.map((election) => {
-              if (election.id === electionId) {
-                const newStatus =
-                  election.status === "Active" ? "Closed" : "Active";
-                Toast(
-                  "success",
-                  `${election.title} election ${
-                    newStatus === "Active" ? "started" : "closed"
-                  } successfully.`,
-                );
-                return {
-                  ...election,
-                  status: newStatus,
-                };
-              }
-              return election;
-            })
-          : prev;
-      });
-    }
-  }, []);
+  // const onClickElectionStatus = useCallback((electionId, status) => {
+  //   if (
+  //     window.confirm(
+  //       `Are you sure you want to ${status === "Upcoming" ? "start" : status === "Active" ? "close" : "start"} election?`,
+  //     )
+  //   ) {
+  //     setAddElection((prev) => {
+  //       return Array.isArray(prev)
+  //         ? prev.map((election) => {
+  //             if (election.id === electionId) {
+  //               const newStatus =
+  //                 election.status === "Active" ? "Closed" : "Active";
+  //               Toast(
+  //                 "success",
+  //                 `${election.title} election ${
+  //                   newStatus === "Active" ? "started" : "closed"
+  //                 } successfully.`,
+  //               );
+  //               return {
+  //                 ...election,
+  //                 status: newStatus,
+  //               };
+  //             }
+  //             return election;
+  //           })
+  //         : prev;
+  //     });
+  //   }
+  // }, []);
 
   /////////////////////////////////////////
   //delete election handler
@@ -335,27 +340,49 @@ const AdminDashboardContent = () => {
         Toast("success", "Election deleted successfully.");
 
         //Hook to delete election
-        // deleteData(`deleteElection/${electionId}` , refetchHandler, ToastHandler);
-
-        // const deleteElection = async () => {
-        //   try {
-        //     const response = await axios.delete(
-        //       `${app_api_url}/deleteElection/${electionId}`,
-        //     );
-        //     refetchHandler();
-
-        //     ToastHandler("success", `${response.data.message}`);
-        //   } catch (err) {
-        //     ToastHandler("error", `Error deleting election: ${err}`);
-        //   }
-        // };
-        // deleteElection();
+        deleteData(`deleteElection/${electionId}`, ToastHandler);
       }
     },
-    [
-      // deleteData, refetchHandler, ToastHandler
-    ],
+    [deleteData, ToastHandler],
   );
+
+  /////////////////////////////////////////
+  //delete candidate handler
+  ////////////////////////////////////////
+  const onDeleteCandidateHandler = useCallback(
+    (candidateId) => {
+      if (window.confirm("Are you sure you want to delete this candidate?")) {
+        setAddElection((prev) => {
+          return Array.isArray(prev)
+            ? prev.map((election) => {
+                return {
+                  ...election,
+                  candidates: election.candidates.filter(
+                    (candidate) => candidate.id !== candidateId,
+                  ),
+                };
+              })
+            : prev;
+        });
+        Toast("success", "Candidate deleted successfully.");
+
+        //Hook to delete candidate
+        deleteData(`deleteCandidate/${candidateId}`, ToastHandler);
+      }
+    },
+    [deleteData, ToastHandler],
+  );
+
+  /////////////////////////////////////////////////////////
+  //* Handler to print all election results */
+  /////////////////////////////////////////////////////
+  const onPrintAllResultsHandler = useCallback(() => {
+    if (Array.isArray(addElection) && addElection.length > 0) {
+      printElectionResults(addElection, "All Elections Report");
+    } else {
+      Toast("info", "No elections to print");
+    }
+  }, [addElection]);
 
   const totalCandidates = addElection
     .map((item) => item.candidates.length)
@@ -600,6 +627,11 @@ const AdminDashboardContent = () => {
                   />
                 </div>
 
+                <Button onClick={onPrintAllResultsHandler}>
+                  {" "}
+                  <PrintIcon size="20" /> Print Results
+                </Button>
+
                 <Button onClick={onShowAddElectionModalHandler}>
                   {" "}
                   <AddIcon /> New Election
@@ -625,9 +657,10 @@ const AdminDashboardContent = () => {
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onEdit={onEditCandidateHandler}
-                      onChangeStatus={() =>
-                        onClickElectionStatus(item.id, item.status)
-                      }
+                      // onChangeStatus={() =>
+                      //   onClickElectionStatus(item.id, item.status)
+                      // }
+                      onDeleteCandidate={onDeleteCandidateHandler}
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}
                       expanded={expandedId === item.id}
@@ -649,10 +682,10 @@ const AdminDashboardContent = () => {
                   style={{
                     textAlign: "center",
                     borderTop: "0.2rem solid #ccc",
-                    padding: "1rem 0",
+                    padding: "2rem 0 1rem 0",
                   }}
                 >
-                  No election added
+                  No election added yet
                 </p>
               )}
             </Box>

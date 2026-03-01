@@ -1,7 +1,6 @@
 import axios from "axios";
 import app_api_url from "../../app_api_url";
 
-
 const useUpdateHook = () => {
   const updateData = async (
     apiEndPointName,
@@ -17,7 +16,9 @@ const useUpdateHook = () => {
 
       refreshTable();
 
-      toastModal("success", response.data.message);
+      if (response.data.message) {
+        toastModal("success", `${response.data.message}`);
+      }
     } catch (err) {
       if (err.response?.data?.error) {
         toastModal("error", err.response.data.error);
