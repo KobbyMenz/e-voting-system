@@ -1,5 +1,5 @@
 import { FormControlLabel, Switch } from "@mui/material";
-import { useTheme } from "../../../context/ThemeContext";
+import { useTheme } from "../../../context/useTheme";
 import { styled } from "@mui/material/styles";
 import ToolTip from "../ToolTip/ToolTip";
 
