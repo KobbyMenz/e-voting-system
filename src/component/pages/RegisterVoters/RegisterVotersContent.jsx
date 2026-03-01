@@ -45,17 +45,17 @@ const RegisterVotersContent = () => {
   const [showEditVoterModal, setShowEditVoterModal] = useState(false);
   const [submitEditData, setSubmitEditData] = useState({});
   const [voters, setVoters] = useState(allVoters);
-  //columns for pagination table (ManageUserPT)
 
-  const onAddVoterHandler = () => {
+  // Handler to open the Add Voter Modal
+  const onAddVoterHandler = useCallback(() => {
     setShowAddVoterModal(true);
-  };
+  }, []);
 
   const ToastHandler = useCallback((type, message) => {
     Toast(type, message);
   }, []);
 
-  const onEditVoterHandler = (id, image, name, dob) => {
+  const onEditVoterHandler = useCallback((id, image, name, dob) => {
     setShowEditVoterModal(true);
 
     setSubmitEditData({
@@ -64,15 +64,15 @@ const RegisterVotersContent = () => {
       name: name,
       dob: dob,
     });
-  };
+  }, []);
 
-  const closeShowEditVoterModalHandler = () => {
+  const closeShowEditVoterModalHandler = useCallback(() => {
     setShowEditVoterModal(false);
-  };
+  }, []);
 
-  const closeShowAddVoterModalHandler = () => {
+  const closeShowAddVoterModalHandler = useCallback(() => {
     setShowAddVoterModal(false);
-  };
+  }, []);
 
   /////////////////////////////////////////////////////////
   //* Handler to print all registered voters */
