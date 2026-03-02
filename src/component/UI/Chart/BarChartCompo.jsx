@@ -108,7 +108,7 @@ const BarChartCompo = () => {
               contentStyle={{
                 // color: "#000",
                 backgroundColor: isDarkTheme ? "var(--bg-color2)" : "var(--bg-color2)",
-                border: "0.1rem solid #ccc",
+                border: "0.1rem solid var(--text-color)",
                 borderRadius: "0.8rem",
               }}
             />

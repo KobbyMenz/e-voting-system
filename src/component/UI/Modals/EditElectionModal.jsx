@@ -60,7 +60,7 @@ const EditElectionModal = (props) => {
           endDate: formData.endDate,
         };
 
-       // props.onEditElection(electionData);
+        // props.onEditElection(electionData);
         props.toastModal("success", `Election updated successfully`);
 
         //sending election details to be updated into the database at the backend
@@ -78,7 +78,7 @@ const EditElectionModal = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.backdrop} onClick={props.onCloseModal} />
+      <div className={classes.backdrop} />
 
       <Card className={`${classes.modal}`}>
         <header>

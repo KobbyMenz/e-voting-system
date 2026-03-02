@@ -26,13 +26,20 @@ const VoterDashboardContent = () => {
           candidateId: 2024001,
           name: "John Doe",
           image: "",
-          position: "President",
+          position: "Boys Prefect",
         },
         {
           candidateId: 2024002,
           name: "Jane Smith",
           image: "",
-          position: "President",
+          position: "Boys Prefect",
+        },
+
+        {
+          candidateId: 2024003,
+          name: "Ronyx Mensah",
+          image: "",
+          position: "Boys Prefect",
         },
       ],
     },
@@ -49,13 +56,13 @@ const VoterDashboardContent = () => {
           candidateId: 2024003,
           name: "John Doe",
           image: "",
-          position: "Dinning Hall Prefect",
+          position: "Girls Prefect",
         },
         {
           candidateId: 2024004,
           name: "Jane Smith",
           image: "",
-          position: "Dinning Hall Prefect",
+          position: "Girls Prefect",
         },
       ],
 

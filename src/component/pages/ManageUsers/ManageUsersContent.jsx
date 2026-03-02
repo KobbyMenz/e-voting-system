@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 //import classes from "../dashboard/DashboardContent.module.css";
 //import styles from "../AdminStaff/AdminStaffContent.module.css";
 //import defaultUserPhoto from "../../../assets/images/profilePicture.png";
@@ -25,6 +25,63 @@ import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 //import NavTabs from "../../UI/Tab/NavTabs";
 import app_api_url from "../../../app_api_url";
 import classes from "../ManageUsers/ManageUsersContent.module.css";
+import useDeleteHook from "../../CustomHooks/useDeleteHook";
+
+//Getting all users details
+const allUsers = [
+  {
+    id: 2025001,
+    image: "",
+    name: "Augustine Mensah",
+    userName: "KobbyMenz",
+    email: "kmz@email",
+    contact: "0546163240",
+    // role: "Admin",
+    userStatus: "Enabled",
+    dateCreated: formatDateTime("2026-02-02T02:00"),
+    lastLogin: formatDateTime("2026-02-02T02:00"),
+  },
+
+  {
+    id: 2025002,
+    image: "",
+    name: "Enoch Boakye",
+    userName: "KobbyMenz",
+    email: "enoch@email",
+    contact: "0546163240",
+    // role: "Admin",
+    userStatus: "Disabled",
+    dateCreated: formatDateTime("2026-02-02T02:00"),
+    lastLogin: formatDateTime("2026-02-02T02:00"),
+  },
+
+  {
+    id: 2025003,
+    image: "",
+    name: "Emmanuel Adu Darkwah",
+    userName: "emmanueladu@gmail.com",
+    email: "enoch@email",
+    contact: "0546163240",
+    // role: "Admin",
+    userStatus: "Enabled",
+    dateCreated: formatDateTime("2026-02-02T02:00"),
+    lastLogin: formatDateTime("2026-02-02T02:00"),
+  },
+
+  {
+    id: 2025004,
+    image: "",
+    name: "Alex Baah",
+    userName: "KobbyMenz",
+    email: "Alexakwasi@gmail.com",
+    contact: "0546163240",
+    // role: "Admin",
+    userStatus: "Disabled",
+    dateCreated: formatDateTime("2026-02-02T02:00"),
+    lastLogin: formatDateTime("2026-02-02T02:00"),
+  },
+];
+
 //import moment from "moment";
 
 const ManageUsersContent = () => {
@@ -32,66 +89,11 @@ const ManageUsersContent = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateUserModal, setShowUpdateUserModal] = useState(false);
   const [submit, setSubmit] = useState("");
+  const [users, setUsers] = useState(allUsers);
 
+  const { deleteData } = useDeleteHook();
   // const { data, loading, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
 
-  //Getting all users details
-  const allUsers = useMemo(
-    () => [
-      {
-        id: 2025001,
-        image: "",
-        name: "Augustine Mensah",
-        userName: "KobbyMenz",
-        email: "kmz@email",
-        contact: "0546163240",
-        // role: "Admin",
-        userStatus: "Enabled",
-        dateCreated: formatDateTime("2026-02-02T02:00"),
-        lastLogin: formatDateTime("2026-02-02T02:00"),
-      },
-
-      {
-        id: 2025002,
-        image: "",
-        name: "Enoch Boakye",
-        userName: "KobbyMenz",
-        email: "enoch@email",
-        contact: "0546163240",
-        // role: "Admin",
-        userStatus: "Disabled",
-        dateCreated: formatDateTime("2026-02-02T02:00"),
-        lastLogin: formatDateTime("2026-02-02T02:00"),
-      },
-
-      {
-        id: 2025003,
-        image: "",
-        name: "Emmanuel Adu Darkwah",
-        userName: "emmanueladu@gmail.com",
-        email: "enoch@email",
-        contact: "0546163240",
-        // role: "Admin",
-        userStatus: "Enabled",
-        dateCreated: formatDateTime("2026-02-02T02:00"),
-        lastLogin: formatDateTime("2026-02-02T02:00"),
-      },
-
-      {
-        id: 2025004,
-        image: "",
-        name: "Alex Baah",
-        userName: "KobbyMenz",
-        email: "Alexakwasi@gmail.com",
-        contact: "0546163240",
-        // role: "Admin",
-        userStatus: "Disabled",
-        dateCreated: formatDateTime("2026-02-02T02:00"),
-        lastLogin: formatDateTime("2026-02-02T02:00"),
-      },
-    ],
-    [],
-  );
   //  useMemo(
   //   () =>
   //     data !== null
@@ -149,7 +151,7 @@ const ManageUsersContent = () => {
           /*Toggling user status.
         If userId matches the storedUserId, then do not change status
         */
-          allUsers.forEach((user) => {
+          users.forEach((user) => {
             if (user.userId === userId) {
               if (userId === storedUserId) {
                 newStatus = currentStatus;
@@ -182,34 +184,26 @@ const ManageUsersContent = () => {
         }
       }
     },
-    [allUsers],
+    [users],
   );
 
   ///////////////////////////////////////////
   // Delete user
   //////////////////////////////////////////////
-  const deleteHandler = useCallback((id) => {
-    if (window.confirm("Are you sure you want to delete")) {
-      const deleteUser = async (id) => {
-        try {
-          const response = await axios.delete(
-            `${app_api_url}/deleteUser/${id}`,
-          );
+  const deleteHandler = useCallback(
+    (id) => {
+      if (window.confirm("Are you sure you want to delete")) {
+        setUsers((prev) => {
+          return Array.isArray(prev)
+            ? prev.filter((user) => user.id !== id)
+            : prev;
+        });
 
-          // setRefetchHandler(); //Refreshing table
-
-          Toast("success", `${response.data.message}`);
-        } catch (err) {
-          if (
-            !(err.response && err.response.data && err.response.data.message)
-          ) {
-            Toast("error", `User cannot be deleted.`);
-          }
-        }
-      };
-      deleteUser(id);
-    }
-  }, []);
+        deleteData(`deleteUser/${id}`, Toast);
+      }
+    },
+    [deleteData],
+  );
 
   ///////////////////////////////////////////////
   // Edit user details
@@ -251,7 +245,7 @@ const ManageUsersContent = () => {
   ];
 
   //rows for pagination table (ManageUserPT)
-  const rows = allUsers.map((user, index) => {
+  const rows = users.map((user, index) => {
     const loginDate = user.lastLogin;
 
     const dateCreated = user.dateCreated;

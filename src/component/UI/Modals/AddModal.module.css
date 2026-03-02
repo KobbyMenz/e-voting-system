@@ -67,7 +67,7 @@
 
 .modal header .close_btn:hover,
 .addUserModal header .close_btn:hover {
-  background: var(--primary-deep);
+  /* background: var(--primary-deep); */
   box-shadow: 0rem 0.2rem 1rem rgba(0, 0, 0, 0.25);
   cursor: pointer;
 }

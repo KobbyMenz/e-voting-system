@@ -9,6 +9,7 @@ import Footer from "../../Footer/Footer";
 import Button from "../../UI/Button/Button";
 import PrintIcon from "../../UI/Icons/PrintIcon";
 import { printVoters } from "../../Functions/printVoters";
+import useDeleteHook from "../../CustomHooks/useDeleteHook";
 
 const allVoters = [
   {
@@ -46,6 +47,8 @@ const RegisterVotersContent = () => {
   const [submitEditData, setSubmitEditData] = useState({});
   const [voters, setVoters] = useState(allVoters);
 
+  const { deleteData } = useDeleteHook();
+
   // Handler to open the Add Voter Modal
   const onAddVoterHandler = useCallback(() => {
     setShowAddVoterModal(true);
@@ -74,6 +77,24 @@ const RegisterVotersContent = () => {
     setShowAddVoterModal(false);
   }, []);
 
+  //////////////////////////////////////////
+  //Handler to delete voters
+  //////////////////////////////////////////
+  const onDeleteHandler = useCallback(
+    (id) => {
+      if (window.confirm("Are you sure you want to delete?")) {
+        setVoters((prev) => {
+          return Array.isArray(prev)
+            ? prev.filter((voter) => voter.id !== id)
+            : prev;
+        });
+
+        deleteData(`deleteVoter/${id}`, ToastHandler);
+      }
+    },
+    [deleteData, ToastHandler],
+  );
+
   /////////////////////////////////////////////////////////
   //* Handler to print all registered voters */
   /////////////////////////////////////////////////////
@@ -101,7 +122,7 @@ const RegisterVotersContent = () => {
   ];
 
   // Format rows for the pagination table
-  const rows = allVoters.map((voter, index) => ({
+  const rows = voters.map((voter, index) => ({
     sn: index + 1,
     id: voter.id,
     image: voter.image,
@@ -138,7 +159,7 @@ const RegisterVotersContent = () => {
           columns={columns}
           rows={rows}
           onEdit={onEditVoterHandler}
-          // onDelete={onDelete}
+          onDelete={onDeleteHandler}
           onAdd={onAddVoterHandler}
           customHeaderButtons={
             <Button onClick={onPrintAllVotersHandler}>

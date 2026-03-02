@@ -126,7 +126,7 @@ const AddCandidateModal = (props) => {
 
   return (
     <Fragment>
-      <div className={classes.backdrop} onClick={props.onCloseModal} />
+      <div className={classes.backdrop}  />
 
       <Card className={`${classes.modal}`}>
         <header>
