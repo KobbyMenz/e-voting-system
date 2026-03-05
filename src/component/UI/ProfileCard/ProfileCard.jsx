@@ -100,11 +100,13 @@ const ProfileCard = () => {
   const navigate = useNavigate();
   const onClickProfileHandler = () => {
     if (userDetails.loginType === "Admin") {
-      navigate("/adminProfile");
+      // navigate("/adminProfile");
+      navigate("#");
     }
 
     if (userDetails.loginType !== "Admin") {
-      navigate("/voterProfile");
+      // navigate("/voterProfile");
+      navigate("#");
     }
   };
 

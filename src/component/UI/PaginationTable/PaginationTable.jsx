@@ -377,7 +377,7 @@ const PaginationTable = ({
                     border: "0.1rem solid var(--bg-color)",
                   }}
                 >
-                  No candidates added yet.
+                  No data added yet.
                 </TableCell>
               </TableRow>
             )}
