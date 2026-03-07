@@ -9,6 +9,11 @@ import Toast from "../../UI/Notification/Toast";
 import ImageBox from "../../UI/ImageBox/ImageBox";
 import Loader from "../../UI/Loader/Loader";
 import ElectionCard from "../../UI/ElectionCard/ElectionCard";
+import bp1 from "../../../assets/images/candidate/bp1.jpg"
+import bp2 from "../../../assets/images/candidate/bp2.jpg"
+import bp3 from "../../../assets/images/candidate/bp3.jpg"
+import gp1 from "../../../assets/images/candidate/gp1.jpg"
+import gp2 from "../../../assets/images/candidate/gp2.jpg"
 
 const VoterDashboardContent = () => {
   const user = JSON.parse(localStorage.getItem("user")) || {};
@@ -25,20 +30,20 @@ const VoterDashboardContent = () => {
         {
           candidateId: 2024001,
           name: "John Doe",
-          image: "",
+          image: bp1,
           position: "Boys Prefect",
         },
         {
           candidateId: 2024002,
           name: "Jane Smith",
-          image: "",
+          image: bp2,
           position: "Boys Prefect",
         },
 
         {
           candidateId: 2024003,
           name: "Ronyx Mensah",
-          image: "",
+          image: bp3,
           position: "Boys Prefect",
         },
       ],
@@ -54,14 +59,14 @@ const VoterDashboardContent = () => {
       candidates: [
         {
           candidateId: 2024003,
-          name: "John Doe",
-          image: "",
+          name: "Hawa Yakubu",
+          image: gp1,
           position: "Girls Prefect",
         },
         {
           candidateId: 2024004,
-          name: "Jane Smith",
-          image: "",
+          name: "Elizabeth Baidoo",
+          image: gp2,
           position: "Girls Prefect",
         },
       ],
@@ -81,13 +86,13 @@ const VoterDashboardContent = () => {
         {
           candidateId: 2024005,
           name: "John Doe",
-          image: "",
+          image: bp3,
           position: "Dinning Hall Prefect",
         },
         {
           candidateId: 2024006,
           name: "Jane Smith",
-          image: "",
+          image: bp1,
           position: "Dinning Hall Prefect",
         },
       ],
@@ -103,14 +108,14 @@ const VoterDashboardContent = () => {
       candidates: [
         {
           candidateId: 2024007,
-          name: "John Doe",
-          image: "",
+          name: "Lydia Amoako",
+          image: gp1,
           position: "Entertainment Prefect",
         },
         {
           candidateId: 2024008,
-          name: "Jane Smith",
-          image: "",
+          name: "Agnes Marfo",
+          image: gp2,
           position: "Entertainment Prefect",
         },
       ],

@@ -13,6 +13,7 @@ const ImageBox = ({ src, alt, width, height, borderRadius, background }) => {
       sx={{
         width: width || "6rem",
         height: height || "7rem",
+        objectPosition:"top",
         objectFit: "cover",
         borderRadius: borderRadius || " 0.5rem",
         background: background || "var(--bg-color)",
