@@ -1,5 +1,5 @@
 //import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import classes from "./ProfileCard.module.css";
 //import defaultProfilePicture from "../../../assets/images/profilePicture.png";
 import PropTypes from "prop-types";
@@ -33,30 +33,18 @@ const settings = [
 
 const ProfileCard = () => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
-  const [userDetails, setUserDetails] = useState({
-    fullName: "",
-    lastLogin: "",
-    loginType: "",
-  });
+  const userDataFromLocalStorage =
+    JSON.parse(localStorage.getItem("user")) || {};
+  const userDetails = {
+    fullName: userDataFromLocalStorage.fullName || "",
+    lastLogin: userDataFromLocalStorage.lastLogin || "",
+    loginType: userDataFromLocalStorage.loginType || "",
+  };
   // const [selectedImage, setSelectedImage] = useState("");
   // const [loading, setLoading] = useState(true);
 
   //   props.loading(loading);
   //========Getting user's info from local storage ============
-  useEffect(() => {
-    const userDataFromLocalStorage = JSON.parse(localStorage.getItem("user"));
-
-    if (userDataFromLocalStorage) {
-      setUserDetails((prev) => {
-        return {
-          ...prev,
-          fullName: userDataFromLocalStorage.fullName,
-          lastLogin: userDataFromLocalStorage.lastLogin,
-          loginType: userDataFromLocalStorage.loginType,
-        };
-      });
-    }
-  }, []);
 
   //////////////////////////////////////////////////////////////
   // useEffect(() => {
@@ -100,13 +88,13 @@ const ProfileCard = () => {
   const navigate = useNavigate();
   const onClickProfileHandler = () => {
     if (userDetails.loginType === "Admin") {
-      // navigate("/adminProfile");
-      navigate("#");
+      //navigate("/adminProfile");
+       navigate("#");
     }
 
     if (userDetails.loginType !== "Admin") {
-      // navigate("/voterProfile");
-      navigate("#");
+      //navigate("/voterProfile");
+       navigate("#");
     }
   };
 
@@ -120,17 +108,19 @@ const ProfileCard = () => {
     setAnchorElUser(null);
   };
 
+  //Handler to show logout modal
+  const onShowQuestionModalHandler = () => {
+    requestAnimationFrame(() => {
+      setShowQuestionModal(true);
+    });
+  };
+
   //Confirm handler of logout modal
   const onConfirmHandler = () => {
     setShowQuestionModal(false);
     navigate("/");
     sessionStorage.clear();
     localStorage.removeItem("user");
-  };
-
-  //Handler to show logout modal
-  const onShowQuestionModalHandler = () => {
-    setShowQuestionModal(true);
   };
 
   //Handler to close logout modal
@@ -273,7 +263,9 @@ const ProfileCard = () => {
                           key={key}
                           onClick={() => {
                             handleCloseUserMenu();
-                            if (key === "profile") onClickProfileHandler();
+                            if (key === "profile") {
+                              onClickProfileHandler();
+                            }
                             if (key === "logout") onShowQuestionModalHandler();
                           }}
                           sx={{

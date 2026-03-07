@@ -1,6 +1,8 @@
 import { Fragment, useState, useRef, useCallback } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import classes from "../../UI/Modals/AddModal.module.css";
 import Card from "./../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
@@ -344,29 +346,73 @@ const UpdateUserModal = (props) => {
   }, [formData.userId, props, formData.profilePicture, file]);
 
   return (
-    <Fragment>
-      <div className={classes.backdrop} />
+    <AnimatePresence>
+      {/* Backdrop with fade animation */}
+      <motion.div
+        className={classes.backdrop}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        onClick={props.onCloseModal}
+      />
 
-      <Card className={`${classes.addUserModal}`}>
-        <header>
-          <span>Update User Details</span>
+      {/* Modal with bounce forward and settle animation */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.8,
+          y: 50,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.75,
+          y: 50,
+        }}
+        transition={{
+          opacity: { duration: 0.2 },
+          scale: {
+            type: "spring",
+            stiffness: 280,
+            damping: 16,
+            mass: 1,
+            delay: 0,
+          },
+          y: { type: "spring", stiffness: 280, damping: 20, delay: 0 },
+        }}
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1001,
+        }}
+      >
+        <Card className={`${classes.addUserModal}`}>
+          <header>
+            <span>Update User Details</span>
 
-          <div onClick={props.onCloseModal} className={classes.close_btn}>
-            <CloseIcon />
-          </div>
-        </header>
+            <div onClick={props.onCloseModal} className={classes.close_btn}>
+              <CloseIcon />
+            </div>
+          </header>
 
-        <form onSubmit={updateHandler}>
-          <div className={classes.content}>
-            <div
-              className={`${classes.profile_form}  ${classes.form_container_left_right}`}
-            >
-              <div className={classes.form_left}>
-                <div className="profile_picture_container">
-                  <div className="profile_picture">
-                    {/* {Setting profile image to display} */}
-                    <div className={classes.image_container}>
-                      {/* {
+          <form onSubmit={updateHandler}>
+            <div className={classes.content}>
+              <div
+                className={`${classes.profile_form}  ${classes.form_container_left_right}`}
+              >
+                <div className={classes.form_left}>
+                  <div className="profile_picture_container">
+                    <div className="profile_picture">
+                      {/* {Setting profile image to display} */}
+                      <div className={classes.image_container}>
+                        {/* {
                         <img
                           src={
                             formData.profilePicture
@@ -377,67 +423,67 @@ const UpdateUserModal = (props) => {
                         />
                       } */}
 
-                      <ImageBox
-                        width="13rem"
-                        height="16rem"
-                        src={formData.profilePicture}
-                      />
-                    </div>
-
-                    <div className={classes.form_control}>
-                      <label htmlFor="photo">Choose Photo</label>
-
-                      <div className="image_chooser_container">
-                        <input
-                          style={{ padding: "1rem" }}
-                          id="photo"
-                          ref={fileInputRef}
-                          name="photo"
-                          type="file"
-                          onChange={profilePictureChangeHandler}
-                          accept="image/*"
+                        <ImageBox
+                          width="13rem"
+                          height="16rem"
+                          src={formData.profilePicture}
                         />
                       </div>
 
-                      <ToolTip placement="top" title="Delete image">
-                        <Button
-                          type="button"
-                          className={classes.delete_btn}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "0.5rem",
-                            borderRadius: "0.8rem",
-                            // Padding: "0.5rem",
-                          }}
-                          onClick={deleteProfilePictureHandler}
-                        >
-                          {" "}
-                          <DeleteIcon />
-                          {/* <span>Delete</span> */}
-                        </Button>
-                      </ToolTip>
+                      <div className={classes.form_control}>
+                        <label htmlFor="photo">Choose Photo</label>
+
+                        <div className="image_chooser_container">
+                          <input
+                            style={{ padding: "1rem" }}
+                            id="photo"
+                            ref={fileInputRef}
+                            name="photo"
+                            type="file"
+                            onChange={profilePictureChangeHandler}
+                            accept="image/*"
+                          />
+                        </div>
+
+                        <ToolTip placement="top" title="Delete image">
+                          <Button
+                            type="button"
+                            className={classes.delete_btn}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "0.5rem",
+                              borderRadius: "0.8rem",
+                              // Padding: "0.5rem",
+                            }}
+                            onClick={deleteProfilePictureHandler}
+                          >
+                            {" "}
+                            <DeleteIcon />
+                            {/* <span>Delete</span> */}
+                          </Button>
+                        </ToolTip>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className={classes.form_control}>
-                  <label htmlFor="fullName">
-                    Full Name<span className={classes.required_field}>*</span>
-                  </label>
+                  <div className={classes.form_control}>
+                    <label htmlFor="fullName">
+                      Full Name<span className={classes.required_field}>*</span>
+                    </label>
 
-                  <input
-                    name="fullName"
-                    id="fullName"
-                    value={formData.fullName}
-                    type="text"
-                    placeholder="eg. Kobby Mensah Junior"
-                    onChange={onFormDataChangeHandler}
-                    required
-                  />
-                </div>
+                    <input
+                      name="fullName"
+                      id="fullName"
+                      value={formData.fullName}
+                      type="text"
+                      placeholder="eg. Kobby Mensah Junior"
+                      onChange={onFormDataChangeHandler}
+                      required
+                    />
+                  </div>
 
-                {/* <div className={classes.form_control}>
+                  {/* <div className={classes.form_control}>
                   <label htmlFor="userName">
                     User Name<span className={classes.required_field}>*</span>
                   </label>
@@ -452,88 +498,89 @@ const UpdateUserModal = (props) => {
                     required
                   />
                 </div> */}
-              </div>
-
-              <div className={classes.form_right}>
-                <div className={classes.form_control}>
-                  <label htmlFor="email">
-                    Email<span className={classes.required_field}>*</span>
-                  </label>
-
-                  <input
-                    name="email"
-                    id="email"
-                    type="email"
-                    onChange={onFormDataChangeHandler}
-                    value={formData.email}
-                    placeholder="eg. kobbymenz@gmail.com"
-                    required
-                  />
                 </div>
 
-                <div className={classes.form_control}>
-                  <label htmlFor="phoneNumber">
-                    Phone<span className={classes.required_field}>*</span>
-                  </label>
+                <div className={classes.form_right}>
+                  <div className={classes.form_control}>
+                    <label htmlFor="email">
+                      Email<span className={classes.required_field}>*</span>
+                    </label>
 
-                  <input
-                    name="phoneNumber"
-                    id="phoneNumber"
-                    type="tel"
-                    onChange={onFormDataChangeHandler}
-                    value={formData.phoneNumber}
-                    placeholder="eg. 0546163240"
-                    required
-                  />
-                </div>
+                    <input
+                      name="email"
+                      id="email"
+                      type="email"
+                      onChange={onFormDataChangeHandler}
+                      value={formData.email}
+                      placeholder="eg. kobbymenz@gmail.com"
+                      required
+                    />
+                  </div>
 
-                <div className={classes.form_control}>
-                  <label htmlFor="password">Password</label>
+                  <div className={classes.form_control}>
+                    <label htmlFor="phoneNumber">
+                      Phone<span className={classes.required_field}>*</span>
+                    </label>
 
-                  <PasswordInput
-                    onChange={onFormDataChangeHandler}
-                    name="password"
-                    value={formData.password ? formData.password : ""}
-                    id="password"
-                    placeholder="Enter password"
-                  />
-                </div>
+                    <input
+                      name="phoneNumber"
+                      id="phoneNumber"
+                      type="tel"
+                      onChange={onFormDataChangeHandler}
+                      value={formData.phoneNumber}
+                      placeholder="eg. 0546163240"
+                      required
+                    />
+                  </div>
 
-                <div className={classes.form_control}>
-                  <label htmlFor="confirmPass">Confirm Password</label>
+                  <div className={classes.form_control}>
+                    <label htmlFor="password">Password</label>
 
-                  <PasswordInput
-                    onChange={onFormDataChangeHandler}
-                    name="confirmPass"
-                    value={formData.confirmPass ? formData.confirmPass : ""}
-                    id="confirmPass"
-                    placeholder="Confirm password"
-                  />
+                    <PasswordInput
+                      onChange={onFormDataChangeHandler}
+                      name="password"
+                      value={formData.password ? formData.password : ""}
+                      id="password"
+                      placeholder="Enter password"
+                    />
+                  </div>
+
+                  <div className={classes.form_control}>
+                    <label htmlFor="confirmPass">Confirm Password</label>
+
+                    <PasswordInput
+                      onChange={onFormDataChangeHandler}
+                      name="confirmPass"
+                      value={formData.confirmPass ? formData.confirmPass : ""}
+                      id="confirmPass"
+                      placeholder="Confirm password"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className={classes.btn_container}>
-            <Button className={classes.btn}>
-              <AddIcon />
-              <span>Save</span>
-            </Button>
+            <div className={classes.btn_container}>
+              <Button className={classes.btn}>
+                <AddIcon />
+                <span>Save</span>
+              </Button>
 
-            <Button
-              type="button"
-              className={classes.btn}
-              id={classes.btn__no}
-              onClick={props.onCloseModal}
-            >
-              <CancelIcon />
+              <Button
+                type="button"
+                className={classes.btn}
+                id={classes.btn__no}
+                onClick={props.onCloseModal}
+              >
+                <CancelIcon />
 
-              <span>Cancel</span>
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </Fragment>
+                <span>Cancel</span>
+              </Button>
+            </div>
+          </form>
+        </Card>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

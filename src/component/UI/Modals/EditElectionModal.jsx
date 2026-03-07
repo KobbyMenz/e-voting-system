@@ -1,6 +1,8 @@
 import { Fragment, useCallback, useState } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import classes from "../../UI/Modals/AddModal.module.css";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
@@ -77,116 +79,162 @@ const EditElectionModal = (props) => {
   );
 
   return (
-    <Fragment>
-      <div className={classes.backdrop} />
+    <AnimatePresence>
+      {/* Backdrop with fade animation */}
+      <motion.div
+        className={classes.backdrop}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+        onClick={props.onCloseModal}
+      />
 
-      <Card className={`${classes.modal}`}>
-        <header>
-          <span>Update Election Details</span>
+      {/* Modal with bounce forward and settle animation */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          scale: 0.8,
+          y: 50,
+        }}
+        animate={{
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        }}
+        exit={{
+          opacity: 0,
+          scale: 0.75,
+          y: 50,
+        }}
+        transition={{
+          opacity: { duration: 0.2 },
+          scale: {
+            type: "spring",
+            stiffness: 280,
+            damping: 16,
+            mass: 1,
+            delay: 0,
+          },
+          y: { type: "spring", stiffness: 280, damping: 20, delay: 0 },
+        }}
+        style={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          zIndex: 1001,
+        }}
+      >
+        {" "}
+        <Card className={`${classes.modal}`}>
+          {" "}
+          <header>
+            <span>Update Election Details</span>
 
-          <div onClick={props.onCloseModal} className={classes.close_btn}>
-            <CloseIcon />
-          </div>
-        </header>
+            <div onClick={props.onCloseModal} className={classes.close_btn}>
+              <CloseIcon />
+            </div>
+          </header>
+          <form onSubmit={onEditElectionHandler}>
+            <div className={classes.content}>
+              <p className={classes.heading}>
+                Update election by filling in the details below.
+              </p>
 
-        <form onSubmit={onEditElectionHandler}>
-          <div className={classes.content}>
-            <p className={classes.heading}>
-              Update election by filling in the details below.
-            </p>
+              <div className={classes.form_control}>
+                <label className={classes.label} htmlFor="title">
+                  Election Title
+                  <span className={classes.required_field}>*</span>
+                </label>
 
-            <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="title">
-                Election Title
-                <span className={classes.required_field}>*</span>
-              </label>
+                <input
+                  name="title"
+                  id="title"
+                  value={formData.title}
+                  type="text"
+                  placeholder="eg. 2026 SRC President"
+                  onChange={onFormDataChangeHandler}
+                  required
+                />
+              </div>
 
-              <input
-                name="title"
-                id="title"
-                value={formData.title}
-                type="text"
-                placeholder="eg. 2026 SRC President"
-                onChange={onFormDataChangeHandler}
-                required
-              />
+              <div className={classes.form_control}>
+                <label className={classes.label} htmlFor="description">
+                  Description<span className={classes.required_field}>*</span>
+                </label>
+
+                <input
+                  name="description"
+                  id="description"
+                  value={formData.description}
+                  type="text"
+                  placeholder="Brief details about this election..."
+                  onChange={onFormDataChangeHandler}
+                  required
+                />
+              </div>
+
+              <div className={classes.form_control}>
+                <label className={classes.label} htmlFor="startDate">
+                  Start Date<span className={classes.required_field}>*</span>
+                </label>
+
+                <input
+                  className={`${classes.date_input}}`}
+                  name="startDate"
+                  id="startDate"
+                  value={formData.startDate}
+                  type="datetime-local"
+                  placeholder="Enter election start date..."
+                  onChange={onFormDataChangeHandler}
+                  min={dayjs().format("YYYY-MM-DDTHH:mm")}
+                  // max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
+                  required
+                />
+              </div>
+
+              <div className={classes.form_control}>
+                <label className={classes.label} htmlFor="endDate">
+                  End Date<span className={classes.required_field}>*</span>
+                </label>
+
+                <input
+                  className={classes.date_input}
+                  name="endDate"
+                  id="endDate"
+                  value={formData.endDate}
+                  type="datetime-local"
+                  placeholder="Enter election end date..."
+                  onChange={onFormDataChangeHandler}
+                  min={dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")}
+                  required
+                />
+              </div>
             </div>
 
-            <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="description">
-                Description<span className={classes.required_field}>*</span>
-              </label>
+            <div className={classes.btn_container}>
+              <Button className={classes.btn}>
+                <SaveIcon />
 
-              <input
-                name="description"
-                id="description"
-                value={formData.description}
-                type="text"
-                placeholder="Brief details about this election..."
-                onChange={onFormDataChangeHandler}
-                required
-              />
+                <span>Save</span>
+              </Button>
+
+              <Button
+                type="button"
+                className={classes.btn}
+                id={classes.btn__no}
+                onClick={props.onCloseModal}
+              >
+                <CancelIcon />
+
+                <span>Cancel</span>
+              </Button>
             </div>
-
-            <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="startDate">
-                Start Date<span className={classes.required_field}>*</span>
-              </label>
-
-              <input
-                className={`${classes.date_input}}`}
-                name="startDate"
-                id="startDate"
-                value={formData.startDate}
-                type="datetime-local"
-                placeholder="Enter election start date..."
-                onChange={onFormDataChangeHandler}
-                min={dayjs().format("YYYY-MM-DDTHH:mm")}
-                // max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
-                required
-              />
-            </div>
-
-            <div className={classes.form_control}>
-              <label className={classes.label} htmlFor="endDate">
-                End Date<span className={classes.required_field}>*</span>
-              </label>
-
-              <input
-                className={classes.date_input}
-                name="endDate"
-                id="endDate"
-                value={formData.endDate}
-                type="datetime-local"
-                placeholder="Enter election end date..."
-                onChange={onFormDataChangeHandler}
-                min={dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")}
-                required
-              />
-            </div>
-          </div>
-
-          <div className={classes.btn_container}>
-            <Button className={classes.btn}>
-              <SaveIcon />
-
-              <span>Save</span>
-            </Button>
-
-            <Button
-              type="button"
-              className={classes.btn}
-              id={classes.btn__no}
-              onClick={props.onCloseModal}
-            >
-              <CancelIcon />
-
-              <span>Cancel</span>
-            </Button>
-          </div>
-        </form>
-      </Card>
-    </Fragment>
+          </form>
+        </Card>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

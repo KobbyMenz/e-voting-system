@@ -13,8 +13,6 @@
   background: rgba(0, 0, 0, 0.521);
   -webkit-backdrop-filter: blur(0.5rem);
   backdrop-filter: blur(0.5rem);
-  transition: all 0.5s ease-in-out;
-  /* animation: bounce 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
 }
 
 .modal {
@@ -29,9 +27,6 @@
   max-width: 45rem;
   z-index: 105;
   overflow: hidden;
-  transition: all 0.5s ease-in-out;
-  /* animation: bounce 0.3s cubic-bezier(0.4, 0, 0.2, 1); */
-  /* animation-delay: 0.2s; */
 }
 
 /* Animation */

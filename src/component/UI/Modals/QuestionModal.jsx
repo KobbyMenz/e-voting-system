@@ -1,6 +1,7 @@
-import { Fragment } from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
+// eslint-disable-next-line no-unused-vars
+import { motion, AnimatePresence } from "framer-motion";
 import classes from "../../UI/Modals/Modal.module.css";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
@@ -8,15 +9,20 @@ import QuestionIcon from "../../UI/Icons/QuestionIcon";
 
 const Backdrop = ({ onCloseModal }) => {
   return (
-    <Fragment>
-      <div className={classes.backdrop} onClick={onCloseModal} />
-    </Fragment>
+    <motion.div
+      className={classes.backdrop}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      onClick={onCloseModal}
+    />
   );
 };
 
 const ModalOverlay = ({ onConfirm, onCloseModal }) => {
   return (
-    <Fragment>
+    <motion.div>
       <Card className={classes.modal}>
         <header>Confirmation Message</header>
         <div className={classes.content}>
@@ -34,25 +40,35 @@ const ModalOverlay = ({ onConfirm, onCloseModal }) => {
           </Button>
         </div>
       </Card>
-    </Fragment>
+    </motion.div>
   );
 };
 
 const QuestionModal = (props) => {
+  const backdropRoot = document.getElementById("backdrop-root");
+  const overlayRoot = document.getElementById("overlay-root");
+
+  if (!backdropRoot || !overlayRoot) return null;
+
   return (
-    <Fragment>
+    <>
       {ReactDOM.createPortal(
-        <Backdrop onCloseModal={props.onCloseModal} />,
-        document.getElementById("backdrop-root"),
+        <AnimatePresence>
+          <Backdrop onCloseModal={props.onCloseModal} key="backdrop" />
+        </AnimatePresence>,
+        backdropRoot,
       )}
       {ReactDOM.createPortal(
-        <ModalOverlay
-          onConfirm={props.onConfirm}
-          onCloseModal={props.onCloseModal}
-        />,
-        document.getElementById("overlay-root"),
+        <AnimatePresence>
+          <ModalOverlay
+            onConfirm={props.onConfirm}
+            onCloseModal={props.onCloseModal}
+            key="overlay"
+          />
+        </AnimatePresence>,
+        overlayRoot,
       )}
-    </Fragment>
+    </>
   );
 };
 
