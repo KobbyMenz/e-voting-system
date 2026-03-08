@@ -354,7 +354,7 @@ const UpdateUserModal = (props) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        onClick={props.onCloseModal}
+        // onClick={props.onCloseModal}
       />
 
       {/* Modal with bounce forward and settle animation */}
