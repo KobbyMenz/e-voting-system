@@ -5,6 +5,8 @@ import NotFoundPage from "./component/pages/NotFound/NotFoundPage";
 import AdminDashboard from "./component/pages/AdminDashboard/AdminDashboard";
 import VoterDashboard from "./component/pages/VoterDashboard/VoterDashboard";
 import RegisterVoters from "./component/pages/RegisterVoters/RegisterVoters";
+import routesConfig from "../src/component/Routes/routesConfig";
+import ProtectedRoute from "../src/component/Routes/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./context/ThemeContext";
 import ManageUsers from "./component/pages/ManageUsers/ManageUsers";
@@ -48,7 +50,6 @@ function App() {
     if (!isLoggedIn) return; // Only track when logged in
     // const localStorageAutoLogoutTime = +localStorage.getItem("autoLogoutTime");
 
-    
     const events = [
       "mousemove",
       "mousedown",
@@ -132,7 +133,31 @@ function App() {
           {/* Define your routes here /admin/manage-users */}
           <Route path="/" element={<SignIn />} />
 
-          <Route
+          {/* 
+          Protected Routes: 
+          Mapping through the routesConfig array and rendering the routes based on the user's role. 
+          The routes are wrapped inside the ProtectedRoute component which checks for the allowed roles before rendering the component. 
+          If the user does not have the required role, they will be redirected to the login page. 
+           */}
+          {routesConfig.map(({ role, routes }) => (
+            <Route
+              key={`role-${role}`}
+              element={<ProtectedRoute allowedRoles={[role]} />}
+            >
+              {/* 
+              Mapping through the routes array for each role and rendering the corresponding component for each route. The components are wrapped inside the ProtectedRoute component which checks for the allowed roles before rendering the component. If the user does not have the required role, they will be redirected to the login page.
+              */}
+              {routes.map(({ path, component: Component }) => (
+                <Route
+                  key={`${role}-${path}`}
+                  path={path}
+                  element={<Component />}
+                />
+              ))}
+            </Route>
+          ))}
+
+          {/* <Route
             path="/admin/dashboard"
             element={isLoggedIn && <AdminDashboard />}
           />
@@ -150,7 +175,7 @@ function App() {
           <Route
             path="/admin/manage_users"
             element={isLoggedIn && <ManageUsers />}
-          />
+          /> */}
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

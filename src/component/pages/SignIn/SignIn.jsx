@@ -67,6 +67,7 @@ const SignIn = () => {
           userId: 2025001,
           userName: "KobbyMenz",
           fullName: "Augustine Mensah",
+          loginType: "Admin",
         }),
       );
       sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
@@ -78,6 +79,7 @@ const SignIn = () => {
           userId: 2026001,
           userName: "Ronyx",
           fullName: "Ronyx Mensah",
+          loginType: "Voter",
         }),
       );
       sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
