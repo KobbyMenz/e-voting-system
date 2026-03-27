@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 //import classes from "../dashboard/DashboardContent.module.css";
 //import styles from "../AdminStaff/AdminStaffContent.module.css";
 //import defaultUserPhoto from "../../../assets/images/profilePicture.png";
@@ -26,61 +26,62 @@ import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 import app_api_url from "../../../app_api_url";
 import classes from "../ManageUsers/ManageUsersContent.module.css";
 import useDeleteHook from "../../CustomHooks/useDeleteHook";
+import useFetch from "../../CustomHooks/useFetchHook";
 
 //Getting all users details
-const allUsers = [
-  {
-    id: 2025001,
-    image: "",
-    name: "Augustine Mensah",
-    userName: "KobbyMenz",
-    email: "kmz@email",
-    contact: "0546163240",
-    // role: "Admin",
-    userStatus: "Enabled",
-    dateCreated: formatDateTime("2026-02-02T02:00"),
-    lastLogin: formatDateTime("2026-02-02T02:00"),
-  },
+// const allUsers = [
+//   {
+//     id: 2025001,
+//     image: "",
+//     name: "Augustine Mensah",
+//     userName: "KobbyMenz",
+//     email: "kmz@email",
+//     contact: "0546163240",
+//     // role: "Admin",
+//     userStatus: "Enabled",
+//     dateCreated: formatDateTime("2026-02-02T02:00"),
+//     lastLogin: formatDateTime("2026-02-02T02:00"),
+//   },
 
-  {
-    id: 2025002,
-    image: "",
-    name: "Enoch Boakye",
-    userName: "KobbyMenz",
-    email: "enoch@email",
-    contact: "0546163240",
-    // role: "Admin",
-    userStatus: "Disabled",
-    dateCreated: formatDateTime("2026-02-02T02:00"),
-    lastLogin: formatDateTime("2026-02-02T02:00"),
-  },
+//   {
+//     id: 2025002,
+//     image: "",
+//     name: "Enoch Boakye",
+//     userName: "KobbyMenz",
+//     email: "enoch@email",
+//     contact: "0546163240",
+//     // role: "Admin",
+//     userStatus: "Disabled",
+//     dateCreated: formatDateTime("2026-02-02T02:00"),
+//     lastLogin: formatDateTime("2026-02-02T02:00"),
+//   },
 
-  {
-    id: 2025003,
-    image: "",
-    name: "Emmanuel Adu Darkwah",
-    userName: "emmanueladu@gmail.com",
-    email: "enoch@email",
-    contact: "0546163240",
-    // role: "Admin",
-    userStatus: "Enabled",
-    dateCreated: formatDateTime("2026-02-02T02:00"),
-    lastLogin: formatDateTime("2026-02-02T02:00"),
-  },
+//   {
+//     id: 2025003,
+//     image: "",
+//     name: "Emmanuel Adu Darkwah",
+//     userName: "emmanueladu@gmail.com",
+//     email: "enoch@email",
+//     contact: "0546163240",
+//     // role: "Admin",
+//     userStatus: "Enabled",
+//     dateCreated: formatDateTime("2026-02-02T02:00"),
+//     lastLogin: formatDateTime("2026-02-02T02:00"),
+//   },
 
-  {
-    id: 2025004,
-    image: "",
-    name: "Alex Baah",
-    userName: "KobbyMenz",
-    email: "Alexakwasi@gmail.com",
-    contact: "0546163240",
-    // role: "Admin",
-    userStatus: "Disabled",
-    dateCreated: formatDateTime("2026-02-02T02:00"),
-    lastLogin: formatDateTime("2026-02-02T02:00"),
-  },
-];
+//   {
+//     id: 2025004,
+//     image: "",
+//     name: "Alex Baah",
+//     userName: "KobbyMenz",
+//     email: "Alexakwasi@gmail.com",
+//     contact: "0546163240",
+//     // role: "Admin",
+//     userStatus: "Disabled",
+//     dateCreated: formatDateTime("2026-02-02T02:00"),
+//     lastLogin: formatDateTime("2026-02-02T02:00"),
+//   },
+// ];
 
 //import moment from "moment";
 
@@ -89,9 +90,17 @@ const ManageUsersContent = () => {
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateUserModal, setShowUpdateUserModal] = useState(false);
   const [submit, setSubmit] = useState("");
-  const [users, setUsers] = useState(allUsers);
+  const [users, setUsers] = useState([]);
 
   const { deleteData } = useDeleteHook();
+
+  const { data, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
+
+  //Getting all users details
+  const allUsers = useMemo(() => (data !== null ? data : []), [data]);
+
+  console.log("All users: ", allUsers);
+
   // const { data, loading, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
 
   //  useMemo(
@@ -127,9 +136,9 @@ const ManageUsersContent = () => {
     Toast(type, message);
   }, []);
 
-  // const setRefetchHandler = useCallback(() => {
-  //   setRefetch((prev) => !prev);
-  // }, [setRefetch]);
+  const setRefetchHandler = useCallback(() => {
+    setRefetch((prev) => !prev);
+  }, [setRefetch]);
 
   ////////////////////////////////////////////////
   //TOGGLE USER ACCOUNT STATUS
@@ -165,7 +174,7 @@ const ManageUsersContent = () => {
             `${app_api_url}/changeUserStatus/${userId}`,
             { userStatus: newStatus },
           );
-          // setRefetchHandler(); //Refreshing table
+          setRefetchHandler(); //Refreshing table
 
           //Preventing the logged-in user from disabling their own account
           userId === storedUserId
@@ -184,7 +193,7 @@ const ManageUsersContent = () => {
         }
       }
     },
-    [users],
+    [users, setRefetchHandler],
   );
 
   ///////////////////////////////////////////
@@ -245,7 +254,7 @@ const ManageUsersContent = () => {
   ];
 
   //rows for pagination table (ManageUserPT)
-  const rows = users.map((user, index) => {
+  const rows = allUsers.map((user, index) => {
     const loginDate = user.lastLogin;
 
     const dateCreated = user.dateCreated;
@@ -253,13 +262,13 @@ const ManageUsersContent = () => {
     return {
       sn: index + 1,
       id: user.id,
-      image: user.userPhoto ? user.userPhoto : "",
-      name: user.name,
-      userName: user.userName,
+      image: user.photo ? user.photo : "",
+      name: user.fullName,
+      // userName: user.userName,
       email: user.email,
-      contact: user.contact,
+      contact: user.phone,
       // role: user.role,
-      userStatus: user.userStatus,
+      userStatus: user.status,
       dateCreated:
         dateCreated === null || dateCreated === ""
           ? ""

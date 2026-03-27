@@ -5,7 +5,7 @@ import { authLocalStorage } from "../Utils/authLocalStorage";
 
 const ProtectedRoute = ({ allowedRoles }) => {
   const userData = authLocalStorage();
-  const userRole = userData ? userData.loginType : null;
+  const userRole = userData ? userData.role : null;
 
   // Not logged in
   if (!userData) return <Navigate to="/" replace />;

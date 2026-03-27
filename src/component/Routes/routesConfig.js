@@ -2,7 +2,7 @@ import AdminDashboard from "../pages/AdminDashboard/AdminDashboard";
 import RegisterVoters from "../pages/RegisterVoters/RegisterVoters";
 import ManageUsers from "../pages/ManageUsers/ManageUsers";
 import VoterDashboard from "../pages/VoterDashboard/VoterDashboard";
-import { ROLES } from "../Utils/ROLES";
+import ROLES from "../Utils/ROLES";
 
 const routesConfig = [
   {

@@ -18,6 +18,7 @@ import app_api_url from "../../../app_api_url";
 import LoginIcon from "../../UI/Icons/LoginIcon";
 import OpenEyeIcon from "../../UI/Icons/OpenEyeIcon";
 import CloseEyeIcon from "../../UI/Icons/CloseEyeIcon";
+import ROLES from "../../Utils/ROLES";
 
 // import { ToastContainer } from "react-toastify";
 // import { toast } from "react-toastify";
@@ -31,7 +32,7 @@ const SignIn = () => {
   // const apiUrl = import.meta.env.VITE_API_URL;
   // const appName = import.meta.env.VITE_APP_NAME;
   const [userName, setUserName] = useState("");
-  const [pass, setPassword] = useState("");
+  const [password, setPassword] = useState("");
   //const [showModal, setShowModal] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [loadingLogin, setLoadingLogin] = useState(false);
@@ -60,33 +61,33 @@ const SignIn = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    if (userName === "KobbyMenz" && pass === "11111111") {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userId: 2025001,
-          userName: "KobbyMenz",
-          fullName: "Augustine Mensah",
-          loginType: "Admin",
-        }),
-      );
-      sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-      navigate("/admin/dashboard");
-    } else if (userName === "Ronyx" && pass === "22222222") {
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          userId: 2026001,
-          userName: "Ronyx",
-          fullName: "Ronyx Mensah",
-          loginType: "Voter",
-        }),
-      );
-      sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-      navigate("/voter/dashboard");
-    } else {
-      Toast("error", "Wrong credentials");
-    }
+    // if (userName === "KobbyMenz" && pass === "11111111") {
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       userId: 2025001,
+    //       userName: "KobbyMenz",
+    //       fullName: "Augustine Mensah",
+    //       loginType: "Admin",
+    //     }),
+    //   );
+    //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+    //   navigate("/admin/dashboard");
+    // } else if (userName === "Ronyx" && pass === "22222222") {
+    //   localStorage.setItem(
+    //     "user",
+    //     JSON.stringify({
+    //       userId: 2026001,
+    //       userName: "Ronyx",
+    //       fullName: "Ronyx Mensah",
+    //       loginType: "Voter",
+    //     }),
+    //   );
+    //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+    //   navigate("/voter/dashboard");
+    // } else {
+    //   Toast("error", "Wrong credentials");
+    // }
 
     //=======Making API call to the backend for LOGIN============
     const login = async () => {
@@ -99,8 +100,8 @@ const SignIn = () => {
           // "http://localhost:3001/api/login",
           `${app_api_url}/login`,
           {
-            userName: userName,
-            pass: pass,
+            email: userName,
+            password: password,
           },
           {
             headers: {
@@ -121,16 +122,16 @@ const SignIn = () => {
         // }
 
         //==========checking for admin login============
-        if (response.data.token && response.data.user.loginType === "Admin") {
+        if (response.data.token && response.data.user.role === "Admin") {
           navigate("/admin/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }
 
         //========checking for voter login ============
-        if (response.data.token && response.data.user.loginType !== "Admin") {
-          navigate("/voter/dashboard");
-          sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-        }
+        // if (response.data.token && response.data.user.role !== "Admin") {
+        //   navigate("/voter/dashboard");
+        //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+        // }
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message) {
           Toast("error", err.response.data.message);
@@ -224,7 +225,7 @@ const SignIn = () => {
               <input
                 className={error ? `${classes.error}` : `${classes.success}`}
                 onChange={passwordHandler}
-                value={pass}
+                value={password}
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder=""
@@ -232,7 +233,7 @@ const SignIn = () => {
               />
               <label htmlFor="password">Password</label>
 
-              {pass === "" ? (
+              {password === "" ? (
                 ""
               ) : (
                 <div

@@ -1,5 +1,7 @@
 // constants/roles.js
-export const ROLES = {
+const ROLES = {
   ADMIN: "Admin",
   VOTER: "Voter",
 };
+
+export default ROLES;
