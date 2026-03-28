@@ -20,7 +20,7 @@ const deleteProfilePhotoRoute = (app) => {
           return res.status(500).send("Error deleting "); //returning HTTP status
         }
 
-        res.status(201).json({ message: "image deleted successfully" });
+        res.status(201).json({ message: "Image deleted successfully" });
         // console.log(result);
       });
       // }
