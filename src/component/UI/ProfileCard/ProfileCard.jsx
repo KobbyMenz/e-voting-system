@@ -1,5 +1,5 @@
 //import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import classes from "./ProfileCard.module.css";
 //import defaultProfilePicture from "../../../assets/images/profilePicture.png";
 import PropTypes from "prop-types";
@@ -25,13 +25,16 @@ import Card from "../Card/Card";
 import ImageBox from "../ImageBox/ImageBox";
 //import app_api_url from "../../../app_api_url";
 import QuestionModal from "../Modals/QuestionModal";
+import axios from "axios";
+import app_api_url from "../../../app_api_url";
+import { authLocalStorage } from "../../Utils/authLocalStorage";
 
 const settings = [
   { key: "profile", label: "Profile", Icon: Person },
   { key: "logout", label: "Logout", Icon: Logout },
 ];
 
-const ProfileCard = () => {
+const ProfileCard = (props) => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
   const userDataFromLocalStorage =
     JSON.parse(localStorage.getItem("user")) || {};
@@ -40,40 +43,40 @@ const ProfileCard = () => {
     lastLogin: userDataFromLocalStorage.lastLogin || "",
     loginType: userDataFromLocalStorage.loginType || "",
   };
-  // const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState("");
   // const [loading, setLoading] = useState(true);
 
   //   props.loading(loading);
   //========Getting user's info from local storage ============
 
   //////////////////////////////////////////////////////////////
-  // useEffect(() => {
-  //   //Fetching profile picture from the backend
-  //   const userDataFromLocalStorage = JSON.parse(localStorage.getItem("user"));
-  //   const userId = userDataFromLocalStorage.userId ;
+  useEffect(() => {
+    //Fetching profile picture from the backend
 
-  //   axios
-  //     .get(`${app_api_url}/getUserProfilePicture/${userId}`)
-  //     .then((response) => {
-  //       if (
-  //         response.data.profilePicture !== null ||
-  //         response.data.profilePicture !== ""
-  //       ) {
-  //         setSelectedImage(
-  //           response.data.profilePicture
-  //             ? `${response.data.profilePicture}`
-  //             : props.profileImage,
-  //         );
+    const userId = authLocalStorage().userId;
 
-  //         setLoading(false);
-  //         // console.log("response: ", selectedImage);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.response.data.error);
-  //       setLoading(false);
-  //     });
-  // }, [selectedImage, props.profileImage]);
+    axios
+      .get(`${app_api_url}/getUserProfilePicture/${userId}`)
+      .then((response) => {
+        if (
+          response.data.profilePicture !== null ||
+          response.data.profilePicture !== ""
+        ) {
+          setSelectedImage(
+            response.data.profilePicture
+              ? `${response.data.profilePicture}`
+              : props.profileImage,
+          );
+
+          //setLoading(false);
+          // console.log("response: ", selectedImage);
+        }
+      })
+      .catch((err) => {
+        console.log(err.response.data.error);
+        // setLoading(false);
+      });
+  }, [selectedImage, props.profileImage]);
   //////////////////////////////////////////////////////
 
   //Getting user name from props
@@ -89,12 +92,12 @@ const ProfileCard = () => {
   const onClickProfileHandler = () => {
     if (userDetails.loginType === "Admin") {
       //navigate("/adminProfile");
-       navigate("#");
+      navigate("#");
     }
 
     if (userDetails.loginType !== "Admin") {
       //navigate("/voterProfile");
-       navigate("#");
+      navigate("#");
     }
   };
 
@@ -168,7 +171,7 @@ const ProfileCard = () => {
                       width="3.5rem"
                       height="3.5rem"
                       borderRadius="50%"
-                      // src={selectedImage}
+                      src={selectedImage}
                     />
                   </IconButton>
                 </ToolTip>

@@ -122,7 +122,7 @@ const SignIn = () => {
         // }
 
         //==========checking for admin login============
-        if (response.data.token && response.data.user.role === "Admin") {
+        if (response.data.token && response.data.user.role === ROLES.ADMIN) {
           navigate("/admin/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }

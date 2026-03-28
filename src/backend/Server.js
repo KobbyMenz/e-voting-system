@@ -13,6 +13,7 @@ import insertUserRoute from "./Routes/insertUserRoute.js";
 import updateUserRoute from "./Routes/updateUserRoute.js";
 import updateUserStatusRoute from "./Routes/updateUserStatusRoute.js";
 import deleteUserRoute from "./Routes/deleteUserRoute.js";
+import getUserProfilePicture from "./Routes/getUserProfilePicture.js";
 
 const app = express();
 /*
@@ -49,6 +50,8 @@ updateUserRoute(app);
 updateUserStatusRoute(app);
 
 deleteUserRoute(app);
+
+getUserProfilePicture(app);
 
 /*Schedule a backup every 1 hour
 ==================================*/

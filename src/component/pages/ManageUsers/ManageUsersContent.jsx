@@ -149,6 +149,7 @@ const ManageUsersContent = () => {
   ////////////////////////////////////////////////
   const toggleStatus = useCallback(
     (userId, currentStatus, name) => {
+      //Getting user ID from local storage
       const storedUserId = authLocalStorage().userId;
 
       //Preventing the logged-in user from disabling their own account
@@ -166,7 +167,6 @@ const ManageUsersContent = () => {
       ) {
         try {
           let newStatus;
-          //Getting user ID from local storage
 
           /*Toggling user status.
         If userId matches the storedUserId, then do not change status
@@ -181,31 +181,12 @@ const ManageUsersContent = () => {
             }
           });
 
-          // const response = await axios.put(
-          //   `${app_api_url}/updateUserStatus/${userId}`,
-          //   { userStatus: newStatus },
-          // );
-          // setRefetchHandler(); //Refreshing table
-
           updateData(
             `updateUserStatus/${userId}`,
             { userStatus: newStatus, fullName: name },
             ToastHandler,
             setRefetchHandler,
           );
-
-          // userId === storedUserId
-          //   ? Toast(
-          //       "warning",
-          //       `This account cannot be disabled while logged in!`,
-          //     )
-          //   : null;
-          // : Toast(
-          //     "success",
-          //     `${name}'s ${
-          //       response.data.message
-          //     } ${newStatus.toLowerCase()} successfully`,
-          //   );
         } catch (err) {
           Toast("error", `Error changing user status: ${err}`);
         }

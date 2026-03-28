@@ -2,6 +2,7 @@ import db from "./../Services/dataBaseConnection.js";
 import staticStorage from "../Services/staticStorage.js";
 import bcrypt from "bcryptjs";
 import dayjs from "dayjs";
+import ROLES from "../../component/Utils/ROLES.js"
 
 const insertUserRoute = (app) => {
   const upload = staticStorage();
@@ -11,7 +12,7 @@ const insertUserRoute = (app) => {
     // console.log("File Request received: ", req.file);
 
     const { fullName, email, phone, password } = req.body;
-    const role = "Admin";
+    const role = ROLES.ADMIN;
     const status = "Enabled";
     const dateCreated = dayjs().format("YYYY-MM-DDTHH:mm");
 
