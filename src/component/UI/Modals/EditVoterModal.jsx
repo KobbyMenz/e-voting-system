@@ -18,6 +18,7 @@ import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import dayjs from "dayjs";
 import useUpdateMultiPartsHook from "../../CustomHooks/useUpdateMultiPartsHook";
+import PasswordInput from "../PasswordInput/PasswordInput";
 //import app_api_url from "../../../app_api_url";
 
 const EditVoterModal = (props) => {
@@ -26,6 +27,7 @@ const EditVoterModal = (props) => {
     image: props.submitEditData.image,
     name: props.submitEditData.name,
     dob: dayjs(props.submitEditData.dob).format("YYYY-MM-DD"),
+    password: "",
   });
 
   const fileInputRef = useRef(null);
@@ -76,29 +78,25 @@ const EditVoterModal = (props) => {
       e.preventDefault();
 
       if (window.confirm("Are you sure you want to add a new candidate?")) {
-        const candidateData = {
-          id: formData.id,
-          image: formData.image,
-          name: formData.name,
-          dob: formData.dob,
-        };
-
-        console.log(candidateData);
-
-        //props.onAddCandidate(candidateData);
-        props.toastModal("success", `Saved successfully`);
+        const voterData = new FormData();
+        //key must match what multer expects
+        voterData.append("photo", file);
+        voterData.append("fullName", formData.name);
+        voterData.append("dob", formData.dob);
+        voterData.append("password", formData.password);
 
         //sending voter details to be updated into the database at the backend
         updateMultiPartsData(
           `updateVoter/${formData.id}`,
-          candidateData,
+          voterData,
           props.toastModal,
+          props.refreshTable,
         );
 
         props.onCloseModal();
       }
     },
-    [props, formData, updateMultiPartsData],
+    [props, formData, file, updateMultiPartsData],
   );
 
   ////////////////////////////////
@@ -284,6 +282,21 @@ const EditVoterModal = (props) => {
                   required
                 />
               </div>
+
+              <div className={classes.form_control}>
+                <label htmlFor="password">
+                  Password<span className={classes.required_field}></span>
+                </label>
+
+                <PasswordInput
+                  onChange={onFormDataChangeHandler}
+                  name="password"
+                  value={formData.password ? formData.password : ""}
+                  id="password"
+                  placeholder="Enter password"
+                  // required
+                />
+              </div>
             </div>
 
             <div className={classes.btn_container}>
@@ -315,7 +328,7 @@ EditVoterModal.propTypes = {
   toastModal: PropTypes.func.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   onAddCandidate: PropTypes.func.isRequired,
-  setRefetch: PropTypes.func,
+  refreshTable: PropTypes.func,
   submitEditData: PropTypes.object,
 };
 

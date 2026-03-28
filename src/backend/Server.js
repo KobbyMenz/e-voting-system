@@ -14,6 +14,10 @@ import updateUserRoute from "./Routes/updateUserRoute.js";
 import updateUserStatusRoute from "./Routes/updateUserStatusRoute.js";
 import deleteUserRoute from "./Routes/deleteUserRoute.js";
 import getUserProfilePicture from "./Routes/getUserProfilePicture.js";
+import insertVoterRoute from "./Routes/insertVoterRoute.js";
+import getAllVotersRoute from "./Routes/getAllVotersRoute.js";
+import deleteVoterRoute from "./Routes/deleteVoterRoute.js";
+import updateVoterRoute from "./Routes/updateVoterRoute.js";
 
 const app = express();
 /*
@@ -41,6 +45,10 @@ app.use(bodyParser.json());
 // loginRoute(app);
 loginRoute(app);
 
+/*
+==============================
+USERS MANAGEMENT
+=============================*/
 getAllUsersRoute(app);
 
 insertUserRoute(app);
@@ -52,6 +60,19 @@ updateUserStatusRoute(app);
 deleteUserRoute(app);
 
 getUserProfilePicture(app);
+
+/*
+
+==============================
+VOTERS MANAGEMENT
+=============================*/
+insertVoterRoute(app);
+
+getAllVotersRoute(app);
+
+deleteVoterRoute(app);
+
+updateVoterRoute(app);
 
 /*Schedule a backup every 1 hour
 ==================================*/

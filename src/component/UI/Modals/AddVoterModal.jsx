@@ -16,14 +16,17 @@ import DeleteIcon from "../Icons/DeleteIcon";
 import ImageBox from "../ImageBox/ImageBox";
 import ToolTip from "../ToolTip/ToolTip";
 import useInsertMultiPartsHook from "../../CustomHooks/useInsertMultiPartsHook";
+import PasswordInput from "../PasswordInput/PasswordInput";
 //import app_api_url from "../../../app_api_url";
 
 const AddVoterModal = (props) => {
   const [formData, setFormData] = useState({
     // id: "",
+
     image: "",
     name: "",
     dob: "",
+    password: "",
   });
   const fileInputRef = useRef(null);
   //const [selectedImage, setSelectedImage] = useState();
@@ -72,25 +75,46 @@ const AddVoterModal = (props) => {
     (e) => {
       e.preventDefault();
 
-      if (window.confirm("Are you sure you want to add a new candidate?")) {
-        const candidateData = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          image: formData.image,
-          name: formData.name,
-          dob: formData.dob,
-        };
+      if (+formData.password.length < 8) {
+        props.toastModal(
+          "error",
+          "Password must be at least 8 characters long",
+        );
+        return;
+      }
 
-        //console.log(candidateData);
-        // props.onAddCandidate(candidateData);
-        props.toastModal("success", `Added successfully`);
+      if (window.confirm("Are you sure you want to add a new voter?")) {
+        const profileFormData = new FormData();
+        //key must match what multer expects
+        profileFormData.append("photo", file);
+        profileFormData.append("fullName", formData.name);
+        profileFormData.append("dob", formData.dob);
+        profileFormData.append("password", formData.password);
+
+        //profileFormData.append("status", formData.userStatus);
+        // const voterData = {
+        //   // id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        //   image: formData.image,
+        //   name: formData.name,
+        //   dob: formData.dob,
+        // };
+
+        //console.log(voterData);
+        // props.onAddCandidate(voterData);
+        //props.toastModal("success", `Added successfully`);
 
         //sending voter details to be inserted into the database at the backend
-        insertMultiPartsData(`insertVoter`, candidateData, props.toastModal);
+        insertMultiPartsData(
+          `insertVoter`,
+          profileFormData,
+          props.toastModal,
+          props.refreshTable,
+        );
 
         props.onCloseModal();
       }
     },
-    [props, formData, insertMultiPartsData],
+    [props, file, formData, insertMultiPartsData],
   );
 
   ///////////////////////////////
@@ -276,6 +300,37 @@ const AddVoterModal = (props) => {
                   required
                 />
               </div>
+
+              <div className={classes.form_control}>
+                <label htmlFor="password">
+                  Password<span className={classes.required_field}>*</span>
+                </label>
+
+                <PasswordInput
+                  onChange={onFormDataChangeHandler}
+                  name="password"
+                  value={formData.password ? formData.password : ""}
+                  id="password"
+                  placeholder="Enter password"
+                  required
+                />
+              </div>
+
+              {/* <div className={classes.form_control}>
+                <label htmlFor="confirmPass">
+                  Confirm Password
+                  <span className={classes.required_field}>*</span>
+                </label>
+
+                <PasswordInput
+                  onChange={onFormDataChangeHandler}
+                  value={formData.confirmPass ? formData.confirmPass : ""}
+                  name="confirmPass"
+                  id="confirmPass"
+                  placeholder="Confirm password"
+                  required
+                />
+              </div> */}
             </div>
 
             <div className={classes.btn_container}>
@@ -307,7 +362,7 @@ AddVoterModal.propTypes = {
   toastModal: PropTypes.func.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   // onAddCandidate: PropTypes.func.isRequired,
-  setRefetch: PropTypes.func,
+  refreshTable: PropTypes.func,
 };
 
 export default AddVoterModal;

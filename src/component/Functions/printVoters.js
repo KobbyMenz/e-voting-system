@@ -23,6 +23,7 @@ export const generateVotersPrintHTML = (voters) => {
           <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">ID</th>
           <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Full Name</th>
           <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Date of Birth</th>
+           <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Registration Date</th>
         </tr>
       </thead>
       
@@ -35,6 +36,7 @@ export const generateVotersPrintHTML = (voters) => {
             <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.id || ""}</td>
             <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.name || ""}</td>
             <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.dob || "N/A"}</td>
+             <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.dateCreated || "N/A"}</td>
           </tr>
         `,
           )
@@ -108,7 +110,7 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
           padding-top: 1rem;
           border-top: 2px solid #ddd;
           color: #999;
-          font-size: 0.85rem;
+          font-size: 1rem;
         }
         
         @media print {

@@ -140,6 +140,7 @@ const ManageUsersContent = () => {
     Toast(type, message);
   }, []);
 
+  //Function to refresh table
   const setRefetchHandler = useCallback(() => {
     setRefetch((prev) => !prev);
   }, [setRefetch]);
