@@ -56,7 +56,7 @@ const TableSkeleton = () => (
         <Box
           display="flex"
           gap="0.2rem"
-          sx={{ position: "absolute", right: "5rem", marginTop: "-7rem" }}
+          sx={{ position: "absolute", right: "10%", marginTop: "-7rem" }}
         >
           <Skeleton
             variant="circular"
