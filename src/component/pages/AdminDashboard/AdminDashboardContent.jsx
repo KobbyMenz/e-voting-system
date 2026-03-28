@@ -21,6 +21,7 @@ import SearchBar from "../../UI/SearchBar/SeachBar";
 import EditCandidateModal from "../../UI/Modals/EditCandidateModal";
 import useDeleteHook from "../../CustomHooks/useDeleteHook";
 import { printElectionResults } from "../../Functions/printElectionResults";
+import { authLocalStorage } from "../../Utils/authLocalStorage";
 // import axios from "axios";
 // import app_api_url from "../../../app_api_url";
 // import useFetch from "../../Hooks/useFetch";
@@ -113,6 +114,7 @@ const AdminDashboardContent = () => {
   //const [loading, setLoading] = useState(true);
 
   const { deleteData } = useDeleteHook();
+  const userName = authLocalStorage().fullName.split(" ")[0];
 
   //  const { data, loading, setRefetch } = useFetch(
   //   `${app_api_url}/getAllElections`,
@@ -441,9 +443,7 @@ const AdminDashboardContent = () => {
           <div className={classes.message_container}>
             <div className={classes.welcome_text}>
               <h2 className={classes.welcome_message_header}>
-                Admin Dashboard
-                {/* {userName} (
-                  {JSON.parse(localStorage.getItem("user")).loginType})! */}
+                {`Hi ${userName}, welcome back to admin dashboard`}
               </h2>
 
               <p

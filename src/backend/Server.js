@@ -9,6 +9,10 @@ import createBackup from "./Services/createBackup.js";
 //import cron from "node-cron";
 import loginRoute from "./Routes/loginRoute.js";
 import getAllUsersRoute from "./Routes/getAllUsersRoute.js";
+import insertUserRoute from "./Routes/insertUserRoute.js";
+import updateUserRoute from "./Routes/updateUserRoute.js";
+import updateUserStatusRoute from "./Routes/updateUserStatusRoute.js";
+import deleteUserRoute from "./Routes/deleteUserRoute.js";
 
 const app = express();
 /*
@@ -37,6 +41,14 @@ app.use(bodyParser.json());
 loginRoute(app);
 
 getAllUsersRoute(app);
+
+insertUserRoute(app);
+
+updateUserRoute(app);
+
+updateUserStatusRoute(app);
+
+deleteUserRoute(app);
 
 /*Schedule a backup every 1 hour
 ==================================*/

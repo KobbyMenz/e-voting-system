@@ -7,7 +7,7 @@ import Card from "../../UI/Card/Card";
 import PropTypes from "prop-types";
 import Loader from "../../UI/Loader/Loader";
 import Modal from "../../UI/Modals/Modal";
-import axios from "axios";
+//import axios from "axios";
 import Footer from "../../Footer/Footer";
 //import ToolTip from "../../UI/ToolTip/ToolTip";
 //import ErrorIcon from "../../UI/ErrorIcon";
@@ -26,7 +26,10 @@ import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 import app_api_url from "../../../app_api_url";
 import classes from "../ManageUsers/ManageUsersContent.module.css";
 import useDeleteHook from "../../CustomHooks/useDeleteHook";
-import useFetch from "../../CustomHooks/useFetchHook";
+//import useFetchHook from "../../CustomHooks/useFetchHook";
+import useFetch from "../../CustomHooks/useFetch";
+import { authLocalStorage } from "../../Utils/authLocalStorage";
+import useUpdateHook from "../../CustomHooks/useUpdateHook";
 
 //Getting all users details
 // const allUsers = [
@@ -89,17 +92,18 @@ const ManageUsersContent = () => {
   const [showModal, setShowModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showUpdateUserModal, setShowUpdateUserModal] = useState(false);
-  const [submit, setSubmit] = useState("");
-  const [users, setUsers] = useState([]);
+  const [submit, setSubmit] = useState({});
+  // const [users, setUsers] = useState([]);
 
   const { deleteData } = useDeleteHook();
+  const { updateData } = useUpdateHook();
 
-  const { data, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
+  const { data, setRefetch, loading } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
 
   //Getting all users details
   const allUsers = useMemo(() => (data !== null ? data : []), [data]);
 
-  console.log("All users: ", allUsers);
+  //console.log("All users: ", allUsers);
 
   // const { data, loading, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
 
@@ -144,23 +148,30 @@ const ManageUsersContent = () => {
   //TOGGLE USER ACCOUNT STATUS
   ////////////////////////////////////////////////
   const toggleStatus = useCallback(
-    async (userId, currentStatus, name) => {
+    (userId, currentStatus, name) => {
+      const storedUserId = authLocalStorage().userId;
+
+      //Preventing the logged-in user from disabling their own account
+      if (userId === storedUserId) {
+        Toast("warning", `This account cannot be disabled while logged in!`);
+        return;
+      }
+
       if (
         window.confirm(
           `Are you sure you want to ${
             currentStatus === "Enabled" ? "disable" : "enable"
-          } account?`,
+          } this account?`,
         )
       ) {
         try {
           let newStatus;
           //Getting user ID from local storage
-          const storedUserId = JSON.parse(localStorage.getItem("user")).userId;
 
           /*Toggling user status.
         If userId matches the storedUserId, then do not change status
         */
-          users.forEach((user) => {
+          allUsers.forEach((user) => {
             if (user.userId === userId) {
               if (userId === storedUserId) {
                 newStatus = currentStatus;
@@ -170,30 +181,37 @@ const ManageUsersContent = () => {
             }
           });
 
-          const response = await axios.put(
-            `${app_api_url}/changeUserStatus/${userId}`,
-            { userStatus: newStatus },
-          );
-          setRefetchHandler(); //Refreshing table
+          // const response = await axios.put(
+          //   `${app_api_url}/updateUserStatus/${userId}`,
+          //   { userStatus: newStatus },
+          // );
+          // setRefetchHandler(); //Refreshing table
 
-          //Preventing the logged-in user from disabling their own account
-          userId === storedUserId
-            ? Toast(
-                "warning",
-                `This account cannot be disabled while logged in!`,
-              )
-            : Toast(
-                "success",
-                `${name}'s ${
-                  response.data.message
-                } ${newStatus.toLowerCase()} successfully`,
-              );
+          updateData(
+            `updateUserStatus/${userId}`,
+            { userStatus: newStatus, fullName: name },
+            ToastHandler,
+            setRefetchHandler,
+          );
+
+          // userId === storedUserId
+          //   ? Toast(
+          //       "warning",
+          //       `This account cannot be disabled while logged in!`,
+          //     )
+          //   : null;
+          // : Toast(
+          //     "success",
+          //     `${name}'s ${
+          //       response.data.message
+          //     } ${newStatus.toLowerCase()} successfully`,
+          //   );
         } catch (err) {
           Toast("error", `Error changing user status: ${err}`);
         }
       }
     },
-    [users, setRefetchHandler],
+    [allUsers, updateData, ToastHandler, setRefetchHandler],
   );
 
   ///////////////////////////////////////////
@@ -202,23 +220,17 @@ const ManageUsersContent = () => {
   const deleteHandler = useCallback(
     (id) => {
       if (window.confirm("Are you sure you want to delete")) {
-        setUsers((prev) => {
-          return Array.isArray(prev)
-            ? prev.filter((user) => user.id !== id)
-            : prev;
-        });
-
-        deleteData(`deleteUser/${id}`, Toast);
+        deleteData(`deleteUser/${id}`, ToastHandler, setRefetchHandler);
       }
     },
-    [deleteData],
+    [deleteData, setRefetchHandler, ToastHandler],
   );
 
   ///////////////////////////////////////////////
   // Edit user details
   ///////////////////////////////////////////////
   const onEditHandler = useCallback(
-    (id, image, name, userName, email, contact, role) => {
+    (id, image, name, email, contact, role) => {
       //showing UpdateUserModal after clicking on edit button
       onShowUpdateUserModalHandler();
 
@@ -227,7 +239,6 @@ const ManageUsersContent = () => {
         id: id,
         image: image,
         name: name,
-        userName: userName,
         email: email,
         contact: contact,
         role: role,
@@ -261,7 +272,7 @@ const ManageUsersContent = () => {
 
     return {
       sn: index + 1,
-      id: user.id,
+      id: user.userId,
       image: user.photo ? user.photo : "",
       name: user.fullName,
       // userName: user.userName,
@@ -302,7 +313,7 @@ const ManageUsersContent = () => {
       {showAddModal && (
         <AddUserModal
           toastModal={ToastHandler}
-          // setRefetch={setRefetchHandler}
+          setRefetch={setRefetchHandler}
           onCloseModal={closeShowAddModalHandler}
           allUsers={allUsers}
         />
@@ -312,7 +323,7 @@ const ManageUsersContent = () => {
         <UpdateUserModal
           toastModal={ToastHandler}
           userData={submit}
-          //setRefetch={setRefetchHandler}
+          setRefetch={setRefetchHandler}
           onCloseModal={closeShowUpdateUserModalHandler}
         />
       )}
@@ -324,10 +335,9 @@ const ManageUsersContent = () => {
           </Card> */}
 
           <div className="table_wrapper">
-            {
-              // loading ? (
-              //   <TableSkeleton />
-              // ) :
+            {loading ? (
+              <TableSkeleton />
+            ) : (
               <ManageUserPT
                 columns={columns}
                 rows={rows}
@@ -336,7 +346,7 @@ const ManageUsersContent = () => {
                 toggleStatus={toggleStatus}
                 onAdd={onShowAddModalHandler}
               />
-            }
+            )}
           </div>
 
           {/* Footer */}

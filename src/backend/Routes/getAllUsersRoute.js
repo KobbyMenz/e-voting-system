@@ -13,7 +13,7 @@ const getAllUsersRoute = (app) => {
       res.status(200).json({
         result: result,
       }); //Sending the query result back to json.
-      console.log(result);
+      //console.log(result);
     });
   });
 };

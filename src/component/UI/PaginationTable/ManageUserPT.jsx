@@ -369,7 +369,7 @@ const ManageUserPT = ({
                                 row.id,
                                 row.image,
                                 row.name,
-                                row.userName,
+                                // row.userName,
                                 row.email,
                                 row.contact,
                                 row.role,
