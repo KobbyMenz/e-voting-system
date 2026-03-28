@@ -16,14 +16,15 @@ export const generateVotersPrintHTML = (voters) => {
 
   // Generate HTML table for voters
   const votersHTML = `
-    <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
+    <table style="width: 100%; border:1px solid #141414; border-collapse: collapse; margin-bottom: 1rem;">
       <thead>
-        <tr style="background-color: #f5f5f5; border-bottom: 1px solid #333;">
-          <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">S/N</th>
-          <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">ID</th>
-          <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Full Name</th>
-          <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Date of Birth</th>
-           <th style="border: 1px solid #ddd; padding: 0.75rem; text-align: left; font-weight: 600;">Registration Date</th>
+        <tr style="background-color: #f5f5f5; border-bottom: 1px solid #141414;">
+          <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">S/N</th>
+          <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">ID</th>
+          <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Photo</th>
+          <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Full Name</th>
+          <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Date of Birth</th>
+           <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Registration Date</th>
         </tr>
       </thead>
       
@@ -31,12 +32,13 @@ export const generateVotersPrintHTML = (voters) => {
         ${voters
           .map(
             (voter, index) => `
-          <tr style="border-bottom: 1px solid #ddd;">
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">${index + 1}</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.id || ""}</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.name || ""}</td>
-            <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.dob || "N/A"}</td>
-             <td style="border: 1px solid #ddd; padding: 0.75rem;">${voter.dateCreated || "N/A"}</td>
+          <tr style="border-bottom: 1px solid #141414;">
+            <td style="border: 1px solid #141414; padding: 0.75rem;">${index + 1}</td>
+            <td style="border: 1px solid #141414; padding: 0.75rem;">${voter.id || ""}</td>
+            <td style="border: 1px solid #141414; padding: 0.75rem;"> <img style="border-radius:0.2rem;" width="50" "height=58" src=${voter.image} alt="Photo" /> </td>
+            <td style="border: 1px solid #141414; padding: 0.75rem;">${voter.name || ""}</td>
+            <td style="border: 1px solid #141414; padding: 0.75rem;">${voter.dob || "N/A"}</td>
+             <td style="border: 1px solid #141414; padding: 0.75rem;">${voter.dateCreated || "N/A"}</td>
           </tr>
         `,
           )
@@ -81,7 +83,7 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
         body {
           font-family: 'Arial', sans-serif;
           line-height: 1.6;
-          color: #333;
+          color: #141414;
           padding: 2rem;
           background: white;
         }
@@ -108,8 +110,8 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
           text-align: center;
           margin-top: 3rem;
           padding-top: 1rem;
-          border-top: 2px solid #ddd;
-          color: #999;
+          border-top: 2px solid #666;
+          color: #666;
           font-size: 1rem;
         }
         
@@ -127,7 +129,7 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
 
     <body>
       <div class="print-header">
-        <h1>${title}</h1>
+        <h2>${title}</h2>
         <p>Generated on: ${currentDate}</p>
         <p>Total Registered Voters: ${voters.length}</p>
       </div>
@@ -146,13 +148,13 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
 
   // Write the HTML content to the new window and trigger print
   try {
-    printWindow.document.write(htmlContent);
+    printWindow.document.writeln(htmlContent);
     printWindow.document.close();
 
     // Trigger print dialog after a short delay to ensure content is loaded
     setTimeout(() => {
       printWindow.print();
-    }, 250);
+    }, 950);
   } catch (error) {
     console.error("Error writing to print window:", error);
     printWindow.close();

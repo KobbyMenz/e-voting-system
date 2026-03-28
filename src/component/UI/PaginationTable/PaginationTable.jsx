@@ -24,6 +24,7 @@ import FormatNumber from "../../Functions/FormatNumber";
 // import AddIcon from "../Icons/AddIcon";
 import AddUserIcon from "../Icons/AddUserIcon";
 import ImageBox from "../ImageBox/ImageBox";
+//import defaultPhoto from "../../../assets/images/profilePicture.png";
 
 const PaginationTable = ({
   columns,
@@ -300,7 +301,7 @@ const PaginationTable = ({
                           <ImageBox
                             // background="transparent"
                             src={`${row[col.field]}`}
-                            alt={row.name}
+                            alt="Photo"
                           />
                         ) : (
                           row[col.type === "status" ? "" : col.field]

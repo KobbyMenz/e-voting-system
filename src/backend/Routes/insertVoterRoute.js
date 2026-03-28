@@ -52,7 +52,7 @@ const insertVoterRoute = (app) => {
 
         //inserting user details into the database without profile picture
         const sqlInsert =
-          "INSERT INTO e_voting_db.admin (fullName, DOB, role, password, dateCreated) VALUES (?,?,?,?,?)";
+          "INSERT INTO e_voting_db.voter (fullName, DOB, role, password, dateCreated) VALUES (?,?,?,?,?)";
         db.query(
           sqlInsert,
           [fullName, dob, role, hashedPassword, dateCreated],

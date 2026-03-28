@@ -91,18 +91,6 @@ const AddVoterModal = (props) => {
         profileFormData.append("dob", formData.dob);
         profileFormData.append("password", formData.password);
 
-        //profileFormData.append("status", formData.userStatus);
-        // const voterData = {
-        //   // id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        //   image: formData.image,
-        //   name: formData.name,
-        //   dob: formData.dob,
-        // };
-
-        //console.log(voterData);
-        // props.onAddCandidate(voterData);
-        //props.toastModal("success", `Added successfully`);
-
         //sending voter details to be inserted into the database at the backend
         insertMultiPartsData(
           `insertVoter`,

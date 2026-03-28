@@ -118,6 +118,7 @@ const RegisterVotersContent = () => {
       // Format voters data for printing
       const formattedVoters = allVoters.map((voter) => ({
         id: voter.voterId,
+        image: voter.photo,
         name: voter.fullName,
         dob: dayjs(voter.DOB).format("DD MMM, YYYY"),
         dateCreated: dayjs(voter.dateCreated).format("DD MMM, YYYY"),
