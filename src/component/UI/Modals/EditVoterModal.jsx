@@ -126,71 +126,31 @@ const EditVoterModal = (props) => {
   }, [file, formData.image]);
 
   return (
-    <AnimatePresence>
+    <>
       {/* Backdrop with fade animation */}
-      <motion.div
+      <div
         className={classes.backdrop}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
         // onClick={props.onCloseModal}
       />
 
-      {/* Modal with bounce forward and settle animation */}
-      <motion.div
-        initial={{
-          opacity: 0,
-          scale: 0.8,
-          y: 50,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-          y: 0,
-        }}
-        exit={{
-          opacity: 0,
-          scale: 0.75,
-          y: 50,
-        }}
-        transition={{
-          opacity: { duration: 0.2 },
-          scale: {
-            type: "spring",
-            stiffness: 280,
-            damping: 16,
-            mass: 1,
-            delay: 0,
-          },
-          y: { type: "spring", stiffness: 280, damping: 20, delay: 0 },
-        }}
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          zIndex: 1001,
-        }}
-      >
-        <Card className={`${classes.modal}`}>
-          <header>
-            <span>Update Voter's Details</span>
+      <Card className={`${classes.modal}`}>
+        <header>
+          <span>Update Voter's Details</span>
 
-            <div onClick={props.onCloseModal} className={classes.close_btn}>
-              <CloseIcon />
-            </div>
-          </header>
+          <div onClick={props.onCloseModal} className={classes.close_btn}>
+            <CloseIcon />
+          </div>
+        </header>
 
-          <p className={classes.heading}>Update voter details.</p>
+        <p className={classes.heading}>Update voter details.</p>
 
-          <form onSubmit={onSaveHandler}>
-            <div className={classes.content}>
-              <div className="profile_picture_container">
-                <div className="profile_picture">
-                  {/*==== {Setting profile image to display}======*/}
-                  <div className={classes.image_container}>
-                    {/* {
+        <form onSubmit={onSaveHandler}>
+          <div className={classes.content}>
+            <div className="profile_picture_container">
+              <div className="profile_picture">
+                {/*==== {Setting profile image to display}======*/}
+                <div className={classes.image_container}>
+                  {/* {
                         <img
                           src={
                             formData.profilePicture
@@ -201,126 +161,121 @@ const EditVoterModal = (props) => {
                         />
                       } */}
 
-                    <ImageBox
-                      width="13rem"
-                      height="16rem"
-                      src={formData.image}
+                  <ImageBox width="13rem" height="16rem" src={formData.image} />
+                </div>
+
+                <div className={classes.form_control}>
+                  <label htmlFor="photo">
+                    Choose Photo
+                    <span className={classes.required_field}></span>
+                  </label>
+
+                  <div className="image_chooser_container">
+                    <input
+                      style={{ padding: "1rem" }}
+                      id="photo"
+                      ref={fileInputRef}
+                      name="photo"
+                      type="file"
+                      onChange={profilePictureChangeHandler}
+                      accept="image/*"
+                      // required
                     />
                   </div>
 
-                  <div className={classes.form_control}>
-                    <label htmlFor="photo">
-                      Choose Photo
-                      <span className={classes.required_field}>*</span>
-                    </label>
-
-                    <div className="image_chooser_container">
-                      <input
-                        style={{ padding: "1rem" }}
-                        id="photo"
-                        ref={fileInputRef}
-                        name="photo"
-                        type="file"
-                        onChange={profilePictureChangeHandler}
-                        accept="image/*"
-                        // required
-                      />
-                    </div>
-
-                    <ToolTip placement="top" title="Delete image">
-                      <Button
-                        type="button"
-                        className={classes.delete_btn}
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "0.5rem",
-                          borderRadius: "0.8rem",
-                          Padding: "1rem",
-                          // width:"2rem"
-                        }}
-                        onClick={deleteProfilePictureHandler}
-                      >
-                        {" "}
-                        <DeleteIcon />
-                        {/* <span>Delete</span> */}
-                      </Button>
-                    </ToolTip>
-                  </div>
+                  <ToolTip placement="top" title="Delete image">
+                    <Button
+                      type="button"
+                      className={classes.delete_btn}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        borderRadius: "0.8rem",
+                        Padding: "1rem",
+                        // width:"2rem"
+                      }}
+                      onClick={deleteProfilePictureHandler}
+                    >
+                      {" "}
+                      <DeleteIcon />
+                      {/* <span>Delete</span> */}
+                    </Button>
+                  </ToolTip>
                 </div>
               </div>
-
-              <div className={classes.form_control}>
-                <label className={classes.label} htmlFor="name">
-                  Full Name<span className={classes.required_field}>*</span>
-                </label>
-
-                <input
-                  name="name"
-                  id="name"
-                  value={formData.name}
-                  type="text"
-                  placeholder="Enter voter's full name..."
-                  onChange={onFormDataChangeHandler}
-                  required
-                />
-              </div>
-
-              <div className={classes.form_control}>
-                <label className={classes.label} htmlFor="dob">
-                  Date of Birth
-                  <span className={classes.required_field}>*</span>
-                </label>
-
-                <input
-                  name="dob"
-                  id="dob"
-                  value={formData.dob}
-                  type="date"
-                  placeholder="Enter date of birth..."
-                  onChange={onFormDataChangeHandler}
-                  required
-                />
-              </div>
-
-              <div className={classes.form_control}>
-                <label htmlFor="password">
-                  Password<span className={classes.required_field}></span>
-                </label>
-
-                <PasswordInput
-                  onChange={onFormDataChangeHandler}
-                  name="password"
-                  value={formData.password ? formData.password : ""}
-                  id="password"
-                  placeholder="Enter password"
-                  // required
-                />
-              </div>
             </div>
 
-            <div className={classes.btn_container}>
-              <Button className={classes.btn}>
-                <SaveIcon />
+            <div className={classes.form_control}>
+              <label className={classes.label} htmlFor="name">
+                Full Name<span className={classes.required_field}>*</span>
+              </label>
 
-                <span>Save</span>
-              </Button>
-
-              <Button
-                type="button"
-                className={classes.btn}
-                id={classes.btn__no}
-                onClick={props.onCloseModal}
-              >
-                <CancelIcon />
-
-                <span>Cancel</span>
-              </Button>
+              <input
+                name="name"
+                id="name"
+                value={formData.name}
+                type="text"
+                placeholder="Enter voter's full name..."
+                onChange={onFormDataChangeHandler}
+                required
+              />
             </div>
-          </form>
-        </Card>
-      </motion.div>
-    </AnimatePresence>
+
+            <div className={classes.form_control}>
+              <label className={classes.label} htmlFor="dob">
+                Date of Birth
+                <span className={classes.required_field}>*</span>
+              </label>
+
+              <input
+                name="dob"
+                id="dob"
+                value={formData.dob}
+                type="date"
+                placeholder="Enter date of birth..."
+                onChange={onFormDataChangeHandler}
+                required
+              />
+            </div>
+
+            <div className={classes.form_control}>
+              <label htmlFor="password">
+                Password<span className={classes.required_field}></span>
+              </label>
+
+              <PasswordInput
+                onChange={onFormDataChangeHandler}
+                name="password"
+                value={formData.password ? formData.password : ""}
+                id="password"
+                placeholder="Enter password"
+                // required
+              />
+            </div>
+          </div>
+
+          <div className={classes.btn_container}>
+            <Button className={classes.btn}>
+              <SaveIcon />
+
+              <span>Save</span>
+            </Button>
+
+            <Button
+              type="button"
+              className={classes.btn}
+              id={classes.btn__no}
+              onClick={props.onCloseModal}
+            >
+              <CancelIcon />
+
+              <span>Cancel</span>
+            </Button>
+          </div>
+        </form>
+      </Card>
+    </>
   );
 };
 

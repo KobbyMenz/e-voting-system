@@ -6,9 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import classes from "../../UI/Modals/AddModal.module.css";
 import Card from "./../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
-//import styles from "../AdminStaff/AdminStaffContent.module.css";
-import axios from "axios";
-import app_api_url from "../../../app_api_url";
+// //import styles from "../AdminStaff/AdminStaffContent.module.css";
+// import axios from "axios";
+// import app_api_url from "../../../app_api_url";
 import CloseIcon from "../../UI/Icons/CloseIcon";
 import AddIcon from "../../UI/Icons/AddIcon";
 import CancelIcon from "../../UI/Icons/CancelIcon";
@@ -196,34 +196,6 @@ const UpdateUserModal = (props) => {
             );
 
             props.onCloseModal(); //Close modal after update
-
-            // try {
-            //   const response = await axios.put(
-            //     `${app_api_url}/updateUserAndPass/${+userId}`,
-            //     profileFormData,
-            //     {
-            //       headers: {
-            //         "Content-Type": "multipart/form-data",
-            //       },
-            //     },
-            //   );
-
-            //   props.setRefetch(); //Refreshing table after update
-
-            //   props.toastModal("success", response.data.message);
-
-            //   props.onCloseModal(); //Close modal after update
-            // } catch (err) {
-            //   if (
-            //     err.response &&
-            //     err.response.data &&
-            //     err.response.data.error
-            //   ) {
-            //     props.toastModal("error", err.response.data.error);
-            //   } else {
-            //     props.toastModal("error", `Error updating records ${err}`);
-            //   }
-            // }
           }
         }
       }
@@ -290,33 +262,47 @@ const UpdateUserModal = (props) => {
       // updateFormData.append("profilePicture", "");
       // const userId = formData.userId;
 
-      const profileFormData = new FormData();
-      profileFormData.append("userId", formData.userId);
-      profileFormData.append("profilePicture", file);
-      try {
-        //Deleting profile picture from the backend
-        const response = await axios.put(
-          `${app_api_url}/deleteProfile`,
-          profileFormData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
-        );
+      const profilePhotoFormData = new FormData();
+      //profileFormData.append("userId", formData.userId);
+      profilePhotoFormData.append("photo", file);
 
-        //setSelectedImage(defaultLogo);
-        setFormData((prev) => ({
-          ...prev,
-          profilePicture: "",
-        }));
-        props.setRefetch();
-        Toast("success", response.data.message);
-      } catch (err) {
-        Toast("error", `Failed to delete ${err}`);
-      }
+      updateMultiPartsData(
+        `deleteProfilePhoto/${formData.userId}`,
+        profilePhotoFormData,
+        props.toastModal,
+        props.setRefetch,
+      );
+
+      // try {
+      //   //Deleting profile picture from the backend
+      //   const response = await axios.put(
+      //     `${app_api_url}/deleteProfile`,
+      //     profileFormData,
+      //     {
+      //       headers: {
+      //         "Content-Type": "multipart/form-data",
+      //       },
+      //     },
+      //   );
+
+      //   //setSelectedImage(defaultLogo);
+      //   setFormData((prev) => ({
+      //     ...prev,
+      //     profilePicture: "",
+      //   }));
+      //   props.setRefetch();
+      //   Toast("success", response.data.message);
+      // } catch (err) {
+      //   Toast("error", `Failed to delete ${err}`);
+      // }
     }
-  }, [formData.userId, props, formData.profilePicture, file]);
+  }, [
+    formData.userId,
+    updateMultiPartsData,
+    props,
+    formData.profilePicture,
+    file,
+  ]);
 
   return (
     <>

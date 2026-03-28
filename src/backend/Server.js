@@ -18,6 +18,7 @@ import insertVoterRoute from "./Routes/insertVoterRoute.js";
 import getAllVotersRoute from "./Routes/getAllVotersRoute.js";
 import deleteVoterRoute from "./Routes/deleteVoterRoute.js";
 import updateVoterRoute from "./Routes/updateVoterRoute.js";
+import deleteProfilePhotoRoute from "./Routes/deleteProfilePhotoRoute.js";
 
 const app = express();
 /*
@@ -60,6 +61,8 @@ updateUserStatusRoute(app);
 deleteUserRoute(app);
 
 getUserProfilePicture(app);
+
+deleteProfilePhotoRoute(app);
 
 /*
 

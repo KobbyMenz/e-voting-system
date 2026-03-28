@@ -21,6 +21,7 @@
   max-width: 60rem;
   z-index: 103;
   overflow: auto;
+  /* border: 0.1rem solid var(--primary); */
 }
 
 .addUserModal {
@@ -32,6 +33,7 @@
   max-width: 60%;
   z-index: 103;
   overflow: auto;
+  /* border: 0.1rem solid var(--bg-color); */
 }
 
 .modal header,
