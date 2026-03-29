@@ -21,7 +21,6 @@ import updateVoterRoute from "./Routes/updateVoterRoute.js";
 import deleteProfilePhotoRoute from "./Routes/deleteProfilePhotoRoute.js";
 import insertElectionRoute from "./Routes/insertElectionRoute.js";
 import getAllElectionsRoute from "./Routes/getAllElectionsRoute.js";
-//import updateElectionStatusRoute from "./Routes/updateElectionStatusRoute.js";
 import updateElectionRoute from "./Routes/updateElectionRoute.js";
 import getNoOfVotersRoute from "./Routes/getNoOfVotersRoute.js";
 import deleteElectionRoute from "./Routes/deleteElectionRoute.js";
@@ -91,8 +90,6 @@ ELECTION MANAGEMENT
 insertElectionRoute(app);
 
 getAllElectionsRoute(app);
-
-// updateElectionStatusRoute(app);
 
 updateElectionRoute(app);
 
