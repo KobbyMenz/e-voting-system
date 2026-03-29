@@ -20,6 +20,7 @@ import { printElectionResults } from "../../Functions/printElectionResults";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
 import app_api_url from "../../../app_api_url";
 import useFetch from "../../CustomHooks/useFetch";
+import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
@@ -92,7 +93,7 @@ const AdminDashboardContent = () => {
 
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
   const [showEditElectionModal, setShowEditElectionModal] = useState(false);
-  const [addElection, setAddElection] = useState(election);
+  //const [addElection, setAddElection] = useState(election);
   const [expandedId, setExpandedId] = useState(null);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -100,6 +101,20 @@ const AdminDashboardContent = () => {
   const [submitCandidateData, setSubmitCandidateData] = useState({});
   const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
   const [submitElectionData, setSubmitElectionData] = useState({});
+
+  // const { getNoOfVoters } = useFetch(`${app_api_url}/getNoOfVoters`);
+  const { dataResult: totalVoters } = useFetchDataCount(
+    "getNoOfVoters",
+    "totalVoters",
+  );
+
+  //console.log("getNoOfVoters: ", getNoOfVoters);
+  // const [fetchData, setFetchData] = useState({
+  //   numberOfElections: 0,
+  //   totalCandidates: 0,
+  //   registeredVoters: 0,
+  //   totalVotes: 0,
+  // });
 
   const { deleteData } = useDeleteHook();
   const authData = authLocalStorage();
@@ -175,75 +190,75 @@ const AdminDashboardContent = () => {
   /////////////////////////////////////////////////////////
   //* Handler to add a candidate to a specific election*/
   /////////////////////////////////////////////////////
-  const onAddCandidateHandler = useCallback((electionId, candidateData) => {
-    // Validate candidate data
-    if (
-      typeof candidateData === "object" &&
-      candidateData !== null &&
-      candidateData.id &&
-      candidateData.image &&
-      candidateData.name &&
-      candidateData.position
-    ) {
-      setAddElection((prev) => {
-        return Array.isArray(prev)
-          ? prev.map((election) => {
-              if (election.id === electionId) {
-                return {
-                  ...election,
-                  candidates: [
-                    ...election.candidates,
-                    {
-                      sn: election.candidates.length + 1,
-                      id: candidateData.id,
-                      image: candidateData.image,
-                      name: candidateData.name,
-                      position: candidateData.position,
-                      votes: 0,
-                    },
-                  ],
-                };
-              }
-              return election;
-            })
-          : prev;
-      });
-    }
-  }, []);
+  // const onAddCandidateHandler = useCallback((electionId, candidateData) => {
+  //   // Validate candidate data
+  //   if (
+  //     typeof candidateData === "object" &&
+  //     candidateData !== null &&
+  //     candidateData.id &&
+  //     candidateData.image &&
+  //     candidateData.name &&
+  //     candidateData.position
+  //   ) {
+  //     setAddElection((prev) => {
+  //       return Array.isArray(prev)
+  //         ? prev.map((election) => {
+  //             if (election.id === electionId) {
+  //               return {
+  //                 ...election,
+  //                 candidates: [
+  //                   ...election.candidates,
+  //                   {
+  //                     sn: election.candidates.length + 1,
+  //                     id: candidateData.id,
+  //                     image: candidateData.image,
+  //                     name: candidateData.name,
+  //                     position: candidateData.position,
+  //                     votes: 0,
+  //                   },
+  //                 ],
+  //               };
+  //             }
+  //             return election;
+  //           })
+  //         : prev;
+  //     });
+  //   }
+  // }, []);
 
   ///////////////////////////////////////////////////////////////////
   //* Handler to add a new election */
   /////////////////////////////////////////////////////
-  const onAddElectionHandler = useCallback((electionData) => {
-    // Validate the election data
-    if (
-      typeof electionData === "object" &&
-      electionData !== null &&
-      electionData.title &&
-      electionData.description &&
-      electionData.dateCreated &&
-      electionData.status &&
-      electionData.startDate &&
-      electionData.endDate
-    ) {
-      // Create a new election instance with its own candidates
-      const newElection = createElectionInstance(
-        electionData.title,
-        electionData.title,
-        electionData.description,
-        electionData.dateCreated,
-        electionData.status,
-        electionData.startDate,
-        electionData.endDate,
-        electionData.candidates || DEFAULT_CANDIDATES,
-      );
+  // const onAddElectionHandler = useCallback((electionData) => {
+  //   // Validate the election data
+  //   if (
+  //     typeof electionData === "object" &&
+  //     electionData !== null &&
+  //     electionData.title &&
+  //     electionData.description &&
+  //     electionData.dateCreated &&
+  //     electionData.status &&
+  //     electionData.startDate &&
+  //     electionData.endDate
+  //   ) {
+  //     // Create a new election instance with its own candidates
+  //     const newElection = createElectionInstance(
+  //       electionData.title,
+  //       electionData.title,
+  //       electionData.description,
+  //       electionData.dateCreated,
+  //       electionData.status,
+  //       electionData.startDate,
+  //       electionData.endDate,
+  //       electionData.candidates || DEFAULT_CANDIDATES,
+  //     );
 
-      setAddElection((prev) => {
-        // Ensure prev is an array before spreading
-        return Array.isArray(prev) ? [...prev, newElection] : [newElection];
-      });
-    }
-  }, []);
+  //     setAddElection((prev) => {
+  //       // Ensure prev is an array before spreading
+  //       return Array.isArray(prev) ? [...prev, newElection] : [newElection];
+  //     });
+  //   }
+  // }, []);
 
   //////////////////////////////////////////////
   //Edit Election
@@ -269,46 +284,43 @@ const AdminDashboardContent = () => {
   const onDeleteElectionHandler = useCallback(
     (electionId) => {
       if (window.confirm("Are you sure you want to delete this election?")) {
-        setAddElection((prev) => {
-          return Array.isArray(prev)
-            ? prev.filter((election) => election.id !== electionId)
-            : prev;
-        });
-        Toast("success", "Election deleted successfully.");
-
         //Hook to delete election
-        deleteData(`deleteElection/${electionId}`, ToastHandler);
+        deleteData(
+          `deleteElection/${electionId}`,
+          ToastHandler,
+          refetchHandler,
+        );
       }
     },
-    [deleteData, ToastHandler],
+    [deleteData, ToastHandler, refetchHandler],
   );
 
   /////////////////////////////////////////
   //delete candidate handler
   ////////////////////////////////////////
-  const onDeleteCandidateHandler = useCallback(
-    (candidateId) => {
-      if (window.confirm("Are you sure you want to delete this candidate?")) {
-        setAddElection((prev) => {
-          return Array.isArray(prev)
-            ? prev.map((election) => {
-                return {
-                  ...election,
-                  candidates: election.candidates.filter(
-                    (candidate) => candidate.id !== candidateId,
-                  ),
-                };
-              })
-            : prev;
-        });
-        Toast("success", "Candidate deleted successfully.");
+  // const onDeleteCandidateHandler = useCallback(
+  //   (candidateId) => {
+  //     if (window.confirm("Are you sure you want to delete this candidate?")) {
+  //       setAddElection((prev) => {
+  //         return Array.isArray(prev)
+  //           ? prev.map((election) => {
+  //               return {
+  //                 ...election,
+  //                 candidates: election.candidates.filter(
+  //                   (candidate) => candidate.id !== candidateId,
+  //                 ),
+  //               };
+  //             })
+  //           : prev;
+  //       });
+  //       Toast("success", "Candidate deleted successfully.");
 
-        //Hook to delete candidate
-        deleteData(`deleteCandidate/${candidateId}`, ToastHandler);
-      }
-    },
-    [deleteData, ToastHandler],
-  );
+  //       //Hook to delete candidate
+  //       deleteData(`deleteCandidate/${candidateId}`, ToastHandler);
+  //     }
+  //   },
+  //   [deleteData, ToastHandler],
+  // );
 
   /////////////////////////////////////////////////////////
   //* Handler to print all election results */
@@ -332,6 +344,12 @@ const AdminDashboardContent = () => {
     [election],
   );
 
+  // const getNoOfVoters = () => {
+
+  //   return data;
+  // };
+  // getNoOfVoters();
+
   return (
     <Fragment>
       {/* {loading && <Loader />} */}
@@ -340,7 +358,7 @@ const AdminDashboardContent = () => {
 
       {showAddElectionModal && (
         <AddElectionModal
-          onAddElection={onAddElectionHandler}
+          //onAddElection={onAddElectionHandler}
           toastModal={ToastHandler}
           setRefetch={refetchHandler}
           onCloseModal={closeShowAddElectionModalHandler}
@@ -359,9 +377,9 @@ const AdminDashboardContent = () => {
 
       {showAddCandidateModal && (
         <AddCandidateModal
-          onAddCandidate={(candidateData) =>
-            onAddCandidateHandler(showAddCandidateModal, candidateData)
-          }
+          // onAddCandidate={(candidateData) =>
+          //   onAddCandidateHandler(showAddCandidateModal, candidateData)
+          // }
           toastModal={ToastHandler}
           onCloseModal={closeShowAddCandidateModalHandler}
         />
@@ -412,7 +430,9 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>{`Registered Voters:`}</p>
-                        <p className={`${classes.amount}`}>{0}</p>
+                        <p className={`${classes.description_value}`}>
+                          {totalVoters}
+                        </p>
                       </div>
                     </div>
 
@@ -432,7 +452,9 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Number of Elections:</p>
-                        <p className={classes.amount2}>{addElection.length}</p>
+                        <p className={classes.description_value}>
+                          {election.length}
+                        </p>
                       </div>
                     </div>
 
@@ -456,7 +478,9 @@ const AdminDashboardContent = () => {
                     <div className={classes.description__container}>
                       <div className={classes.description}>
                         <p>Total Candidates:</p>
-                        <p className={classes.amount2}>{totalCandidates}</p>
+                        <p className={classes.description_value}>
+                          {totalCandidates}
+                        </p>
                       </div>
                     </div>
 
@@ -482,7 +506,7 @@ const AdminDashboardContent = () => {
                       <div className={classes.description}>
                         <p>Total Votes Cast:</p>
 
-                        <p className={` ${classes.amount2}`}>{0}</p>
+                        <p className={` ${classes.description_value}`}>{0}</p>
                       </div>
                     </div>
 
@@ -573,7 +597,7 @@ const AdminDashboardContent = () => {
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onEdit={onEditCandidateHandler}
-                      onDeleteCandidate={onDeleteCandidateHandler}
+                      // onDeleteCandidate={onDeleteCandidateHandler}
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}
                       expanded={expandedId === item.id}

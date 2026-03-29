@@ -23,7 +23,7 @@ const insertElectionRoute = (app) => {
           return res.status(500).json({ error: "Error adding election" }); //returning HTTP status
         }
 
-        res.status(201).json({ message: "Added successfully" });
+        res.status(201).json({ message: "Election added successfully" });
         // console.log(result);
       },
     );

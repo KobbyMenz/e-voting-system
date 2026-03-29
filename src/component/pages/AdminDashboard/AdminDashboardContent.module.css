@@ -109,7 +109,7 @@ p {
 }
 
 .card__box .description {
-  font-size: 1.3rem;
+  font-size: 1rem;
 }
 
 .description:first-child,
@@ -118,14 +118,14 @@ p {
   color: #696969;
 }
 
-.card__box .description .amount {
+/* .card__box .description .amount {
   font-size: 1.6rem;
   margin-top: -0.2rem;
   font-weight: 700;
   color: var(--text-color);
-}
+} */
 
-.card__box .description .amount2 {
+.card__box .description .description_value {
   font-size: 2rem;
   font-weight: 700;
   color: var(--text-color);
