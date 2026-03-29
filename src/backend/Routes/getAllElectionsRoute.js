@@ -7,10 +7,12 @@ const calculateElectionStatus = (startDate, endDate, now) => {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
 
+  // Handle invalid dates gracefully by treating them as "Upcoming"
   if (!start.isValid() || !end.isValid()) {
     return "Upcoming";
   }
 
+  // Determine status based on current time
   if (now.isBefore(start)) {
     return "Upcoming";
   } else if (now.isAfter(end)) {
@@ -41,6 +43,7 @@ const getAllElectionsRoute = (app) => {
           now,
         );
 
+        // If calculated status differs from current status, queue it for update
         if (calculatedStatus !== election.status) {
           electionsToUpdate.push({
             electionId: election.electionId,
@@ -49,6 +52,7 @@ const getAllElectionsRoute = (app) => {
           });
         }
 
+        // Return election data with calculated status for response
         return {
           ...election,
           status: calculatedStatus,
@@ -84,6 +88,7 @@ const getAllElectionsRoute = (app) => {
           WHERE electionId IN (${electionIds})
         `;
 
+        // Execute batch update query
         db.query(batchUpdateQuery, (err) => {
           if (err) {
             console.error(

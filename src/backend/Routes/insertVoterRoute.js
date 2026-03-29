@@ -59,9 +59,7 @@ const insertVoterRoute = (app) => {
           (err) => {
             if (err) {
               console.log("Database error", err);
-              return res
-                .status(500)
-                .json({ error: "This username or email can not be used!" }); //returning HTTP status
+              return res.status(500).json({ error: "Registered failed!" }); //returning HTTP status
             }
 
             res.status(201).json({ message: "Registered successfully" });
