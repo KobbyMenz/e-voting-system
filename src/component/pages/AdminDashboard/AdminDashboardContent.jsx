@@ -161,13 +161,13 @@ const AdminDashboardContent = () => {
     setShowAddCandidateModal(false);
   }, []);
 
-  // Filter elections based on search
+  // Enhanced filtering to search across all fields of the election, including candidates
   const filteredElectionRows = useMemo(
     () =>
-      election.filter(
-        (item) =>
-          item.title?.toLowerCase().includes(search.toLowerCase()) ||
-          item.description?.toLowerCase().includes(search.toLowerCase()),
+      election.filter((row) =>
+        Object.values(row).some((value) =>
+          String(value).toLowerCase().includes(search.toLowerCase()),
+        ),
       ),
     [election, search],
   );
