@@ -24,6 +24,7 @@ import getAllElectionsRoute from "./Routes/getAllElectionsRoute.js";
 import updateElectionRoute from "./Routes/updateElectionRoute.js";
 import getNoOfVotersRoute from "./Routes/getNoOfVotersRoute.js";
 import deleteElectionRoute from "./Routes/deleteElectionRoute.js";
+import updateElectionStatusRoute from "./Routes/updateElectionStatusRoute.js";
 
 const app = express();
 /*
@@ -94,6 +95,8 @@ getAllElectionsRoute(app);
 updateElectionRoute(app);
 
 deleteElectionRoute(app);
+
+updateElectionStatusRoute(app);
 
 /*
 
