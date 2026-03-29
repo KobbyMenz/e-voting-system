@@ -1,6 +1,5 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useMemo, useState } from "react";
 import { Box } from "@mui/material";
-import PropTypes from "prop-types";
 import classes from "../AdminDashboard/AdminDashboardContent.module.css";
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/Button/Button";
@@ -13,34 +12,17 @@ import AccordionExpandDefault from "../../UI/Accordion/Accordion";
 import DigitalClock from "../../UI/Clock/DigitalClock";
 import Footer from "../../Footer/Footer";
 import Toast from "../../UI/Notification/Toast";
-//import formatDateTime from "../../Functions/formatDateTime";
 import EditElectionModal from "../../UI/Modals/EditElectionModal";
-//import dayjs from "dayjs";
-import Loader from "../../UI/Loader/Loader";
 import SearchBar from "../../UI/SearchBar/SeachBar";
 import EditCandidateModal from "../../UI/Modals/EditCandidateModal";
 import useDeleteHook from "../../CustomHooks/useDeleteHook";
 import { printElectionResults } from "../../Functions/printElectionResults";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
-// import axios from "axios";
-// import app_api_url from "../../../app_api_url";
-// import useFetch from "../../Hooks/useFetch";
+import app_api_url from "../../../app_api_url";
+import useFetch from "../../CustomHooks/useFetch";
 
 // Default candidates list
-const DEFAULT_CANDIDATES = [
-  // {
-  //   id: "2024001",
-  //   name: "Augustine Mensah",
-  // },
-  // {
-  //   id: "2024002",
-  //   name: "Deborah Quarshie",
-  // },
-];
-
-// Unique ID generator function
-const generateUniqueId = () =>
-  `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const DEFAULT_CANDIDATES = [];
 
 // Table columns definition
 const columns = [
@@ -54,6 +36,7 @@ const columns = [
 
 // Function to create a new election instance with candidates
 const createElectionInstance = (
+  electionId,
   title,
   description,
   dateCreated,
@@ -62,7 +45,7 @@ const createElectionInstance = (
   endDate,
   candidates = DEFAULT_CANDIDATES,
 ) => ({
-  id: generateUniqueId(),
+  id: electionId,
   title: title,
   description: description,
   dateCreated: dateCreated,
@@ -80,51 +63,52 @@ const createElectionInstance = (
   })),
 });
 
-const election = [
-  createElectionInstance(
-    "Boys Prefect",
-    "Namong Boys Prefect Election",
-    "2026-01-02T07:00",
-    "Closed",
-    "2026-01-23T07:00",
-    "2026-01-27T19:00",
-  ),
-  createElectionInstance(
-    "Girls Prefect",
-    "Namong Girls Prefect Election",
-    "2026-01-03T07:10",
-    "Closed",
-    "2026-02-04T08:00",
-    "2026-02-05T20:00",
-  ),
-];
-
 const AdminDashboardContent = () => {
+  // Auto-refresh election data every 2 seconds to check start/end dates frequently
+  const { data, setRefetch } = useFetch(`${app_api_url}/getAllElections`, 1000);
+
+  //Getting all users details
+  const allElections = useMemo(() => (data !== null ? data : []), [data]);
+
+  // Transform database elections into component election instances
+  const election = useMemo(
+    () =>
+      Array.isArray(allElections)
+        ? allElections.map((election) =>
+            createElectionInstance(
+              election.electionId,
+              election.title,
+              election.description,
+              election.dateCreated,
+              election.status,
+              election.startDate,
+              election.endDate,
+              Array.isArray(election.candidates) ? election.candidates : [],
+            ),
+          )
+        : [],
+    [allElections],
+  );
+
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
   const [showEditElectionModal, setShowEditElectionModal] = useState(false);
   const [addElection, setAddElection] = useState(election);
   const [expandedId, setExpandedId] = useState(null);
-  //const [addCandidate, setAddCandidate] = useState(DEFAULT_CANDIDATES);
   const [showAddCandidateModal, setShowAddCandidateModal] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [search, setSearch] = useState("");
   const [submitCandidateData, setSubmitCandidateData] = useState({});
   const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
   const [submitElectionData, setSubmitElectionData] = useState({});
-  //const [loading, setLoading] = useState(true);
 
   const { deleteData } = useDeleteHook();
-  const userName = authLocalStorage().fullName.split(" ")[0];
-
-  //  const { data, loading, setRefetch } = useFetch(
-  //   `${app_api_url}/getAllElections`,
-  // );
-  // const allElections = data !== null ? data : [];
+  const authData = authLocalStorage();
+  const userName = authData?.fullName?.split(" ")[0] || "Admin";
 
   //Refetch data handler
-  // const refetchHandler = useCallback(() => {
-  //   setRefetch((prev) => !prev);
-  // }, [setRefetch]);
+  const refetchHandler = useCallback(() => {
+    setRefetch((prev) => !prev);
+  }, [setRefetch]);
 
   const closeShowModalHandler = useCallback(() => {
     setShowModal((prev) => !prev);
@@ -137,13 +121,12 @@ const AdminDashboardContent = () => {
   const onEditCandidateHandler = useCallback(
     (id, image, name, dob, position) => {
       setShowEditCandidateModal(true);
-
       setSubmitCandidateData({
-        id: id,
-        name: name,
-        image: image,
-        dob: dob,
-        position: position,
+        id,
+        name,
+        image,
+        dob,
+        position,
       });
     },
     [],
@@ -178,21 +161,21 @@ const AdminDashboardContent = () => {
     setShowAddCandidateModal(false);
   }, []);
 
-  // const onChangeHandler = (e) => {
-  //   ;
-  // };
-
-  // Filter added election rows based on search
-  const filteredElectionRows = addElection.filter((row) =>
-    Object.values(row).some((value) =>
-      String(value).toLowerCase().includes(search.toLowerCase()),
-    ),
+  // Filter elections based on search
+  const filteredElectionRows = useMemo(
+    () =>
+      election.filter(
+        (item) =>
+          item.title?.toLowerCase().includes(search.toLowerCase()) ||
+          item.description?.toLowerCase().includes(search.toLowerCase()),
+      ),
+    [election, search],
   );
 
   /////////////////////////////////////////////////////////
   //* Handler to add a candidate to a specific election*/
   /////////////////////////////////////////////////////
-  const onAddCandidateHandler = (electionId, candidateData) => {
+  const onAddCandidateHandler = useCallback((electionId, candidateData) => {
     // Validate candidate data
     if (
       typeof candidateData === "object" &&
@@ -226,12 +209,12 @@ const AdminDashboardContent = () => {
           : prev;
       });
     }
-  };
+  }, []);
 
   ///////////////////////////////////////////////////////////////////
   //* Handler to add a new election */
   /////////////////////////////////////////////////////
-  const onAddElectionHandler = (electionData) => {
+  const onAddElectionHandler = useCallback((electionData) => {
     // Validate the election data
     if (
       typeof electionData === "object" &&
@@ -246,6 +229,7 @@ const AdminDashboardContent = () => {
       // Create a new election instance with its own candidates
       const newElection = createElectionInstance(
         electionData.title,
+        electionData.title,
         electionData.description,
         electionData.dateCreated,
         electionData.status,
@@ -259,74 +243,25 @@ const AdminDashboardContent = () => {
         return Array.isArray(prev) ? [...prev, newElection] : [newElection];
       });
     }
-  };
+  }, []);
 
   //////////////////////////////////////////////
   //Edit Election
   /////////////////////////////////////////////
   const onShowEditElectionHandler = useCallback(
-    (
-      electionId,
-      title,
-      description,
-      // status,
-      dateCreated,
-      startDate,
-      endDate,
-    ) => {
+    (electionId, title, description, dateCreated, startDate, endDate) => {
       setShowEditElectionModal(true);
-
       setSubmitElectionData({
-        electionId: electionId,
-        title: title,
-        dateCreated: dateCreated,
-        // status: status,
-        description: description,
-        startDate: startDate,
-        endDate: endDate,
+        electionId,
+        title,
+        dateCreated,
+        description,
+        startDate,
+        endDate,
       });
-      // addElection.filter((item) => {
-      //   const electionData = item.electionId === electionId;
-
-      //   //console.log("electionData: ", electionData);
-      //   return electionData;
-      // });
     },
     [],
   );
-
-  /////////////////////////////////////////////////////////
-  //* Handler to change election status */
-  /////////////////////////////////////////////////////
-  // const onClickElectionStatus = useCallback((electionId, status) => {
-  //   if (
-  //     window.confirm(
-  //       `Are you sure you want to ${status === "Upcoming" ? "start" : status === "Active" ? "close" : "start"} election?`,
-  //     )
-  //   ) {
-  //     setAddElection((prev) => {
-  //       return Array.isArray(prev)
-  //         ? prev.map((election) => {
-  //             if (election.id === electionId) {
-  //               const newStatus =
-  //                 election.status === "Active" ? "Closed" : "Active";
-  //               Toast(
-  //                 "success",
-  //                 `${election.title} election ${
-  //                   newStatus === "Active" ? "started" : "closed"
-  //                 } successfully.`,
-  //               );
-  //               return {
-  //                 ...election,
-  //                 status: newStatus,
-  //               };
-  //             }
-  //             return election;
-  //           })
-  //         : prev;
-  //     });
-  //   }
-  // }, []);
 
   /////////////////////////////////////////
   //delete election handler
@@ -379,17 +314,23 @@ const AdminDashboardContent = () => {
   //* Handler to print all election results */
   /////////////////////////////////////////////////////
   const onPrintAllResultsHandler = useCallback(() => {
-    if (Array.isArray(addElection) && addElection.length > 0) {
-      printElectionResults(addElection, "All Elections Report");
+    if (Array.isArray(election) && election.length > 0) {
+      printElectionResults(election, "All Elections Report");
     } else {
       Toast("info", "No elections to print");
     }
-  }, [addElection]);
+  }, [election]);
 
-  const totalCandidates = addElection
-    .map((item) => item.candidates.length)
-    .slice(0, -1)
-    .reduce((a, b) => a + b, 0);
+  const totalCandidates = useMemo(
+    () =>
+      Array.isArray(election)
+        ? election.reduce(
+            (total, item) => total + (item.candidates?.length || 0),
+            0,
+          )
+        : 0,
+    [election],
+  );
 
   return (
     <Fragment>
@@ -401,7 +342,7 @@ const AdminDashboardContent = () => {
         <AddElectionModal
           onAddElection={onAddElectionHandler}
           toastModal={ToastHandler}
-          //setRefetch={refetchHandler}
+          setRefetch={refetchHandler}
           onCloseModal={closeShowAddElectionModalHandler}
         />
       )}
@@ -411,7 +352,7 @@ const AdminDashboardContent = () => {
           submitElectionData={submitElectionData}
           // onEditElection={onEditElectionHandler}
           toastModal={ToastHandler}
-          //setRefetch={refetchHandler}
+          setRefetch={refetchHandler}
           onCloseModal={closeShowEditElectionModalHandler}
         />
       )}
@@ -632,9 +573,6 @@ const AdminDashboardContent = () => {
                       rows={item.candidates}
                       onAdd={() => onShowAddCandidateModalHandler(item.id)}
                       onEdit={onEditCandidateHandler}
-                      // onChangeStatus={() =>
-                      //   onClickElectionStatus(item.id, item.status)
-                      // }
                       onDeleteCandidate={onDeleteCandidateHandler}
                       onDeleteElection={onDeleteElectionHandler}
                       onEditElection={onShowEditElectionHandler}
@@ -642,15 +580,6 @@ const AdminDashboardContent = () => {
                       onExpandChange={onAccordionExpandChange}
                     />
                   ))}
-                  {/* <ul>
-                  {addElection.map((item, index) => (
-                    <li key={index}>
-                      {typeof item === "object" && item.title
-                        ? item.title
-                        : "Unnamed Election"}
-                    </li>
-                  ))}
-                </ul> */}
                 </>
               ) : (
                 <p
@@ -667,26 +596,6 @@ const AdminDashboardContent = () => {
           </Card>
         </section>
 
-        {/* ======sales report table======= */}
-        {/* <div className="sales_table">
-          {loading ? (
-            <TableSkeleton />
-          ) : (
-            <SalesHistoryPT
-              columns={columns}
-              rows={rows}
-              onChangeDate={onChangeDateHandler}
-              amount={currencyFormatter(
-                +filteredItemAmount,
-                currency
-              ).toString()}
-              onChange={onChangeHandler}
-            />
-          )}
-        </div> */}
-
-        {/*======= usage log ========*/}
-
         <div style={{ marginTop: "-1rem" }}>
           <Footer />
         </div>
@@ -694,7 +603,5 @@ const AdminDashboardContent = () => {
     </Fragment>
   );
 };
-AdminDashboardContent.propTypes = {
-  closeLoader: PropTypes.func,
-};
+
 export default AdminDashboardContent;

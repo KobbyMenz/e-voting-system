@@ -16,7 +16,7 @@ import ToolTip from "../ToolTip/ToolTip";
 import formatDateTime from "../../Functions/formatDateTime";
 import BarChartCompo from "../Chart/BarChartCompo";
 // import Card from "../Card/Card";
-import { useElectionStatus } from "../../CustomHooks/useElectionStatus";
+//import { useElectionStatus } from "../../CustomHooks/useElectionStatus";
 import Toast from "../Notification/Toast";
 
 export default function AccordionExpandDefault({
@@ -40,13 +40,14 @@ export default function AccordionExpandDefault({
   expanded,
   onExpandChange,
 }) {
-  // Automatically calculate election status based on current time
-  const calculatedStatus = useElectionStatus(
-    `updateElectionStatus/${id}`,
-    startDate,
-    endDate,
-    status,
-  );
+  // Automatically calculate election status based on current time and update database
+  // const calculatedStatus = useElectionStatus(
+  //   id,
+  //   startDate,
+  //   endDate,
+  //   status,
+  //   null, // onStatusChange callback can be added here if needed
+  // );
 
   return (
     // <Card className={classes.card}>
@@ -141,11 +142,11 @@ export default function AccordionExpandDefault({
               <div
                 style={{
                   background:
-                    calculatedStatus === "Active"
+                    status === "Active"
                       ? "#06882d"
-                      : calculatedStatus === "Upcoming"
+                      : status === "Upcoming"
                         ? "var(--primary)"
-                        : calculatedStatus === "Closed"
+                        : status === "Closed"
                           ? "#ca0202"
                           : "",
                   padding: "0.5rem 1.2rem",
@@ -159,7 +160,7 @@ export default function AccordionExpandDefault({
                   color: "#fff",
                 }}
               >
-                {calculatedStatus}
+                {status}
               </div>{" "}
             </Box>
             <Typography variant="p" color="initial">
@@ -326,11 +327,11 @@ export default function AccordionExpandDefault({
                 <h2>Status Control:</h2>
                 <p>
                   Election is{" "}
-                  {calculatedStatus === "Active"
+                  {status === "Active"
                     ? " currently open for voting"
-                    : calculatedStatus === "Closed"
+                    : status === "Closed"
                       ? " currently closed"
-                      : calculatedStatus === "Upcoming"
+                      : status === "Upcoming"
                         ? " yet to commence"
                         : ""}
                 </p>

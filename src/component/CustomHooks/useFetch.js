@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-const useFetch = (url) => {
+const useFetch = (url, autoRefreshInterval = 0) => {
   const [data, setData] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,14 +29,28 @@ const useFetch = (url) => {
         }
       } catch (err) {
         if (err.name !== "AbortError") {
+          console.error("Fetch error:", err.message);
           setLoading(true);
         }
       }
     };
     fetchData();
 
-    return () => controller.abort();
-  }, [refetch, url, isFirstRender]);
+    // Setup auto-refresh interval if specified
+    let refreshInterval = null;
+    if (autoRefreshInterval > 0) {
+      refreshInterval = setInterval(() => {
+        fetchData();
+      }, autoRefreshInterval);
+    }
+
+    return () => {
+      controller.abort();
+      if (refreshInterval) {
+        clearInterval(refreshInterval);
+      }
+    };
+  }, [refetch, url, isFirstRender, autoRefreshInterval]);
 
   return { data, setRefetch, loading, isFirstRender };
 };
