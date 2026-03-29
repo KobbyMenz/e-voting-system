@@ -19,7 +19,7 @@ function App() {
   //const [autoTheme, setAutoTheme] = useState("");
 
   // Inactivity timeout (15 minutes)
-  const INACTIVITY_TIME = 15 * 60 * 1000; // 15 minutes
+  const INACTIVITY_TIME = 20 * 60 * 1000; // 20 minutes
 
   // Inactivity timeout (15 minutes)
   const inactivityTimerRef = useRef(null);
