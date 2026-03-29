@@ -8,7 +8,7 @@ const useFetchDataCount = (
   dataProperty = "totalCount",
   options = {},
 ) => {
-    // Destructure options with defaults
+  // Destructure options with defaults
   const {
     params = {},
     retries = 2,
@@ -75,7 +75,7 @@ const useFetchDataCount = (
         break;
       } catch (err) {
         if (axios.isCancel(err)) {
-          console.log("Request cancelled");
+          //console.log("Request cancelled");
           return;
         }
 
