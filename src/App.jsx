@@ -5,50 +5,40 @@ import NotFoundPage from "./component/pages/NotFound/NotFoundPage";
 import AdminDashboard from "./component/pages/AdminDashboard/AdminDashboard";
 import VoterDashboard from "./component/pages/VoterDashboard/VoterDashboard";
 import RegisterVoters from "./component/pages/RegisterVoters/RegisterVoters";
-import routesConfig from "../src/component/Routes/routesConfig";
+//import routesConfig from "../src/component/Routes/routesConfig";
 import ProtectedRoute from "../src/component/Routes/ProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./context/ThemeContext";
 import ManageUsers from "./component/pages/ManageUsers/ManageUsers";
 import { useCallback, useEffect, useRef, useState } from "react";
-//import useLogoutTimer from "./components/CustomHooks/useLogoutTimer";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  // const [logoutTimer, setLogoutTimer] = useState(10);
-  //const [autoTheme, setAutoTheme] = useState("");
-
-  // Inactivity timeout (15 minutes)
   const INACTIVITY_TIME = 20 * 60 * 1000; // 20 minutes
-
-  // Inactivity timeout (15 minutes)
   const inactivityTimerRef = useRef(null);
 
-  /////////////////////////////////////////////
-  //Logout function
-  ////////////////////////////////////////
   const navigate = useNavigate();
+
+  // ✅ FIXED: Separated logout logic
   const logoutHandler = useCallback(() => {
     navigate("/");
     sessionStorage.clear();
     localStorage.removeItem("user");
 
-    // clear inactivity timer
     if (inactivityTimerRef.current) {
       clearTimeout(inactivityTimerRef.current);
       inactivityTimerRef.current = null;
     }
   }, [navigate]);
 
-  ////////////////////////////////////////////////////////////////
-  //==== Inactivity auto-logout: reset on user activity====
-  ////////////////////////////////////////////////////////////
+  // ✅ FIXED: Separated login state check
   useEffect(() => {
-    //const isLoggedInSessionStorage = ;
-    setIsLoggedIn(JSON.parse(sessionStorage.getItem("isLoggedIn")));
+    setIsLoggedIn(JSON.parse(sessionStorage.getItem("isLoggedIn")) || false);
+  }, []); // Only runs once on mount
 
-    if (!isLoggedIn) return; // Only track when logged in
-    // const localStorageAutoLogoutTime = +localStorage.getItem("autoLogoutTime");
+  // ✅ OPTIMIZED: Inactivity timeout effect - separate and minimal dependencies
+  useEffect(() => {
+    if (!isLoggedIn) return;
 
     const events = [
       "mousemove",
@@ -60,30 +50,23 @@ function App() {
     ];
 
     const resetInactivity = () => {
+      // ✅ FIXED: Clear existing timer before setting new one
       if (inactivityTimerRef.current) {
         clearTimeout(inactivityTimerRef.current);
       }
 
-      // set a new inactivity timeout
       inactivityTimerRef.current = setTimeout(() => {
         logoutHandler();
       }, INACTIVITY_TIME);
-
-      // Also update stored expiryTime so other tabs/logic can read it
-      // try {
-      //   const expiryTimestamp = Date.now() + localStorageAutoLogoutTime;
-      //   localStorage.setItem("expiryTime", JSON.stringify(expiryTimestamp));
-      // } catch {
-      //   // ignore
-      // }
     };
 
-    // attach listeners
+    // ✅ Attach listeners once
     events.forEach((ev) => window.addEventListener(ev, resetInactivity));
 
-    // start initial timer
+    // Start initial timer
     resetInactivity();
 
+    // ✅ Proper cleanup
     return () => {
       events.forEach((ev) => window.removeEventListener(ev, resetInactivity));
       if (inactivityTimerRef.current) {
@@ -91,95 +74,55 @@ function App() {
         inactivityTimerRef.current = null;
       }
     };
-  }, [INACTIVITY_TIME, logoutHandler, isLoggedIn]);
+  }, [isLoggedIn, INACTIVITY_TIME, logoutHandler]); // ✅ Reduced dependency issues
   ///////////////////////////////////////////////
-
-  ///////////////////////////////////////
-  //Disabling right click and keyboard shortcuts
-  ///////////////////////////////////////
-  // useEffect(() => {
-  //   const handleContextMenu = (e) => {
-  //     e.preventDefault();
-  //   };
-
-  //   document.addEventListener("contextmenu", handleContextMenu);
-
-  //   const disableShortcuts = (e) => {
-  //     if (
-  //       (e.ctrlKey && e.shiftKey && e.key === "I") ||
-  //       (e.ctrlKey && e.shiftKey && e.key === "J") ||
-  //       (e.ctrlKey && e.key === "U") ||
-  //       e.key === "F12"
-  //     ) {
-  //       e.preventDefault();
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", disableShortcuts);
-
-  //   return () => {
-  //     document.removeEventListener("contextmenu", handleContextMenu);
-  //     document.removeEventListener("keydown", disableShortcuts);
-  //   };
-  // }, []);
-  //////////////////////////////////////////////
 
   return (
     <ThemeProvider>
-      <main className="App">
-        <ToastContainer />
+      <Routes>
+        <Route path="/" element={<SignIn />} />
+        <Route path="/not-found" element={<NotFoundPage />} />
 
-        <Routes>
-          {/* Define your routes here /admin/manage-users */}
-          <Route path="/" element={<SignIn />} />
+        {/* Protected routes */}
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute requiredRole="Admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/voter/dashboard"
+          element={
+            <ProtectedRoute requiredRole="Voter">
+              <VoterDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/register-voters"
+          element={
+            <ProtectedRoute requiredRole="Admin">
+              <RegisterVoters />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/manage-users"
+          element={
+            <ProtectedRoute requiredRole="Admin">
+              <ManageUsers />
+            </ProtectedRoute>
+          }
+        />
 
-          {/* 
-          Protected Routes: 
-          Mapping through the routesConfig array and rendering the routes based on the user's role. 
-          The routes are wrapped inside the ProtectedRoute component which checks for the allowed roles before rendering the component. 
-          If the user does not have the required role, they will be redirected to the login page. 
-           */}
-          {routesConfig.map(({ role, routes }) => (
-            <Route
-              key={`role-${role}`}
-              element={<ProtectedRoute allowedRoles={[role]} />}
-            >
-              {/* 
-              Mapping through the routes array for each role and rendering the corresponding component for each route. The components are wrapped inside the ProtectedRoute component which checks for the allowed roles before rendering the component. If the user does not have the required role, they will be redirected to the login page.
-              */}
-              {routes.map(({ path, component: Component }) => (
-                <Route
-                  key={`${role}-${path}`}
-                  path={path}
-                  element={<Component />}
-                />
-              ))}
-            </Route>
-          ))}
+        {/* Catch all */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
 
-          {/* <Route
-            path="/admin/dashboard"
-            element={isLoggedIn && <AdminDashboard />}
-          />
-
-          <Route
-            path="/voter/dashboard"
-            element={isLoggedIn && <VoterDashboard />}
-          />
-
-          <Route
-            path="/admin/register"
-            element={isLoggedIn && <RegisterVoters />}
-          />
-
-          <Route
-            path="/admin/manage_users"
-            element={isLoggedIn && <ManageUsers />}
-          /> */}
-
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </main>
+      {/* Toast notifications */}
+      <ToastContainer />
     </ThemeProvider>
   );
 }

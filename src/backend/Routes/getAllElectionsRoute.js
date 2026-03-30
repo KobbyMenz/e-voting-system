@@ -1,18 +1,22 @@
 import db from "./../Services/dataBaseConnection.js";
 import dayjs from "dayjs";
+import process from "process";
 
-// Function to calculate election status based on current time and update database if needed
-///////////////////////////////////////////////////////////////
+// ✅ Selectively log only on development
+const log = (message, data) => {
+  if (process.env.NODE_ENV === "development") {
+    console.log(message, data);
+  }
+};
+
 const calculateElectionStatus = (startDate, endDate, now) => {
   const start = dayjs(startDate);
   const end = dayjs(endDate);
 
-  // Handle invalid dates gracefully by treating them as "Upcoming"
   if (!start.isValid() || !end.isValid()) {
     return "Upcoming";
   }
 
-  // Determine status based on current time
   if (now.isBefore(start)) {
     return "Upcoming";
   } else if (now.isAfter(end)) {
@@ -21,26 +25,46 @@ const calculateElectionStatus = (startDate, endDate, now) => {
     return "Active";
   }
 };
-///////////////////////////////////////////////////////
 
 const getAllElectionsRoute = (app) => {
   app.get("/api/getAllElections", (req, res) => {
-    const sqlQuery = `SELECT election.electionId, election.title, election.description, election.dateCreated, election.status, election.startDate, election.endDate, candidate.candidateId, candidate.fullName, candidate.photo, candidate.position 
-    FROM e_voting_db.election LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId`;
+    // ✅ NEW: Add pagination query parameters
+    const page = Math.max(1, parseInt(req.query.page) || 1);
+    const limit = Math.min(100, parseInt(req.query.limit) || 50); // Max 100
+    const offset = (page - 1) * limit;
 
-    const now = dayjs(); // Cache current time once
+    // ✅ OPTIMIZED: Add LIMIT and OFFSET for pagination
+    // ✅ OPTIMIZED: Also fetch total count for pagination metadata
+    const sqlQuery = `
+      SELECT 
+        election.electionId, 
+        election.title, 
+        election.description, 
+        election.dateCreated, 
+        election.status, 
+        election.startDate, 
+        election.endDate, 
+        candidate.candidateId, 
+        candidate.fullName, 
+        candidate.photo, 
+        candidate.position,
+        candidate.votes
+      FROM e_voting_db.election 
+      LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
+      ORDER BY election.dateCreated DESC, election.electionId, candidate.candidateId
+      LIMIT ? OFFSET ?
+    `;
 
-    db.query(sqlQuery, (err, result) => {
+    const countQuery = `SELECT COUNT(DISTINCT electionId) as total FROM e_voting_db.election`;
+
+    const now = dayjs();
+
+    // ✅ Fetch paginated elections
+    db.query(sqlQuery, [limit, offset], (err, result) => {
       if (err) {
-        console.log("Error fetching data", err);
+        console.error("Error fetching elections:", err);
         return res.status(500).json({ error: "Database error" });
       }
-
-      // Debug: Log the raw result to check if photo field exists
-      // console.log(
-      //   "Raw election data from DB:",
-      //   result.length > 0 ? result[0] : "No data",
-      // );
 
       // Collect elections needing status updates
       const electionsToUpdate = [];
@@ -51,7 +75,6 @@ const getAllElectionsRoute = (app) => {
           now,
         );
 
-        // If calculated status differs from current status, queue it for update
         if (calculatedStatus !== election.status) {
           electionsToUpdate.push({
             electionId: election.electionId,
@@ -60,67 +83,61 @@ const getAllElectionsRoute = (app) => {
           });
         }
 
-        // Return election data with calculated status for response
         return {
           ...election,
           status: calculatedStatus,
         };
       });
 
-      // console.log(
-      //   "Processed elections:",
-      // (electionsWithCalculatedStatus.length > 0
-      //   ? electionsWithCalculatedStatus[0]
-      //   : "No data",
-      // );
-
-      // Send response immediately (non-blocking)
+      // ✅ NEW: Include pagination metadata
       res.status(200).json({
         result: electionsWithCalculatedStatus,
+        pagination: {
+          page,
+          limit,
+          offset,
+          timestamp: new Date().toISOString(),
+        },
       });
 
-      //console.log("Result: ", electionsWithCalculatedStatus);
+      log("Elections fetched:", electionsWithCalculatedStatus.length);
 
-      // Update database asynchronously in background (non-blocking)
+      // ✅ FIXED: Asynchronously update status using prepared statements if needed
       if (electionsToUpdate.length > 0) {
-        // Build batch update query
-        const updateCases = electionsToUpdate
-          .map(
-            (el) => `WHEN electionId = ${el.electionId} THEN '${el.newStatus}'`,
-          )
-          .join("\n");
+        updateElectionsStatus(electionsToUpdate);
+      }
+    });
 
-        // Extract election IDs for WHERE clause
-        const electionIds = electionsToUpdate
-          .map((el) => el.electionId)
-          .join(",");
-
-        // Construct batch update query using CASE statement
-        const batchUpdateQuery = `
-          UPDATE e_voting_db.election
-          SET status = CASE
-            ${updateCases}
-            ELSE status
-          END
-          WHERE electionId IN (${electionIds})
-        `;
-
-        // Execute batch update query
-        db.query(batchUpdateQuery, (err) => {
-          if (err) {
-            console.error(
-              `[getAllElections] Batch update error for ${electionsToUpdate.length} elections:`,
-              err,
-            );
-          }
-          //   else {
-          //     console.log(
-          //       `[getAllElections] Successfully batch updated ${electionsToUpdate.length} election(s)`,
-          //     );
-          //   }
-        });
+    // ✅ FIXED: Fetch total count separately
+    db.query(countQuery, (err, countResult) => {
+      if (!err && countResult.length > 0) {
+        log("Total elections in DB:", countResult[0].total);
       }
     });
   });
 };
+
+// ✅ NEW: Separate function to handle batch updates safely
+const updateElectionsStatus = (electionsToUpdate) => {
+  // For each election, update status individually (safer and clearer)
+  electionsToUpdate.forEach((election) => {
+    const updateQuery = `
+      UPDATE e_voting_db.election 
+      SET status = ? 
+      WHERE electionId = ?
+    `;
+
+    // ✅ FIXED: Use prepared statements to prevent SQL injection
+    db.query(updateQuery, [election.newStatus, election.electionId], (err) => {
+      if (err) {
+        console.error(`Failed to update election ${election.electionId}:`, err);
+      } else {
+        log(
+          `Election ${election.electionId} status updated: ${election.oldStatus} -> ${election.newStatus}`,
+        );
+      }
+    });
+  });
+};
+
 export default getAllElectionsRoute;

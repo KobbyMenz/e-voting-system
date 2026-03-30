@@ -4,54 +4,72 @@ const useFetch = (url, autoRefreshInterval = 0) => {
   const [data, setData] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
-  const isFirstRender = useRef(false);
+  const [error, setError] = useState(null); // ✅ NEW: Error state
+  const controllerRef = useRef(null);
+  const intervalRef = useRef(null);
 
   useEffect(() => {
-    // if (isFirstRender.current) {
-    //   isFirstRender.current = false;
-    //   return;
-    // }
-
     const controller = new AbortController();
+    controllerRef.current = controller;
     const signal = controller.signal;
 
-    //=======Fetching all products from database======
     const fetchData = async () => {
       try {
+        setLoading(true);
+        setError(null); // ✅ Clear previous errors
+
         const response = await fetch(url, { signal });
 
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-        if (data.result) {
-          setData(data.result);
+        const json = await response.json();
 
-          setLoading(false);
+        if (json.result) {
+          setData(json.result);
+          setError(null);
+        } else {
+          throw new Error("No result in response");
         }
       } catch (err) {
+        // ✅ Proper error handling (don't catch AbortError)
         if (err.name !== "AbortError") {
           console.error("Fetch error:", err.message);
-          setLoading(true);
+          setError(err.message);
+          setData(null); // Clear stale data on error
         }
+      } finally {
+        setLoading(false); // ✅ Always set loading to false
       }
     };
+
     fetchData();
 
-    // Setup auto-refresh interval if specified
-    let refreshInterval = null;
+    // ✅ Setup auto-refresh interval if specified
     if (autoRefreshInterval > 0) {
-      refreshInterval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         fetchData();
       }, autoRefreshInterval);
     }
 
+    // ✅ Cleanup function
     return () => {
-      controller.abort();
-      if (refreshInterval) {
-        clearInterval(refreshInterval);
+      if (controllerRef.current) {
+        controllerRef.current.abort();
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
       }
     };
-  }, [refetch, url, isFirstRender, autoRefreshInterval]);
+  }, [refetch, url, autoRefreshInterval]); // ✅ Removed unused isFirstRender
 
-  return { data, setRefetch, loading, isFirstRender };
+  return { 
+    data, 
+    setRefetch, 
+    loading, 
+    error, // ✅ Export error state
+  };
 };
+
 export default useFetch;
