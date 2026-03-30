@@ -70,9 +70,9 @@ const createElectionInstance = (
 
 const AdminDashboardContent = () => {
   // Auto-refresh election data every 60 seconds to check start/end dates
-  const { data, setRefetch, loading, error } = useFetch(
+  const { data, setRefetch, loading } = useFetch(
     `${app_api_url}/getAllElections`,
-    60000,  // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
+    60000, // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
   );
 
   //Getting all users details

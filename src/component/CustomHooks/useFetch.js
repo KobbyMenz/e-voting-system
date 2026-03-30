@@ -64,10 +64,10 @@ const useFetch = (url, autoRefreshInterval = 0) => {
     };
   }, [refetch, url, autoRefreshInterval]); // ✅ Removed unused isFirstRender
 
-  return { 
-    data, 
-    setRefetch, 
-    loading, 
+  return {
+    data,
+    setRefetch,
+    loading,
     error, // ✅ Export error state
   };
 };
