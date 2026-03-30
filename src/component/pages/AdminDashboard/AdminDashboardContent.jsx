@@ -23,6 +23,7 @@ import useFetch from "../../CustomHooks/useFetch";
 import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
 import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 import SystemOverviewSkeleton from "../../UI/Skeleton/SystemOverviewSkeleton";
+import WelcomeMessageSkeleton from "../../UI/Skeleton/WelcomeMessageSkeleton";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
@@ -70,7 +71,7 @@ const createElectionInstance = (
 
 const AdminDashboardContent = () => {
   // Auto-refresh election data every 60 seconds to check start/end dates
-  const { data, setRefetch, loading } = useFetch(
+  const { data, setRefetch, loading, error } = useFetch(
     `${app_api_url}/getAllElections`,
     60000, // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
   );
@@ -436,23 +437,23 @@ const AdminDashboardContent = () => {
 
       <div className={classes.content__container}>
         <Card className={"card__wrapper"}>
-          {/* {loading ? (
+          {loading ? (
             <WelcomeMessageSkeleton />
-          ) :  */}
+          ) : (
+            <div className={classes.message_container}>
+              <div className={classes.welcome_text}>
+                <h2 className={classes.welcome_message_header}>
+                  {`Hi ${userName}, welcome back to admin dashboard`}
+                </h2>
 
-          <div className={classes.message_container}>
-            <div className={classes.welcome_text}>
-              <h2 className={classes.welcome_message_header}>
-                {`Hi ${userName}, welcome back to admin dashboard`}
-              </h2>
+                <p
+                  className={classes.welcome_message}
+                >{`Manage elections, candidate, and view real-time results.`}</p>
+              </div>
 
-              <p
-                className={classes.welcome_message}
-              >{`Manage elections, candidate, and view real-time results.`}</p>
+              <DigitalClock />
             </div>
-
-            <DigitalClock />
-          </div>
+          )}
         </Card>
 
         <div className={` ${classes.system_overview_card}`}>
@@ -624,6 +625,19 @@ const AdminDashboardContent = () => {
 
             {loading ? (
               <TableSkeleton />
+            ) : error ? (
+              <Box
+                sx={{
+                  padding: "2rem",
+                  textAlign: "center",
+                  color: "error.main",
+                }}
+              >
+                <p>❌ Error loading elections: {error}</p>
+                <Button onClick={() => setRefetch((prev) => !prev)}>
+                  🔄 Retry
+                </Button>
+              </Box>
             ) : (
               <Box sx={{ padding: "1rem 0" }}>
                 {Array.isArray(filteredElectionRows) &&
