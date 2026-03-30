@@ -83,39 +83,17 @@ function App() {
         <Route path="/" element={<SignIn />} />
         <Route path="/not-found" element={<NotFoundPage />} />
 
-        {/* Protected routes */}
-        <Route
-          path="/admin/dashboard"
-          element={
-            <ProtectedRoute requiredRole="Admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/voter/dashboard"
-          element={
-            <ProtectedRoute requiredRole="Voter">
-              <VoterDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/register-voters"
-          element={
-            <ProtectedRoute requiredRole="Admin">
-              <RegisterVoters />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/manage-users"
-          element={
-            <ProtectedRoute requiredRole="Admin">
-              <ManageUsers />
-            </ProtectedRoute>
-          }
-        />
+        {/* Protected Admin Routes */}
+        <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/register-voters" element={<RegisterVoters />} />
+          <Route path="/admin/manage-users" element={<ManageUsers />} />
+        </Route>
+
+        {/* Protected Voter Routes */}
+        <Route element={<ProtectedRoute allowedRoles={["Voter"]} />}>
+          <Route path="/voter/dashboard" element={<VoterDashboard />} />
+        </Route>
 
         {/* Catch all */}
         <Route path="*" element={<NotFoundPage />} />
