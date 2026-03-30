@@ -26,6 +26,8 @@ import getNoOfVotersRoute from "./Routes/getNoOfVotersRoute.js";
 import deleteElectionRoute from "./Routes/deleteElectionRoute.js";
 import updateElectionStatusRoute from "./Routes/updateElectionStatusRoute.js";
 import insertCandidateRoute from "./Routes/insertCandidateRoute.js";
+import updateCandidateRoute from "./Routes/updateCandidateRoute.js";
+import deleteCandidateRoute from "./Routes/deleteCandidateRoute.js";
 
 const app = express();
 /*
@@ -105,6 +107,10 @@ updateElectionStatusRoute(app);
 CANDIDATE MANAGEMENT
 =============================*/
 insertCandidateRoute(app);
+
+updateCandidateRoute(app);
+
+deleteCandidateRoute(app);
 
 /*
 

@@ -78,29 +78,25 @@ const EditCandidateModal = (props) => {
       e.preventDefault();
 
       if (window.confirm("Are you sure you want to updating candidate?")) {
-        const candidateData = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          image: formData.image,
-          name: formData.name,
-          position: formData.position,
-        };
-
-        console.log(candidateData);
-
-        //props.onAddCandidate(candidateData);
-        props.toastModal("success", `Candidate update successfully`);
+        const candidateFormData = new FormData();
+        //key must match what multer expects
+        candidateFormData.append("fullName", formData.name);
+        candidateFormData.append("photo", file);
+        candidateFormData.append("position", formData.position);
+        //candidateFormData.append("electionId", props.electionId);
 
         //sending candidate details to be updated into the database at the backend
         updateMultiPartsData(
           `updateCandidate/${formData.id}`,
-          candidateData,
+          candidateFormData,
           props.toastModal,
+          props.setRefetch,
         );
 
         props.onCloseModal();
       }
     },
-    [props, formData, updateMultiPartsData],
+    [props, formData, file, updateMultiPartsData],
   );
 
   ///////////////////////////////

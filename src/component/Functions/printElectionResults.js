@@ -158,7 +158,7 @@ export const printElectionResults = (
     </head>
     <body>
       <div class="print-header">
-        <h1>${title}</h1>
+        <h2>${title.toLocaleUpperCase()}</h2>
         <p>Generated on: ${currentDate}</p>
         <p>Total Elections: ${elections.length}</p>
       </div>

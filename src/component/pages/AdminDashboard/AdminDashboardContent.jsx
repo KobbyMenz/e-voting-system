@@ -22,6 +22,7 @@ import app_api_url from "../../../app_api_url";
 import useFetch from "../../CustomHooks/useFetch";
 import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
 import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
+import SystemOverviewSkeleton from "../../UI/Skeleton/SystemOverviewSkeleton";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
@@ -360,36 +361,26 @@ const AdminDashboardContent = () => {
   /////////////////////////////////////////
   //delete candidate handler
   ////////////////////////////////////////
-  // const onDeleteCandidateHandler = useCallback(
-  //   (candidateId) => {
-  //     if (window.confirm("Are you sure you want to delete this candidate?")) {
-  //       setAddElection((prev) => {
-  //         return Array.isArray(prev)
-  //           ? prev.map((election) => {
-  //               return {
-  //                 ...election,
-  //                 candidates: election.candidates.filter(
-  //                   (candidate) => candidate.id !== candidateId,
-  //                 ),
-  //               };
-  //             })
-  //           : prev;
-  //       });
-  //       Toast("success", "Candidate deleted successfully.");
-
-  //       //Hook to delete candidate
-  //       deleteData(`deleteCandidate/${candidateId}`, ToastHandler);
-  //     }
-  //   },
-  //   [deleteData, ToastHandler],
-  // );
+  const onDeleteCandidateHandler = useCallback(
+    (candidateId) => {
+      if (window.confirm("Are you sure you want to delete this candidate?")) {
+        //Hook to delete candidate
+        deleteData(
+          `deleteCandidate/${candidateId}`,
+          ToastHandler,
+          refetchHandler,
+        );
+      }
+    },
+    [deleteData, ToastHandler, refetchHandler],
+  );
 
   /////////////////////////////////////////////////////////
   //* Handler to print all election results */
   /////////////////////////////////////////////////////
   const onPrintAllResultsHandler = useCallback(() => {
     if (Array.isArray(election) && election.length > 0) {
-      printElectionResults(election, "All Elections Report");
+      printElectionResults(election, "Election Results Report");
     } else {
       Toast("info", "No elections to print");
     }
@@ -446,6 +437,7 @@ const AdminDashboardContent = () => {
         <EditCandidateModal
           onSubmitCandidateData={submitCandidateData}
           toastModal={ToastHandler}
+          setRefetch={refetchHandler}
           onCloseModal={closeShowEditCandidateModalHandler}
         />
       )}
@@ -472,7 +464,9 @@ const AdminDashboardContent = () => {
         </Card>
 
         <div className={` ${classes.system_overview_card}`}>
-          {
+          {loading ? (
+            <SystemOverviewSkeleton />
+          ) : (
             <section>
               {/* {
                 <p
@@ -592,7 +586,7 @@ const AdminDashboardContent = () => {
                 </div>
               </div>
             </section>
-          }
+          )}
         </div>
 
         {/*===top 10 products table===*/}
@@ -657,7 +651,7 @@ const AdminDashboardContent = () => {
                         rows={item.candidates}
                         onAdd={() => onShowAddCandidateModalHandler(item.id)}
                         onEdit={onEditCandidateHandler}
-                        // onDeleteCandidate={onDeleteCandidateHandler}
+                        onDeleteCandidate={onDeleteCandidateHandler}
                         onDeleteElection={onDeleteElectionHandler}
                         onEditElection={onShowEditElectionHandler}
                         expanded={expandedId === item.id}

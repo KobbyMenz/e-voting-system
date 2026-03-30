@@ -17,7 +17,7 @@ const SystemOverviewSkeleton = () => {
         gridTemplateColumns: "repeat(auto-fit, minmax(30rem, 1fr))",
       }}
     >
-      {Array.from(new Array(8)).map((item, index) => (
+      {Array.from(new Array(4)).map((item, index) => (
         <Box key={index}>
           {
             <Skeleton

@@ -129,7 +129,7 @@ export const printVoters = (voters, title = "Registered Voters Report") => {
 
     <body>
       <div class="print-header">
-        <h2>${title}</h2>
+        <h2>${title.toUpperCase()}</h2>
         <p>Generated on: ${currentDate}</p>
         <p>Total Registered Voters: ${voters.length}</p>
       </div>
