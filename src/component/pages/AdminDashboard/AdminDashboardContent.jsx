@@ -21,6 +21,7 @@ import { authLocalStorage } from "../../Utils/authLocalStorage";
 import app_api_url from "../../../app_api_url";
 import useFetch from "../../CustomHooks/useFetch";
 import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
+import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
@@ -68,7 +69,10 @@ const createElectionInstance = (
 
 const AdminDashboardContent = () => {
   // Auto-refresh election data every 2 seconds to check start/end dates frequently
-  const { data, setRefetch } = useFetch(`${app_api_url}/getAllElections`, 1000);
+  const { data, setRefetch, loading } = useFetch(
+    `${app_api_url}/getAllElections`,
+    1000,
+  );
 
   //Getting all users details
   const allElections = useMemo(() => (data !== null ? data : []), [data]);
@@ -632,45 +636,49 @@ const AdminDashboardContent = () => {
               </Box>
             </div>
 
-            <Box sx={{ padding: "1rem 0" }}>
-              {Array.isArray(filteredElectionRows) &&
-              filteredElectionRows.length > 0 ? (
-                <>
-                  {filteredElectionRows.map((item) => (
-                    <AccordionExpandDefault
-                      key={item.id}
-                      id={item.id}
-                      electionTitle={item.title}
-                      description={item.description}
-                      dateCreated={item.dateCreated}
-                      startDate={item.startDate}
-                      endDate={item.endDate}
-                      status={item.status}
-                      columns={columns}
-                      rows={item.candidates}
-                      onAdd={() => onShowAddCandidateModalHandler(item.id)}
-                      onEdit={onEditCandidateHandler}
-                      // onDeleteCandidate={onDeleteCandidateHandler}
-                      onDeleteElection={onDeleteElectionHandler}
-                      onEditElection={onShowEditElectionHandler}
-                      expanded={expandedId === item.id}
-                      onExpandChange={onAccordionExpandChange}
-                      // onclickAccordion={onclickAccordion(item.id)}
-                    />
-                  ))}
-                </>
-              ) : (
-                <p
-                  style={{
-                    textAlign: "center",
-                    borderTop: "0.2rem solid #ccc",
-                    padding: "2rem 0 1rem 0",
-                  }}
-                >
-                  No election added yet
-                </p>
-              )}
-            </Box>
+            {loading ? (
+              <TableSkeleton />
+            ) : (
+              <Box sx={{ padding: "1rem 0" }}>
+                {Array.isArray(filteredElectionRows) &&
+                filteredElectionRows.length > 0 ? (
+                  <>
+                    {filteredElectionRows.map((item) => (
+                      <AccordionExpandDefault
+                        key={item.id}
+                        id={item.id}
+                        electionTitle={item.title}
+                        description={item.description}
+                        dateCreated={item.dateCreated}
+                        startDate={item.startDate}
+                        endDate={item.endDate}
+                        status={item.status}
+                        columns={columns}
+                        rows={item.candidates}
+                        onAdd={() => onShowAddCandidateModalHandler(item.id)}
+                        onEdit={onEditCandidateHandler}
+                        // onDeleteCandidate={onDeleteCandidateHandler}
+                        onDeleteElection={onDeleteElectionHandler}
+                        onEditElection={onShowEditElectionHandler}
+                        expanded={expandedId === item.id}
+                        onExpandChange={onAccordionExpandChange}
+                        // onclickAccordion={onclickAccordion(item.id)}
+                      />
+                    ))}
+                  </>
+                ) : (
+                  <p
+                    style={{
+                      textAlign: "center",
+                      borderTop: "0.2rem solid #ccc",
+                      padding: "2rem 0 1rem 0",
+                    }}
+                  >
+                    No election added yet
+                  </p>
+                )}
+              </Box>
+            )}
           </Card>
         </section>
 
