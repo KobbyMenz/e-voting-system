@@ -161,14 +161,6 @@ const AdminDashboardContent = () => {
     "totalVoters",
   );
 
-  // console.log("election: ", election);
-  // const [fetchData, setFetchData] = useState({
-  //   numberOfElections: 0,
-  //   totalCandidates: 0,
-  //   registeredVoters: 0,
-  //   totalVotes: 0,
-  // });
-
   const { deleteData } = useDeleteHook();
   const authData = authLocalStorage();
   const userName = authData?.fullName?.split(" ")[0] || "Admin";
