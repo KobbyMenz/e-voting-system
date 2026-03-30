@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { Box } from "@mui/material";
 import classes from "../AdminDashboard/AdminDashboardContent.module.css";
 import Card from "../../UI/Card/Card";
@@ -71,7 +71,7 @@ const createElectionInstance = (
 
 const AdminDashboardContent = () => {
   // Auto-refresh election data every 60 seconds to check start/end dates
-  const { data, setRefetch, loading, error } = useFetch(
+  const { data, setRefetch, error } = useFetch(
     `${app_api_url}/getAllElections`,
     60000, // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
   );
@@ -155,6 +155,16 @@ const AdminDashboardContent = () => {
   const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
   const [submitElectionData, setSubmitElectionData] = useState({});
   //const [submitElectionId, setSubmitElectionId] = useState("");
+
+  // Track initial load separately from polling refreshes
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  // Only show skeleton on first load, not on polling refreshes
+  useEffect(() => {
+    if (data !== null) {
+      setInitialLoading(false);
+    }
+  }, [data]);
 
   // const { getNoOfVoters } = useFetch(`${app_api_url}/getNoOfVoters`);
   const { dataResult: totalVoters } = useFetchDataCount(
@@ -437,7 +447,7 @@ const AdminDashboardContent = () => {
 
       <div className={classes.content__container}>
         <Card className={"card__wrapper"}>
-          {loading ? (
+          {initialLoading ? (
             <WelcomeMessageSkeleton />
           ) : (
             <div className={classes.message_container}>
@@ -457,7 +467,7 @@ const AdminDashboardContent = () => {
         </Card>
 
         <div className={` ${classes.system_overview_card}`}>
-          {loading ? (
+          {initialLoading ? (
             <SystemOverviewSkeleton />
           ) : (
             <section>
@@ -623,7 +633,7 @@ const AdminDashboardContent = () => {
               </Box>
             </div>
 
-            {loading ? (
+            {initialLoading ? (
               <TableSkeleton />
             ) : error ? (
               <Box

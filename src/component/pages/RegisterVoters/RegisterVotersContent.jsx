@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 //import formatDateTime from "../../Functions/formatDateTime";
 import PaginationTable from "../../UI/PaginationTable/PaginationTable";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import AddVoterModal from "../../UI/Modals/AddVoterModal";
 import EditVoterModal from "../../UI/Modals/EditVoterModal";
 import Toast from "../../UI/Notification/Toast";
@@ -53,10 +53,20 @@ const RegisterVotersContent = () => {
 
   const { deleteData } = useDeleteHook();
 
-  const { data, setRefetch, loading } = useFetch(`${app_api_url}/getAllVoters`); //Getting all users details
+  const { data, setRefetch } = useFetch(`${app_api_url}/getAllVoters`); //Getting all users details
 
   //Getting all users details
   const allVoters = useMemo(() => (data !== null ? data : []), [data]);
+
+  // Track initial load separately from polling refreshes
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  // Only show skeleton on first load, not on polling refreshes
+  useEffect(() => {
+    if (data !== null) {
+      setInitialLoading(false);
+    }
+  }, [data]);
 
   // Handler to open the Add Voter Modal
   const onAddVoterHandler = useCallback(() => {
@@ -179,7 +189,7 @@ const RegisterVotersContent = () => {
       )}
 
       <div className="table_wrapper">
-        {loading ? (
+        {initialLoading ? (
           <TableSkeleton />
         ) : (
           <PaginationTable

@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 //import classes from "../dashboard/DashboardContent.module.css";
 //import styles from "../AdminStaff/AdminStaffContent.module.css";
 //import defaultUserPhoto from "../../../assets/images/profilePicture.png";
@@ -98,10 +98,20 @@ const ManageUsersContent = () => {
   const { deleteData } = useDeleteHook();
   const { updateData } = useUpdateHook();
 
-  const { data, setRefetch, loading } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
+  const { data, setRefetch } = useFetch(`${app_api_url}/getAllUsers`); //Getting all users details
 
   //Getting all users details
   const allUsers = useMemo(() => (data !== null ? data : []), [data]);
+
+  // Track initial load separately from polling refreshes
+  const [initialLoading, setInitialLoading] = useState(true);
+
+  // Only show skeleton on first load, not on polling refreshes
+  useEffect(() => {
+    if (data !== null) {
+      setInitialLoading(false);
+    }
+  }, [data]);
 
   //console.log("All users: ", allUsers);
 
@@ -317,7 +327,7 @@ const ManageUsersContent = () => {
           </Card> */}
 
           <div className="table_wrapper">
-            {loading ? (
+            {initialLoading ? (
               <TableSkeleton />
             ) : (
               <ManageUserPT
