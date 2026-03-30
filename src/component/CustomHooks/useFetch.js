@@ -4,7 +4,7 @@ const useFetch = (url, autoRefreshInterval = 0) => {
   const [data, setData] = useState(null);
   const [refetch, setRefetch] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null); // ✅ NEW: Error state
+  const [error, setError] = useState(null); //  NEW: Error state
   const controllerRef = useRef(null);
   const intervalRef = useRef(null);
 
@@ -16,7 +16,7 @@ const useFetch = (url, autoRefreshInterval = 0) => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        setError(null); // ✅ Clear previous errors
+        setError(null); // Clear previous errors
 
         const response = await fetch(url, { signal });
 
@@ -33,27 +33,27 @@ const useFetch = (url, autoRefreshInterval = 0) => {
           throw new Error("No result in response");
         }
       } catch (err) {
-        // ✅ Proper error handling (don't catch AbortError)
+        // Proper error handling (don't catch AbortError)
         if (err.name !== "AbortError") {
           console.error("Fetch error:", err.message);
           setError(err.message);
           setData(null); // Clear stale data on error
         }
       } finally {
-        setLoading(false); // ✅ Always set loading to false
+        setLoading(false); //  Always set loading to false
       }
     };
 
     fetchData();
 
-    // ✅ Setup auto-refresh interval if specified
+    //  Setup auto-refresh interval if specified
     if (autoRefreshInterval > 0) {
       intervalRef.current = setInterval(() => {
         fetchData();
       }, autoRefreshInterval);
     }
 
-    // ✅ Cleanup function
+    //  Cleanup function
     return () => {
       if (controllerRef.current) {
         controllerRef.current.abort();
@@ -62,13 +62,13 @@ const useFetch = (url, autoRefreshInterval = 0) => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [refetch, url, autoRefreshInterval]); // ✅ Removed unused isFirstRender
+  }, [refetch, url, autoRefreshInterval]); //  Removed unused isFirstRender
 
   return {
     data,
     setRefetch,
     loading,
-    error, // ✅ Export error state
+    error, //  Export error state
   };
 };
 
