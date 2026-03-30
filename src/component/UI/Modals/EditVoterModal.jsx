@@ -1,8 +1,6 @@
 import { Fragment, useCallback, useRef, useState } from "react";
 //import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-// eslint-disable-next-line no-unused-vars
-import { motion, AnimatePresence } from "framer-motion";
 import classes from "../../UI/Modals/AddModal.module.css";
 import Card from "../Card/Card";
 import Button from "../Button/Button";

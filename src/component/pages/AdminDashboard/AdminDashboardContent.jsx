@@ -438,7 +438,7 @@ const AdminDashboardContent = () => {
           toastModal={ToastHandler}
           onCloseModal={closeShowAddCandidateModalHandler}
           setRefetch={refetchHandler}
-          onAddCandidate={() => {}}
+          //onAddCandidate={() => {}}
         />
       )}
 
