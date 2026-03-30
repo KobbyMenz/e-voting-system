@@ -21,9 +21,10 @@ import { authLocalStorage } from "../../Utils/authLocalStorage";
 import app_api_url from "../../../app_api_url";
 import useFetch from "../../CustomHooks/useFetch";
 import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
-import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
+//import TableSkeleton from "../../UI/Skeleton/TableSkeleton";
 import SystemOverviewSkeleton from "../../UI/Skeleton/SystemOverviewSkeleton";
-import WelcomeMessageSkeleton from "../../UI/Skeleton/WelcomeMessageSkeleton";
+//import WelcomeMessageSkeleton from "../../UI/Skeleton/WelcomeMessageSkeleton";
+import ElectionListSkeleton from "../../UI/Skeleton/ElectionListSkeleton";
 
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
@@ -447,9 +448,10 @@ const AdminDashboardContent = () => {
 
       <div className={classes.content__container}>
         <Card className={"card__wrapper"}>
-          {initialLoading ? (
-            <WelcomeMessageSkeleton />
-          ) : (
+          {
+            // initialLoading ? (
+            //   <WelcomeMessageSkeleton />
+            // ) :
             <div className={classes.message_container}>
               <div className={classes.welcome_text}>
                 <h2 className={classes.welcome_message_header}>
@@ -463,7 +465,7 @@ const AdminDashboardContent = () => {
 
               <DigitalClock />
             </div>
-          )}
+          }
         </Card>
 
         <div className={` ${classes.system_overview_card}`}>
@@ -633,8 +635,8 @@ const AdminDashboardContent = () => {
               </Box>
             </div>
 
-            {initialLoading ? (
-              <TableSkeleton />
+            {!initialLoading ? (
+              <ElectionListSkeleton />
             ) : error ? (
               <Box
                 sx={{

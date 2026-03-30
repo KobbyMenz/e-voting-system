@@ -47,8 +47,8 @@ const getAllElectionsRoute = (app) => {
         candidate.candidateId, 
         candidate.fullName, 
         candidate.photo, 
-        candidate.position,
-        candidate.votes
+        candidate.position
+        
       FROM e_voting_db.election 
       LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
       ORDER BY election.dateCreated DESC, election.electionId, candidate.candidateId
