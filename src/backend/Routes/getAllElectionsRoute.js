@@ -25,7 +25,9 @@ const calculateElectionStatus = (startDate, endDate, now) => {
 
 const getAllElectionsRoute = (app) => {
   app.get("/api/getAllElections", (req, res) => {
-    const sqlQuery = `SELECT election.electionId, election.title, election.description, election.dateCreated, election.status, election.startDate, election.endDate, candidate.candidateId, candidate.fullName, candidate.photo, candidate.position FROM e_voting_db.election LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId GROUP BY candidate.candidateId ORDER BY candidate.candidateId ASC`;
+    const sqlQuery = `SELECT election.electionId, election.title, election.description, election.dateCreated, election.status, election.startDate, election.endDate, candidate.candidateId, candidate.fullName, candidate.photo, candidate.position 
+    FROM e_voting_db.election LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId`;
+
     const now = dayjs(); // Cache current time once
 
     db.query(sqlQuery, (err, result) => {
@@ -33,6 +35,12 @@ const getAllElectionsRoute = (app) => {
         console.log("Error fetching data", err);
         return res.status(500).json({ error: "Database error" });
       }
+
+      // Debug: Log the raw result to check if photo field exists
+      // console.log(
+      //   "Raw election data from DB:",
+      //   result.length > 0 ? result[0] : "No data",
+      // );
 
       // Collect elections needing status updates
       const electionsToUpdate = [];
@@ -59,10 +67,19 @@ const getAllElectionsRoute = (app) => {
         };
       });
 
+      // console.log(
+      //   "Processed elections:",
+      // (electionsWithCalculatedStatus.length > 0
+      //   ? electionsWithCalculatedStatus[0]
+      //   : "No data",
+      // );
+
       // Send response immediately (non-blocking)
       res.status(200).json({
         result: electionsWithCalculatedStatus,
       });
+
+      //console.log("Result: ", electionsWithCalculatedStatus);
 
       // Update database asynchronously in background (non-blocking)
       if (electionsToUpdate.length > 0) {

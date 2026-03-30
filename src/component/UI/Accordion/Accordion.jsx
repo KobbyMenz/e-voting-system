@@ -431,7 +431,11 @@ export default function AccordionExpandDefault({
               Total Votes for Candidates
             </h2>
 
-            <BarChartCompo />
+            <BarChartCompo
+              candidatesRow={rows}
+              // name="name"
+              // total_vote="votes"
+            />
           </div>
         </Box>
         <Typography sx={{ fontSize: "1.1rem" }}></Typography>

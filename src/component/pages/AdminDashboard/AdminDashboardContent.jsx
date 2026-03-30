@@ -25,6 +25,8 @@ import useFetchDataCount from "../../CustomHooks/useFetchDataCount";
 // Default candidates list
 const DEFAULT_CANDIDATES = [];
 
+// Helper function to convert relative image paths to full URLs
+
 // Table columns definition
 const columns = [
   { field: "sn", headerName: "S/N" },
@@ -56,9 +58,9 @@ const createElectionInstance = (
 
   candidates: candidates.map((candidate, index) => ({
     sn: index + 1,
-    id: candidate.id,
-    image: candidate.photo ? candidate.photo : "",
-    name: candidate.name,
+    id: candidate.candidateId || `candidate-${index}`,
+    image: candidate.photo ? `${candidate.photo}` : "", // Maps database photo to image
+    name: candidate.fullName || "N/A",
     position: candidate.position ? candidate.position : "N/A",
     votes: candidate.votes ? candidate.votes : 0,
   })),
@@ -71,7 +73,7 @@ const AdminDashboardContent = () => {
   //Getting all users details
   const allElections = useMemo(() => (data !== null ? data : []), [data]);
 
-  // Group candidates by election ID
+  // Group candidates by election ID - SORTED by creation order
   const candidatesByElection = useMemo(() => {
     const grouped = {};
     if (Array.isArray(allElections)) {
@@ -84,19 +86,38 @@ const AdminDashboardContent = () => {
           grouped[row.electionId].push(row);
         }
       });
+
+      // Sort candidates within each election by their position in the data (order added)
+      Object.keys(grouped).forEach((electionId) => {
+        grouped[electionId].sort((a, b) => {
+          // If both have a date field, sort by it; otherwise maintain data order
+          if (a.dateAdded && b.dateAdded) {
+            return (
+              new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
+            );
+          }
+          return 0;
+        });
+      });
     }
     return grouped;
   }, [allElections]);
 
-  // Get unique elections
+  // Get unique elections - SORTED by dateCreated (oldest first)
   const uniqueElections = useMemo(() => {
     if (!Array.isArray(allElections)) return [];
     const seen = new Set();
-    return allElections.filter((election) => {
+    const unique = allElections.filter((election) => {
       if (seen.has(election.electionId)) return false;
       seen.add(election.electionId);
       return true;
     });
+
+    // Sort by dateCreated (ascending - oldest/first created first)
+    return unique.sort(
+      (a, b) =>
+        new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
+    );
   }, [allElections]);
 
   // Transform database elections into component election instances
@@ -111,17 +132,7 @@ const AdminDashboardContent = () => {
           electionRow.status,
           electionRow.startDate,
           electionRow.endDate,
-
-          (candidatesByElection[electionRow.electionId] || []).map(
-            (candidate, index) => ({
-              sn: index + 1,
-              id: candidate.candidateId || `candidate-${index}`, // Fallback if not available
-              image: candidate.photo ? candidate.photo : "",
-              name: candidate.fullName || "N/A",
-              position: candidate.position ? candidate.position : "N/A",
-              votes: candidate.votes ? candidate.votes : 0,
-            }),
-          ),
+          candidatesByElection[electionRow.electionId] || [], // Pass raw candidates, let createElectionInstance handle mapping
         ),
       ),
     [uniqueElections, candidatesByElection],
@@ -145,7 +156,7 @@ const AdminDashboardContent = () => {
     "totalVoters",
   );
 
-  //console.log("getNoOfVoters: ", getNoOfVoters);
+  // console.log("election: ", election);
   // const [fetchData, setFetchData] = useState({
   //   numberOfElections: 0,
   //   totalCandidates: 0,
@@ -213,14 +224,24 @@ const AdminDashboardContent = () => {
     setShowAddCandidateModal(false);
   }, []);
 
+  //console.log("All elections data: ", election);
+
   // Enhanced filtering to search across all fields of the election, including candidates
+  // Preserves the sorted order from election array
   const filteredElectionRows = useMemo(
     () =>
-      election.filter((row) =>
-        Object.values(row).some((value) =>
-          String(value).toLowerCase().includes(search.toLowerCase()),
+      election
+        .filter((row) =>
+          Object.values(row).some((value) =>
+            String(value).toLowerCase().includes(search.toLowerCase()),
+          ),
+        )
+        // Maintain sort order by dateCreated
+        .sort(
+          (a, b) =>
+            new Date(a.dateCreated).getTime() -
+            new Date(b.dateCreated).getTime(),
         ),
-      ),
     [election, search],
   );
 

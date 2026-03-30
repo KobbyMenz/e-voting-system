@@ -15,7 +15,7 @@ import {
 //import CircularProgress from "@mui/material/CircularProgress";
 import Paper from "@mui/material/Paper";
 //import Card from "../Card";
-import { useEffect, useState } from "react";
+//import { useEffect, useState } from "react";
 //import axios from "axios";
 import PropTypes from "prop-types";
 import FormatCurrency from "../../Functions/FormatCurrency";
@@ -26,49 +26,12 @@ import { useTheme } from "../../../context/useTheme";
 
 //import FormatCurrency from "../../Functions/FormatCurrency";
 
-const BarChartCompo = () => {
+const BarChartCompo = ({
+  candidatesRow = [],
+  name = "name",
+  total_vote = "votes",
+}) => {
   const { isDarkTheme } = useTheme();
-  // const { topProducts, loading } = useTopProducts(); setRefetch
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  // const currentYear = props.year;
-  //console.log("Year:", currentYear);
-  useEffect(() => {
-    const fetchNumberOfVotes = async () => {
-      // Simulating API call
-      setTimeout(() => {
-        setData([
-          { name: "Augustine Mensah", total_vote: 100 },
-          { name: "John Doe", total_vote: 110 },
-          { name: "Jane Smith", total_vote: 60 },
-        ]);
-        setLoading(false);
-      }, 1000);
-    };
-
-    fetchNumberOfVotes();
-
-    // const getSalesYear = async () => {
-    //   try {
-    //     const response = await axios.get(`${app_api_url}/getAllMonthlySales`);
-
-    //     if (response.data.result) {
-    //       setData(response.data.result);
-
-    //       setLoading(false);
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-    // getSalesYear();
-
-    // setRefetch((prev) => !prev);
-  }, []);
-
-  if (loading) {
-    return <ChartSkeleton />;
-  }
 
   return (
     <div>
@@ -97,22 +60,24 @@ const BarChartCompo = () => {
         </h3> */}
         <ResponsiveContainer width="100%" height={226}>
           <BarChart
-            data={data}
+            data={candidatesRow}
             margin={{ top: 0, right: 10, left: 0, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
+            <XAxis dataKey={name} />
             <YAxis tickFormatter={formatNumberToK} />
             <Tooltip
               formatter={(value) => formatNumberToK(value)}
               contentStyle={{
                 // color: "#000",
-                backgroundColor: isDarkTheme ? "var(--bg-color2)" : "var(--bg-color2)",
+                backgroundColor: isDarkTheme
+                  ? "var(--bg-color2)"
+                  : "var(--bg-color2)",
                 border: "0.1rem solid var(--text-color)",
                 borderRadius: "0.8rem",
               }}
             />
-            <Bar dataKey="total_vote" fill="var(--primary)" barSize={"100"} />
+            <Bar dataKey={total_vote} fill="var(--primary)" barSize={"100"} />
           </BarChart>
         </ResponsiveContainer>
       </Paper>
@@ -160,5 +125,11 @@ const BarChartCompo = () => {
 };
 BarChartCompo.propTypes = {
   year: PropTypes.number,
+  candidatesRow: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      total_vote: PropTypes.number.isRequired,
+    }),
+  ),
 };
 export default BarChartCompo;
