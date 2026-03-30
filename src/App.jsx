@@ -86,8 +86,8 @@ function App() {
         {/* Protected Admin Routes */}
         <Route element={<ProtectedRoute allowedRoles={["Admin"]} />}>
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/admin/register-voters" element={<RegisterVoters />} />
-          <Route path="/admin/manage-users" element={<ManageUsers />} />
+          <Route path="/admin/register" element={<RegisterVoters />} />
+          <Route path="/admin/manage_users" element={<ManageUsers />} />
         </Route>
 
         {/* Protected Voter Routes */}
