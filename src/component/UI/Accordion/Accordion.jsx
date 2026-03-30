@@ -34,7 +34,7 @@ export default function AccordionExpandDefault({
   onEdit,
   onDeleteCandidate,
   onAdd,
-  // onChangeStatus,
+  // onclickAccordion,
   onDeleteElection,
   onEditElection,
   expanded,
@@ -458,4 +458,5 @@ AccordionExpandDefault.propTypes = {
   onEditElection: PropTypes.func,
   expanded: PropTypes.bool,
   onExpandChange: PropTypes.func,
+  // onclickAccordion: PropTypes.func,
 };

@@ -69,7 +69,7 @@ const AddCandidateModal = (props) => {
     },
     [props],
   );
-
+  //console.log("electionId: ", props.electionId);
   /////////////////////////////////////////
   // ADDING CANDIDATE
   /////////////////////////////////////////
@@ -78,26 +78,24 @@ const AddCandidateModal = (props) => {
       e.preventDefault();
 
       if (window.confirm("Are you sure you want to add a new candidate?")) {
-        const candidateData = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-          image: formData.image,
-          name: formData.name,
-          position: formData.position,
-        };
-
-        props.onAddCandidate(candidateData);
-        props.toastModal("success", `Candidate added successfully`);
+        const candidateFormData = new FormData();
+        //key must match what multer expects
+        candidateFormData.append("fullName", formData.name);
+        candidateFormData.append("photo", file);
+        candidateFormData.append("position", formData.position);
+        candidateFormData.append("electionId", props.electionId);
 
         insertMultiPartsData(
           `insertCandidate`,
-          candidateData,
+          candidateFormData,
           props.toastModal,
+          props.setRefetch,
         );
 
         props.onCloseModal();
       }
     },
-    [props, formData, insertMultiPartsData],
+    [props, formData, file, insertMultiPartsData],
   );
 
   ///////////////////////////////
@@ -276,6 +274,7 @@ AddCandidateModal.propTypes = {
   onCloseModal: PropTypes.func.isRequired,
   onAddCandidate: PropTypes.func.isRequired,
   setRefetch: PropTypes.func,
+  electionId: PropTypes.string,
 };
 
 export default AddCandidateModal;

@@ -71,24 +71,60 @@ const AdminDashboardContent = () => {
   //Getting all users details
   const allElections = useMemo(() => (data !== null ? data : []), [data]);
 
+  // Group candidates by election ID
+  const candidatesByElection = useMemo(() => {
+    const grouped = {};
+    if (Array.isArray(allElections)) {
+      allElections.forEach((row) => {
+        if (!grouped[row.electionId]) {
+          grouped[row.electionId] = [];
+        }
+        // Only add candidate if it exists (not null from LEFT JOIN)
+        if (row.candidateId) {
+          grouped[row.electionId].push(row);
+        }
+      });
+    }
+    return grouped;
+  }, [allElections]);
+
+  // Get unique elections
+  const uniqueElections = useMemo(() => {
+    if (!Array.isArray(allElections)) return [];
+    const seen = new Set();
+    return allElections.filter((election) => {
+      if (seen.has(election.electionId)) return false;
+      seen.add(election.electionId);
+      return true;
+    });
+  }, [allElections]);
+
   // Transform database elections into component election instances
   const election = useMemo(
     () =>
-      Array.isArray(allElections)
-        ? allElections.map((election) =>
-            createElectionInstance(
-              election.electionId,
-              election.title,
-              election.description,
-              election.dateCreated,
-              election.status,
-              election.startDate,
-              election.endDate,
-              Array.isArray(election.candidates) ? election.candidates : [],
-            ),
-          )
-        : [],
-    [allElections],
+      uniqueElections.map((electionRow) =>
+        createElectionInstance(
+          electionRow.electionId,
+          electionRow.title,
+          electionRow.description,
+          electionRow.dateCreated,
+          electionRow.status,
+          electionRow.startDate,
+          electionRow.endDate,
+
+          (candidatesByElection[electionRow.electionId] || []).map(
+            (candidate, index) => ({
+              sn: index + 1,
+              id: candidate.candidateId || `candidate-${index}`, // Fallback if not available
+              image: candidate.photo ? candidate.photo : "",
+              name: candidate.fullName || "N/A",
+              position: candidate.position ? candidate.position : "N/A",
+              votes: candidate.votes ? candidate.votes : 0,
+            }),
+          ),
+        ),
+      ),
+    [uniqueElections, candidatesByElection],
   );
 
   const [showAddElectionModal, setShowAddElectionModal] = useState(false);
@@ -101,6 +137,7 @@ const AdminDashboardContent = () => {
   const [submitCandidateData, setSubmitCandidateData] = useState({});
   const [showEditCandidateModal, setShowEditCandidateModal] = useState(false);
   const [submitElectionData, setSubmitElectionData] = useState({});
+  //const [submitElectionId, setSubmitElectionId] = useState("");
 
   // const { getNoOfVoters } = useFetch(`${app_api_url}/getNoOfVoters`);
   const { dataResult: totalVoters } = useFetchDataCount(
@@ -344,12 +381,6 @@ const AdminDashboardContent = () => {
     [election],
   );
 
-  // const getNoOfVoters = () => {
-
-  //   return data;
-  // };
-  // getNoOfVoters();
-
   return (
     <Fragment>
       {/* {loading && <Loader />} */}
@@ -359,6 +390,7 @@ const AdminDashboardContent = () => {
       {showAddElectionModal && (
         <AddElectionModal
           //onAddElection={onAddElectionHandler}
+
           toastModal={ToastHandler}
           setRefetch={refetchHandler}
           onCloseModal={closeShowAddElectionModalHandler}
@@ -377,11 +409,11 @@ const AdminDashboardContent = () => {
 
       {showAddCandidateModal && (
         <AddCandidateModal
-          // onAddCandidate={(candidateData) =>
-          //   onAddCandidateHandler(showAddCandidateModal, candidateData)
-          // }
+          electionId={showAddCandidateModal}
           toastModal={ToastHandler}
           onCloseModal={closeShowAddCandidateModalHandler}
+          setRefetch={refetchHandler}
+          onAddCandidate={() => {}}
         />
       )}
 
@@ -602,6 +634,7 @@ const AdminDashboardContent = () => {
                       onEditElection={onShowEditElectionHandler}
                       expanded={expandedId === item.id}
                       onExpandChange={onAccordionExpandChange}
+                      // onclickAccordion={onclickAccordion(item.id)}
                     />
                   ))}
                 </>

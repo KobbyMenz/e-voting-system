@@ -25,7 +25,7 @@ const calculateElectionStatus = (startDate, endDate, now) => {
 
 const getAllElectionsRoute = (app) => {
   app.get("/api/getAllElections", (req, res) => {
-    const sqlQuery = `SELECT * FROM e_voting_db.election`;
+    const sqlQuery = `SELECT election.electionId, election.title, election.description, election.dateCreated, election.status, election.startDate, election.endDate, candidate.candidateId, candidate.fullName, candidate.photo, candidate.position FROM e_voting_db.election LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId GROUP BY candidate.candidateId ORDER BY candidate.candidateId ASC`;
     const now = dayjs(); // Cache current time once
 
     db.query(sqlQuery, (err, result) => {

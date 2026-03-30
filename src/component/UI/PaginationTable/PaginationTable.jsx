@@ -58,9 +58,9 @@ const PaginationTable = ({
   };
 
   //column has candidate name and id, hide id column and use id value to display candidate name
-  const hasCandidateNameColumn = columns.some(
-    (col) => col.type === "candidateName",
-  );
+  // const hasCandidateNameColumn = columns.some(
+  //   (col) => col.type === "candidateName",
+  // );
 
   return (
     <Paper
@@ -208,10 +208,10 @@ const PaginationTable = ({
                     backgroundColor: "var(--primary)",
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
-                    display:
-                      hasCandidateNameColumn && col.field === "id"
-                        ? "none"
-                        : "table-cell",
+                    // display:
+                    //   hasCandidateNameColumn && col.field === "id"
+                    //     ? "none"
+                    //     : "table-cell",
                     // Mobile responsive
                     "@media (max-width: 600px)": {
                       fontSize: "0.9rem",
@@ -279,10 +279,10 @@ const PaginationTable = ({
                           color: "var(--text-color)",
                           borderBottom: "1px solid var(--bg-color)",
                           borderLeft: "0.1rem solid var(--bg-color)",
-                          display:
-                            hasCandidateNameColumn && col.field === "id"
-                              ? "none"
-                              : "table-cell",
+                          // display:
+                          //   hasCandidateNameColumn && col.field === "id"
+                          //     ? "none"
+                          //     : "table-cell",
                           // Mobile responsive
                           "@media (max-width: 600px)": {
                             fontSize: "0.9rem",
