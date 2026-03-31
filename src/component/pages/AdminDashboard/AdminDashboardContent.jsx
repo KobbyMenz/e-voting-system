@@ -635,7 +635,7 @@ const AdminDashboardContent = () => {
               </Box>
             </div>
 
-            {!initialLoading ? (
+            {initialLoading ? (
               <ElectionListSkeleton />
             ) : error ? (
               <Box
