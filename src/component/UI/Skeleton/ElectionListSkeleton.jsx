@@ -3,46 +3,6 @@ import Card from "../Card/Card";
 
 const ElectionListSkeleton = () => (
   <Card style={{ padding: "2rem" }}>
-    <Box
-      display="flex"
-      flexWrap={"wrap"}
-      rowGap={1}
-      columnGap={"20%"}
-      justifyContent="space-between"
-      alignItems="center"
-      mb={2}
-    >
-      <Box width="30rem">
-        {/*======= text =======*/}
-        <Skeleton variant="text" width="70%" />
-        <Skeleton variant="text" width="60%" />
-      </Box>
-
-      <Box
-        display="flex"
-        gap={1}
-        flexGrow={1}
-        justifyContent={"flex-end"}
-        alignItems={"center"}
-      >
-        {/*======= textbox =======*/}
-        <Skeleton
-          sx={{ borderRadius: "1rem", maxWidth: "85%" }}
-          variant="rounded"
-          height="5rem"
-          width="100%"
-        />
-
-        {/*======= button =======*/}
-        <Skeleton
-          variant="rounded"
-          height="4.5rem"
-          sx={{ borderRadius: "2rem", background: "var(--nav-bg)" }}
-          width="13rem"
-        />
-      </Box>
-    </Box>
-
     {[...Array(5)].map((_, index) => (
       <Box key={index}>
         <Skeleton
@@ -80,7 +40,8 @@ const ElectionListSkeleton = () => (
             variant="circular"
             height="3rem"
             sx={{
-              background: "var(--nav-bg)",marginTop:"2rem"
+              background: "var(--nav-bg)",
+              marginTop: "2rem",
             }}
             width="3rem"
           />
