@@ -47,10 +47,12 @@ const getAllElectionsRoute = (app) => {
         candidate.candidateId, 
         candidate.fullName, 
         candidate.photo, 
-        candidate.position
-        
+        candidate.position,
+        COUNT(vote.voteId) AS votes
       FROM e_voting_db.election 
       LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
+      LEFT JOIN e_voting_db.vote ON candidate.candidateId = vote.candidateId
+      GROUP BY election.electionId, candidate.candidateId
       ORDER BY election.dateCreated DESC, election.electionId, candidate.candidateId
       LIMIT ? OFFSET ?
     `;

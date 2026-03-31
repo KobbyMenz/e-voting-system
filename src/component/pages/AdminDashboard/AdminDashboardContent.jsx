@@ -350,6 +350,7 @@ const AdminDashboardContent = () => {
   ////////////////////////////////////////
   const onDeleteElectionHandler = useCallback(
     (electionId) => {
+      console.log("Delete election with ID:", electionId);
       if (window.confirm("Are you sure you want to delete this election?")) {
         //Hook to delete election
         deleteData(
