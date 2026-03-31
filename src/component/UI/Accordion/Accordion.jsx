@@ -131,6 +131,15 @@ export default function AccordionExpandDefault({
               <Typography variant="h4" color="initial">
                 <p
                   style={{
+                    fontSize: "1.4rem",
+                    fontWeight: "700",
+                    color: "var(--text-color)",
+                  }}
+                >
+                  Election ID: {id}
+                </p>
+                <p
+                  style={{
                     fontSize: "1.8rem",
                     fontWeight: "700",
                     color: "var(--text-color)",
