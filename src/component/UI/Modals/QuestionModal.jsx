@@ -6,21 +6,12 @@ import Button from "../Button/Button";
 import QuestionIcon from "../../UI/Icons/QuestionIcon";
 
 const Backdrop = ({ onCloseModal }) => {
-  return (
-    <motion.div
-      className={classes.backdrop}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
-      onClick={onCloseModal}
-    />
-  );
+  return <div className={classes.backdrop} onClick={onCloseModal} />;
 };
 
 const ModalOverlay = ({ onConfirm, onCloseModal }) => {
   return (
-    <motion.div>
+    <div>
       <Card className={classes.modal}>
         <header>Confirmation Message</header>
         <div className={classes.content}>
@@ -38,7 +29,7 @@ const ModalOverlay = ({ onConfirm, onCloseModal }) => {
           </Button>
         </div>
       </Card>
-    </motion.div>
+    </div>
   );
 };
 
@@ -51,19 +42,19 @@ const QuestionModal = (props) => {
   return (
     <>
       {ReactDOM.createPortal(
-        <AnimatePresence>
+        <>
           <Backdrop onCloseModal={props.onCloseModal} key="backdrop" />
-        </AnimatePresence>,
+        </>,
         backdropRoot,
       )}
       {ReactDOM.createPortal(
-        <AnimatePresence>
+        <>
           <ModalOverlay
             onConfirm={props.onConfirm}
             onCloseModal={props.onCloseModal}
             key="overlay"
           />
-        </AnimatePresence>,
+        </>,
         overlayRoot,
       )}
     </>
