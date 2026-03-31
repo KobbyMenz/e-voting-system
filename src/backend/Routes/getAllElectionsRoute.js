@@ -32,9 +32,12 @@ const getAllElectionsRoute = (app) => {
     const page = Math.max(1, parseInt(req.query.page) || 1);
     const limit = Math.min(100, parseInt(req.query.limit) || 50); // Max 100
     const offset = (page - 1) * limit;
+    // ✅ NEW: Get voterId from query parameters
+    const voterId = req.query.voterId;
 
     // ✅ OPTIMIZED: Add LIMIT and OFFSET for pagination
     // ✅ OPTIMIZED: Also fetch total count for pagination metadata
+    // ✅ NEW: Add LEFT JOIN to vote table to check if voter has voted
     const sqlQuery = `
       SELECT 
         election.electionId, 
@@ -48,7 +51,8 @@ const getAllElectionsRoute = (app) => {
         candidate.fullName, 
         candidate.photo, 
         candidate.position,
-        COUNT(vote.voteId) AS votes
+        COUNT(vote.voteId) AS votes,
+        MAX(CASE WHEN vote.voterId = ? THEN 1 ELSE 0 END) AS hasVoted
       FROM e_voting_db.election 
       LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
       LEFT JOIN e_voting_db.vote ON candidate.candidateId = vote.candidateId
@@ -61,8 +65,8 @@ const getAllElectionsRoute = (app) => {
 
     const now = dayjs();
 
-    // ✅ Fetch paginated elections
-    db.query(sqlQuery, [limit, offset], (err, result) => {
+    // ✅ Fetch paginated elections with voterId parameter
+    db.query(sqlQuery, [voterId || null, limit, offset], (err, result) => {
       if (err) {
         console.error("Error fetching elections:", err);
         return res.status(500).json({ error: "Database error" });

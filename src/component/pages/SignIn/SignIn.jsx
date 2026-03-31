@@ -31,10 +31,16 @@ import ROLES from "../../Utils/ROLES";
 const SignIn = () => {
   // const apiUrl = import.meta.env.VITE_API_URL;
   // const appName = import.meta.env.VITE_APP_NAME;
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    userName: "",
+    password: "",
+    role: "",
+  });
+  // const [userName, setUserName] = useState("");
+  // const [password, setPassword] = useState("");
   //const [showModal, setShowModal] = useState();
   const [showPassword, setShowPassword] = useState(false);
+
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [error, setError] = useState(false);
 
@@ -47,12 +53,13 @@ const SignIn = () => {
     setLoadingLogin((prev) => !prev);
   };
 
-  const indexNumberHandler = (e) => {
-    setUserName(e.target.value);
-  };
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target;
 
-  const passwordHandler = (e) => {
-    setPassword(e.target.value);
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   //////////////////////////////////////
@@ -100,8 +107,9 @@ const SignIn = () => {
           // "http://localhost:3001/api/login",
           `${app_api_url}/login`,
           {
-            email: userName,
-            password: password,
+            email: formData.userName,
+            password: formData.password,
+            role: formData.role,
           },
           {
             headers: {
@@ -193,17 +201,48 @@ const SignIn = () => {
                 </svg>
               </div>
 
+              <select
+                name="role"
+                id="role"
+                onChange={onChangeHandler}
+                value={formData.role}
+              >
+                <option value="">Select User Type</option>
+                <option value={ROLES.VOTER}>Voter</option>
+                <option value={ROLES.ADMIN}>Admin</option>
+              </select>
+
+              {/* <label htmlFor="index">User Name/User ID</label> */}
+            </div>
+
+            <div className={`${classes.form_control}`}>
+              <div className={classes.icon}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+
               <input
                 className={error ? `${classes.error}` : `${classes.success}`}
-                onChange={indexNumberHandler}
-                value={userName}
-                id="index"
+                onChange={onChangeHandler}
+                value={formData.userName}
+                id="userName"
+                name="userName"
                 type="text"
                 placeholder=""
                 required
               />
 
-              <label htmlFor="index">User Name/User ID</label>
+              <label htmlFor="userName">User Name/User ID</label>
             </div>
 
             <div className={classes.form_control}>
@@ -224,16 +263,17 @@ const SignIn = () => {
 
               <input
                 className={error ? `${classes.error}` : `${classes.success}`}
-                onChange={passwordHandler}
-                value={password}
+                onChange={onChangeHandler}
+                value={formData.password}
                 id="password"
+                name="password"
                 type={showPassword ? "text" : "password"}
                 placeholder=""
                 required
               />
               <label htmlFor="password">Password</label>
 
-              {password === "" ? (
+              {formData.password === "" ? (
                 ""
               ) : (
                 <div

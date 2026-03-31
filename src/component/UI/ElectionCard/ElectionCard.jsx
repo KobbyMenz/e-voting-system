@@ -17,7 +17,7 @@ const ElectionCard = ({
   return (
     <>
       <Card
-        key={election._id || election.id}
+        // key={election.id}
         className={
           election.hasVoted ? `${classes.hasVoted}` : `${classes.content}`
         }
@@ -55,7 +55,7 @@ const ElectionCard = ({
           {election.description || ""}
         </p>
 
-        {election.hasVoted === true ? (
+        {election.hasVoted === 1 ? (
           <div className={classes.hasVoted_content}>
             <span>✓</span> <p>You have already voted in this election</p>
           </div>
@@ -140,7 +140,7 @@ const ElectionCard = ({
                 style={{
                   padding: "1.5rem",
                   background: "var(--primary)",
-                  color:"#fff",
+                  color: "#fff",
                   borderRadius: "0.5rem",
                   fontSize: "1.6rem",
                 }}
@@ -161,13 +161,11 @@ const ElectionCard = ({
         <div className={classes.buttonContainer}>
           <Button
             className={classes.castVoteBtn}
-            onClick={() =>
-              handleCastVote(
-                election._id || election.id
-                
-              )
+            onClick={() => handleCastVote(election._id || election.id)}
+            disabled={
+              !selectedCandidates[election._id || election.id] ||
+              election.hasVoted === 1
             }
-            disabled={!selectedCandidates[election._id || election.id]}
           >
             Cast Your Vote
           </Button>

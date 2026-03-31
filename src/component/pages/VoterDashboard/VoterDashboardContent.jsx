@@ -2,175 +2,187 @@ import { Box } from "@mui/material";
 import Button from "../../UI/Button/Button";
 import Card from "../../UI/Card/Card";
 import classes from "../VoterDashboard/VoterDashboard.module.css";
-import { useCallback, useEffect, useState } from "react";
-import axios from "axios";
+import { useCallback, useEffect, useMemo, useState } from "react";
+//import axios from "axios";
 import app_api_url from "../../../app_api_url";
 import Toast from "../../UI/Notification/Toast";
 import ImageBox from "../../UI/ImageBox/ImageBox";
 import Loader from "../../UI/Loader/Loader";
 import ElectionCard from "../../UI/ElectionCard/ElectionCard";
-import bp1 from "../../../assets/images/candidate/bp1.jpg"
-import bp2 from "../../../assets/images/candidate/bp2.jpg"
-import bp3 from "../../../assets/images/candidate/bp3.jpg"
-import gp1 from "../../../assets/images/candidate/gp1.jpg"
-import gp2 from "../../../assets/images/candidate/gp2.jpg"
+// import bp1 from "../../../assets/images/candidate/bp1.jpg";
+// import bp2 from "../../../assets/images/candidate/bp2.jpg";
+// import bp3 from "../../../assets/images/candidate/bp3.jpg";
+// import gp1 from "../../../assets/images/candidate/gp1.jpg";
+// import gp2 from "../../../assets/images/candidate/gp2.jpg";
+import useFetch from "../../CustomHooks/useFetch";
+import { authLocalStorage } from "../../Utils/authLocalStorage";
+import useInsertHook from "../../CustomHooks/useInsertHook";
+
+// Function to create a new election instance with candidates
+const createElectionInstance = (
+  electionId,
+  title,
+  description,
+  dateCreated,
+  status,
+  startDate,
+  endDate,
+  candidates = [],
+  hasVoted = false, // ✅ NEW: Add hasVoted parameter
+) => ({
+  id: electionId,
+  _id: electionId, // ✅ Keep both for compatibility
+  title: title,
+  description: description,
+  dateCreated: dateCreated,
+  status: status,
+  startDate: startDate,
+  endDate: endDate,
+  hasVoted: hasVoted, // ✅ NEW: Include hasVoted in election object
+  candidates: candidates.map((candidate, index) => ({
+    sn: index + 1,
+    id: candidate.candidateId || `candidate-${index}`,
+    _id: candidate.candidateId, // ✅ Keep both for compatibility
+    image: candidate.photo ? `${candidate.photo}` : "", // Maps database photo to image
+    name: candidate.fullName || "N/A",
+    position: candidate.position ? candidate.position : "N/A",
+    votes: candidate.votes ? candidate.votes : 0,
+  })),
+});
 
 const VoterDashboardContent = () => {
-  const user = JSON.parse(localStorage.getItem("user")) || {};
-  const token = JSON.parse(sessionStorage.getItem("token"));
-  const [elections, setElections] = useState([
-    {
-      id: 1,
-      title: "Boys Prefect",
-      description: "Namong Boys Prefect Election",
-      status: "Active",
-      startDate: "2026-01-30 07:00:00",
-      endDate: "2026-02-27 19:00:00",
-      candidates: [
-        {
-          candidateId: 2024001,
-          name: "John Doe",
-          image: bp1,
-          position: "Boys Prefect",
-        },
-        {
-          candidateId: 2024002,
-          name: "Jane Smith",
-          image: bp2,
-          position: "Boys Prefect",
-        },
-
-        {
-          candidateId: 2024003,
-          name: "Ronyx Mensah",
-          image: bp3,
-          position: "Boys Prefect",
-        },
-      ],
-    },
-
-    {
-      id: 2,
-      title: "Girls Prefect",
-      description: "Namong Girls Prefect Election",
-      status: "Active",
-      startDate: "2026-02-23 07:00:00",
-      endDate: "2026-02-27 19:00:00",
-      candidates: [
-        {
-          candidateId: 2024003,
-          name: "Hawa Yakubu",
-          image: gp1,
-          position: "Girls Prefect",
-        },
-        {
-          candidateId: 2024004,
-          name: "Elizabeth Baidoo",
-          image: gp2,
-          position: "Girls Prefect",
-        },
-      ],
-
-      voterId: 2026001,
-      hasVoted: true,
-    },
-
-    {
-      id: 3,
-      title: "Dinning Hall Prefect",
-      description: "Namong Dinning Hall Election",
-      status: "Closed",
-      startDate: "2026-02-23 07:00:00",
-      endDate: "2026-02-27 19:00:00",
-      candidates: [
-        {
-          candidateId: 2024005,
-          name: "John Doe",
-          image: bp3,
-          position: "Dinning Hall Prefect",
-        },
-        {
-          candidateId: 2024006,
-          name: "Jane Smith",
-          image: bp1,
-          position: "Dinning Hall Prefect",
-        },
-      ],
-    },
-
-    {
-      id: 4,
-      title: "Entertainment Prefect",
-      description: "Namong Entertainment Election",
-      status: "Active",
-      startDate: "2026-02-23 07:00:00",
-      endDate: "2026-02-27 19:00:00",
-      candidates: [
-        {
-          candidateId: 2024007,
-          name: "Lydia Amoako",
-          image: gp1,
-          position: "Entertainment Prefect",
-        },
-        {
-          candidateId: 2024008,
-          name: "Agnes Marfo",
-          image: gp2,
-          position: "Entertainment Prefect",
-        },
-      ],
-    },
-
-    {
-      id: 5,
-      title: "Sanitation Prefect",
-      description: "Namong Sanitation Prefect Election",
-      status: "Upcoming",
-      startDate: "2026-02-23 07:00:00",
-      endDate: "2026-02-27 19:00:00",
-      candidates: [
-        // {
-        //   candidateId: 1,
-        //   name: "John Doe",
-        //   image: "",
-        //   position: "Dinning Hall Prefect",
-        // },
-        // {
-        //   candidateId: 2,
-        //   name: "Jane Smith",
-        //   image: "",
-        //   position: "Dinning Hall Prefect",
-        // },
-      ],
-    },
-  ]);
+  const user = authLocalStorage() || {};
 
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [loading, setLoading] = useState(true);
+
   // const [votingInProgress, setVotingInProgress] = useState(false);
   // const [currentElectionId, setCurrentElectionId] = useState(null);
+  // Auto-refresh election data every 60 seconds to check start/end dates
+  // Auto-refresh election data every 60 seconds to check start/end dates
+  const { insertData } = useInsertHook();
+  // ✅ NEW: Pass voterId to API
+  const { data, setRefetch } = useFetch(
+    `${app_api_url}/getAllElections?voterId=${user?.userId || ""}`,
+    60000, // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
+  );
+
+  // Only show skeleton on first load, not on polling refreshes
+  useEffect(() => {
+    if (data !== null) {
+      setLoading(false);
+    }
+  }, [data]);
+
+  //Refetch data handler
+  const refetchHandler = useCallback(() => {
+    setRefetch((prev) => !prev);
+  }, [setRefetch]);
+
+  //Getting all users details
+  const allElections = useMemo(() => (data !== null ? data : []), [data]);
+
+  // Group candidates by election ID - SORTED by creation order
+  const candidatesByElection = useMemo(() => {
+    const grouped = {};
+    if (Array.isArray(allElections)) {
+      allElections.forEach((row) => {
+        if (!grouped[row.electionId]) {
+          grouped[row.electionId] = [];
+        }
+        // Only add candidate if it exists (not null from LEFT JOIN)
+        if (row.candidateId) {
+          grouped[row.electionId].push(row);
+        }
+      });
+
+      // Sort candidates within each election by their position in the data (order added)
+      Object.keys(grouped).forEach((electionId) => {
+        grouped[electionId].sort((a, b) => {
+          // If both have a date field, sort by it; otherwise maintain data order
+          if (a.dateAdded && b.dateAdded) {
+            return (
+              new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
+            );
+          }
+          return 0;
+        });
+      });
+    }
+    return grouped;
+  }, [allElections]);
+
+  // Get unique elections - SORTED by dateCreated (oldest first)
+  // Ensure hasVoted is preserved from any candidate row for that election
+  const uniqueElections = useMemo(() => {
+    if (!Array.isArray(allElections)) return [];
+    const seen = new Map(); // Changed to Map to store the full election object
+
+    // Iterate through allElections and store the full election object in the Map
+    allElections.forEach((election) => {
+      if (!seen.has(election.electionId)) {
+        seen.set(election.electionId, election);
+      } else {
+        // If we've seen this election before, update hasVoted if it's true in the current row
+        const existing = seen.get(election.electionId);
+        if (election.hasVoted && !existing.hasVoted) {
+          existing.hasVoted = election.hasVoted;
+        }
+      }
+    });
+
+    // Convert Map values to an array of unique elections
+    const unique = Array.from(seen.values());
+
+    // Sort by dateCreated (ascending - oldest/first created first)
+    return unique.sort(
+      (a, b) =>
+        new Date(a.dateCreated).getTime() - new Date(b.dateCreated).getTime(),
+    );
+  }, [allElections]);
+
+  // Transform database elections into component election instances
+  const election = useMemo(
+    () =>
+      uniqueElections.map((electionRow) =>
+        createElectionInstance(
+          electionRow.electionId,
+          electionRow.title,
+          electionRow.description,
+          electionRow.dateCreated,
+          electionRow.status,
+          electionRow.startDate,
+          electionRow.endDate,
+          candidatesByElection[electionRow.electionId] || [], // Pass raw candidates, let createElectionInstance handle mapping
+          electionRow.hasVoted, // Pass hasVoted from backend
+        ),
+      ),
+    [uniqueElections, candidatesByElection],
+  );
+
+  //console.log(election);
 
   // Fetch elections and candidates from backend
-  useEffect(() => {
-    const fetchElections = async () => {
-      try {
-        const response = await axios.get(`${app_api_url}/elections`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        setElections(response.data.elections || []);
-        setLoading(false);
-      } catch (err) {
-        console.error("Error fetching elections:", err);
-        Toast("error", "Failed to load elections");
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchElections = async () => {
+  //     try {
+  //       const response = await axios.get(`${app_api_url}/elections`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       setElections(response.data.elections || []);
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error("Error fetching elections:", err);
+  //       Toast("error", "Failed to load elections");
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchElections();
-  }, [token]);
+  //   fetchElections();
+  // }, [token]);
 
   // Handle candidate selection per election
   const handleSelectCandidate = (electionId, candidateId) => {
@@ -198,49 +210,52 @@ const VoterDashboardContent = () => {
           "Are you sure you want to vote for this candidate? This action cannot be undone.",
         )
       ) {
-        console.log({
+        const voteData = {
           electionId: electionId,
           candidateId: selectedCandidates[electionId],
-          voterId: JSON.parse(localStorage.getItem("user")).userId,
-        });
-        const castVote = async () => {
-          try {
-            // setVotingInProgress(false);
-            const response = await axios.post(
-              `${app_api_url}/insertVote/${electionId}`,
-              {
-                // electionId: electionId,
-                candidateId: selectedCandidates[electionId],
-                voterId: JSON.parse(localStorage.getItem("user")).userId,
-                // candidateId: selectedCandidates[electionId],
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                  "Content-Type": "application/json",
-                },
-              },
-            );
-
-            if (response.data.success) {
-              Toast("success", "Your vote has been recorded successfully!");
-              setSelectedCandidates((prev) => ({
-                ...prev,
-                [electionId]: null,
-              }));
-            }
-          } catch (err) {
-            Toast(
-              "error",
-              err.response?.data?.message || "Failed to cast vote",
-            );
-            //setVotingInProgress(false);
-          }
+          voterId: authLocalStorage().userId,
         };
-        castVote();
+
+        insertData(`insertVote`, voteData, Toast, refetchHandler);
+
+        // const castVote = async () => {
+        //   try {
+        //     // setVotingInProgress(false);
+        //     const response = await axios.post(
+        //       `${app_api_url}/insertVote/${electionId}`,
+        //       {
+        //         // electionId: electionId,
+        //         candidateId: selectedCandidates[electionId],
+        //         voterId: JSON.parse(localStorage.getItem("user")).userId,
+        //         // candidateId: selectedCandidates[electionId],
+        //       },
+        //       {
+        //         headers: {
+        //           Authorization: `Bearer ${token}`,
+        //           "Content-Type": "application/json",
+        //         },
+        //       },
+        //     );
+
+        //     if (response.data.success) {
+        //       Toast("success", "Your vote has been recorded successfully!");
+        //       setSelectedCandidates((prev) => ({
+        //         ...prev,
+        //         [electionId]: null,
+        //       }));
+        //     }
+        //   } catch (err) {
+        //     Toast(
+        //       "error",
+        //       err.response?.data?.message || "Failed to cast vote",
+        //     );
+        //     //setVotingInProgress(false);
+        //   }
+        // };
+        // castVote();
       }
     },
-    [selectedCandidates, token],
+    [selectedCandidates, insertData, refetchHandler],
   );
 
   // Confirm vote after clicking cast vote
@@ -268,12 +283,12 @@ const VoterDashboardContent = () => {
             <p>Voter ID: {user.userId || "N/A"}</p>
           </Card>
 
-          {elections.length === 0 ? (
+          {election.length === 0 ? (
             <p>No elections available</p>
           ) : (
-            elections.map((election) => (
+            election.map((election) => (
               <ElectionCard
-                key={election._id || election.id}
+                key={election.id}
                 election={election}
                 selectedCandidates={selectedCandidates}
                 handleSelectCandidate={handleSelectCandidate}
