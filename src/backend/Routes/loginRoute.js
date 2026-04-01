@@ -1,6 +1,7 @@
 import db from "./../Services/dataBaseConnection.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+// import cookieParser from "cookie-parser";
 import process from "process";
 import dotenv from "dotenv";
 import dayjs from "dayjs";
@@ -9,13 +10,15 @@ dotenv.config(); //Loading environment variables
 
 const loginRoute = (app) => {
   app.post("/api/login", (req, res) => {
-    const { email, password, role } = req.body; // ✅ NEW: Added role parameter
+    // app.use(cookieParser());
+
+    const { username, password, role } = req.body; // ✅ NEW: Added role parameter
 
     //Query to fetch user data
     try {
       if (role === ROLES.ADMIN) {
         const sqlQuery = `SELECT * FROM e_voting_db.admin WHERE ((email = ? OR userId = ?) AND status = "Enabled")`;
-        db.query(sqlQuery, [email, email], (err, result) => {
+        db.query(sqlQuery, [username, username], (err, result) => {
           if (err) {
             console.error("Database error: ", err);
             return res.status(500).json({ error: "Database error" });
@@ -49,6 +52,7 @@ const loginRoute = (app) => {
                   {
                     userId: user.userId,
                     email: user.email,
+                    role: user.role,
                   }, // Include role in token payload
                   process.env.VITE_JWT_SECRET,
                   { expiresIn: expiresIn },
@@ -100,7 +104,7 @@ const loginRoute = (app) => {
         //========checking for voter login ============
       } else if (role === ROLES.VOTER) {
         const sqlQuery = `SELECT * FROM e_voting_db.voter WHERE voterId = ?`;
-        db.query(sqlQuery, [email], (err, result) => {
+        db.query(sqlQuery, [username], (err, result) => {
           if (err) {
             console.error("Database error: ", err);
             return res.status(500).json({ error: "Database error" });
@@ -134,7 +138,7 @@ const loginRoute = (app) => {
                 const token = jwt.sign(
                   {
                     userId: user.userId,
-                    email: user.email,
+                    role: user.role,
                   }, // Include role in token payload
                   process.env.VITE_JWT_SECRET,
                   { expiresIn: expiresIn },

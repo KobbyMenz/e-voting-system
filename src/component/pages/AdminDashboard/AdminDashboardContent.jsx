@@ -173,6 +173,11 @@ const AdminDashboardContent = () => {
     "totalVoters",
   );
 
+  const { dataResult: totalVoteCast } = useFetchDataCount(
+    "getNoOfVoteCast",
+    "totalVoteCast",
+  );
+
   const { deleteData } = useDeleteHook();
   const authData = authLocalStorage();
   const userName = authData?.fullName?.split(" ")[0] || "Admin";
@@ -563,7 +568,9 @@ const AdminDashboardContent = () => {
                       <div className={classes.description}>
                         <p>Total Votes Cast:</p>
 
-                        <p className={` ${classes.description_value}`}>{0}</p>
+                        <p className={` ${classes.description_value}`}>
+                          {totalVoteCast}
+                        </p>
                       </div>
                     </div>
 

@@ -1,13 +1,13 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 dotenv.config(); //Loading environment variables
 //import { console } from "inspector";
 import process from "process";
 import createBackup from "./Services/createBackup.js";
 //import cron from "node-cron";
-import loginRoute from "./Routes/loginRoute.js";
 import getAllUsersRoute from "./Routes/getAllUsersRoute.js";
 import insertUserRoute from "./Routes/insertUserRoute.js";
 import updateUserRoute from "./Routes/updateUserRoute.js";
@@ -29,6 +29,8 @@ import insertCandidateRoute from "./Routes/insertCandidateRoute.js";
 import updateCandidateRoute from "./Routes/updateCandidateRoute.js";
 import deleteCandidateRoute from "./Routes/deleteCandidateRoute.js";
 import insertVoteRoute from "./Routes/insertVoteRoute.js";
+//import loginRouteSecure from "./Routes/LoginRouteSecure.js";
+import loginRoute from "./Routes/loginRoute.js";
 
 const app = express();
 /*
@@ -47,14 +49,14 @@ app.use(
 /*=========================*/
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
 ////////////////////////////////////////////////////////////////
 
 /*
               LOGIN
 ===================================*/
-//Login Route
-// loginRoute(app);
 loginRoute(app);
+//loginRouteSecure(app);
 
 /*
 ==============================

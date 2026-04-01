@@ -107,7 +107,7 @@ const SignIn = () => {
           // "http://localhost:3001/api/login",
           `${app_api_url}/login`,
           {
-            email: formData.userName,
+            username: formData.userName,
             password: formData.password,
             role: formData.role,
           },
@@ -116,6 +116,7 @@ const SignIn = () => {
               "Content-Type": "application/json",
             },
           },
+          { withCredentials: true },// Include credentials for cookie handling
         );
         const expiryTimestamp = Date.now() + response.data.expiresIn;
         //console.log("Time:", new Date(response.data.expiresIn));
@@ -133,10 +134,7 @@ const SignIn = () => {
         if (response.data.token && response.data.user.role === ROLES.ADMIN) {
           navigate("/admin/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-        }
-
-        //========checking for voter login ============
-        if (response.data.token && response.data.user.role !== ROLES.VOTER) {
+        } else {
           navigate("/voter/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }
