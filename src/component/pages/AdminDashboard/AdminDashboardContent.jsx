@@ -259,79 +259,6 @@ const AdminDashboardContent = () => {
     [election, search],
   );
 
-  /////////////////////////////////////////////////////////
-  //* Handler to add a candidate to a specific election*/
-  /////////////////////////////////////////////////////
-  // const onAddCandidateHandler = useCallback((electionId, candidateData) => {
-  //   // Validate candidate data
-  //   if (
-  //     typeof candidateData === "object" &&
-  //     candidateData !== null &&
-  //     candidateData.id &&
-  //     candidateData.image &&
-  //     candidateData.name &&
-  //     candidateData.position
-  //   ) {
-  //     setAddElection((prev) => {
-  //       return Array.isArray(prev)
-  //         ? prev.map((election) => {
-  //             if (election.id === electionId) {
-  //               return {
-  //                 ...election,
-  //                 candidates: [
-  //                   ...election.candidates,
-  //                   {
-  //                     sn: election.candidates.length + 1,
-  //                     id: candidateData.id,
-  //                     image: candidateData.image,
-  //                     name: candidateData.name,
-  //                     position: candidateData.position,
-  //                     votes: 0,
-  //                   },
-  //                 ],
-  //               };
-  //             }
-  //             return election;
-  //           })
-  //         : prev;
-  //     });
-  //   }
-  // }, []);
-
-  ///////////////////////////////////////////////////////////////////
-  //* Handler to add a new election */
-  /////////////////////////////////////////////////////
-  // const onAddElectionHandler = useCallback((electionData) => {
-  //   // Validate the election data
-  //   if (
-  //     typeof electionData === "object" &&
-  //     electionData !== null &&
-  //     electionData.title &&
-  //     electionData.description &&
-  //     electionData.dateCreated &&
-  //     electionData.status &&
-  //     electionData.startDate &&
-  //     electionData.endDate
-  //   ) {
-  //     // Create a new election instance with its own candidates
-  //     const newElection = createElectionInstance(
-  //       electionData.title,
-  //       electionData.title,
-  //       electionData.description,
-  //       electionData.dateCreated,
-  //       electionData.status,
-  //       electionData.startDate,
-  //       electionData.endDate,
-  //       electionData.candidates || DEFAULT_CANDIDATES,
-  //     );
-
-  //     setAddElection((prev) => {
-  //       // Ensure prev is an array before spreading
-  //       return Array.isArray(prev) ? [...prev, newElection] : [newElection];
-  //     });
-  //   }
-  // }, []);
-
   //////////////////////////////////////////////
   //Edit Election
   /////////////////////////////////////////////
@@ -479,37 +406,8 @@ const AdminDashboardContent = () => {
             <SystemOverviewSkeleton />
           ) : (
             <section>
-              {/* {
-                <p
-                  className={classes.heading}
-                >{`Hi ${userName}, Welcome to Admin Dashboard Area`}</p>
-              } */}
-              {/* <h2 className={classes.sub__title}>System Overview</h2> */}
-
               <div className={classes.flexbox_container}>
                 <div className={classes.card__box__container}>
-                  <Card className={classes.card__box}>
-                    <div className={classes.description__container}>
-                      <div className={classes.description}>
-                        <p>{`Registered Voters:`}</p>
-                        <p className={`${classes.description_value}`}>
-                          {totalVoters}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className={`${classes.icon} ${classes.icon__violet}`}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="size-6"
-                      >
-                        <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
-                      </svg>
-                    </div>
-                  </Card>
-
                   <Card className={classes.card__box}>
                     <div className={classes.description__container}>
                       <div className={classes.description}>
@@ -559,6 +457,28 @@ const AdminDashboardContent = () => {
                           clipRule="evenodd"
                         />
                         <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
+                      </svg>
+                    </div>
+                  </Card>
+
+                  <Card className={classes.card__box}>
+                    <div className={classes.description__container}>
+                      <div className={classes.description}>
+                        <p>{`Registered Voters:`}</p>
+                        <p className={`${classes.description_value}`}>
+                          {totalVoters}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className={`${classes.icon} ${classes.icon__violet}`}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="size-6"
+                      >
+                        <path d="M4.5 6.375a4.125 4.125 0 1 1 8.25 0 4.125 4.125 0 0 1-8.25 0ZM14.25 8.625a3.375 3.375 0 1 1 6.75 0 3.375 3.375 0 0 1-6.75 0ZM1.5 19.125a7.125 7.125 0 0 1 14.25 0v.003l-.001.119a.75.75 0 0 1-.363.63 13.067 13.067 0 0 1-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 0 1-.364-.63l-.001-.122ZM17.25 19.128l-.001.144a2.25 2.25 0 0 1-.233.96 10.088 10.088 0 0 0 5.06-1.01.75.75 0 0 0 .42-.643 4.875 4.875 0 0 0-6.957-4.611 8.586 8.586 0 0 1 1.71 5.157v.003Z" />
                       </svg>
                     </div>
                   </Card>
