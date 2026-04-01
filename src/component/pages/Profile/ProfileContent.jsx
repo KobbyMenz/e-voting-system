@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect, useCallback, useRef } from "react";
+import { Fragment, useState, useEffect, useCallback } from "react";
 //import "./ProfileContent.css";
 import classes from "../Profile/ProfileContent.module.css";
 import Card from "../../UI/Card/Card";
@@ -20,13 +20,13 @@ import PasswordInput from "../../UI/PasswordInput/PasswordInput";
 import app_api_url from "../../../app_api_url";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
 
-const ProfileContent = (props) => {
+const ProfileContent = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [file, setFile] = useState(null);
-  //const [selectedImage, setSelectedImage] = useState(null);
-  const fileInput = useRef(null);
-  const { onSubmitProfilePicture } = props;
+  // const [file, setFile] = useState(null);
+  // //const [selectedImage, setSelectedImage] = useState(null);
+  // const fileInput = useRef(null);
+  // const { onSubmitProfilePicture } = props;
   const [formData, setFormData] = useState({
     id: authLocalStorage().userId,
     userName: "",
