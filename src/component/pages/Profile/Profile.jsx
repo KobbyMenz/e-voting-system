@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import ToolTip from "../../UI/ToolTip/ToolTip";
 import DashboardIcon from "../../UI/Icons/DashboardIcon";
+import VoteIcon from "../../UI/Icons/VoteIcon";
 
 const Profile = () => {
   const [profileImage, setProfileImage] = useState("");
@@ -27,7 +28,7 @@ const Profile = () => {
                 <NavLink to={"/voter/dashboard"}>
                   <div className={` ${classes.link} ${classes.current}`}>
                     <div className={classes.link__icon}>
-                      <DashboardIcon />
+                      <VoteIcon />
                     </div>
 
                     <div className={classes.link_title}>Cast Vote</div>

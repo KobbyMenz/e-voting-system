@@ -132,8 +132,8 @@ export default function AccordionExpandDefault({
                 <p
                   style={{
                     fontSize: "1.4rem",
-                    fontWeight: "700",
-                    color: "var(--text-color)",
+                    fontWeight: "500",
+                    color: "#747474",
                   }}
                 >
                   Election ID: {id}

@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { useNavigate, NavLink } from "react-router-dom";
-import Card from "../../UI/Card/Card";
-import Button from "../../UI/Button/Button";
+// import Card from "../../UI/Card/Card";
+// import Button from "../../UI/Button/Button";
 import QuestionModal from "../../UI/Modals/QuestionModal";
 import MainHeader from "../../MainHeader/MainHeader";
 import Navigation from "../../Navigation/Navigation";
@@ -10,7 +10,8 @@ import classes from "../../Navigation/Navigation.module.css";
 //import navigationClasses from "../../Navigation/Navigation.module.css";
 import "../../Layout/Layout.css";
 import VoterDashboardContent from "./VoterDashboardContent";
-import DashboardIcon from "../../UI/Icons/DashboardIcon";
+//import DashboardIcon from "../../UI/Icons/DashboardIcon";
+import VoteIcon from "../../UI/Icons/VoteIcon";
 
 const VoterDashboard = () => {
   const navigate = useNavigate();
@@ -51,7 +52,7 @@ const VoterDashboard = () => {
                 <NavLink to={"/voter/dashboard"}>
                   <div className={` ${classes.link} ${classes.current}`}>
                     <div className={classes.link__icon}>
-                      <DashboardIcon />
+                      <VoteIcon />
                     </div>
 
                     <div className={classes.link_title}>Cast Vote</div>
