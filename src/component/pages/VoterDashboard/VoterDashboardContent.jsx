@@ -13,6 +13,7 @@ import formatName from "../../Functions/formatName";
 import useFetch from "../../CustomHooks/useFetch";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
 import useInsertHook from "../../CustomHooks/useInsertHook";
+import VoterDashboardSkeleton from "../../UI/Skeleton/VoterDashboardSkeleton";
 
 // Function to create a new election instance with candidates
 const createElectionInstance = (
@@ -156,6 +157,8 @@ const VoterDashboardContent = () => {
     [uniqueElections, candidatesByElection],
   );
 
+  //console.log("Transformed Election Data:", election); // Debug log to verify data structure
+
   // Handle candidate selection per election
   const handleSelectCandidate = (electionId, candidateId) => {
     setSelectedCandidates({
@@ -204,12 +207,15 @@ const VoterDashboardContent = () => {
       )} */}
 
       {loading ? (
-        <Loader />
+        <VoterDashboardSkeleton />
       ) : (
         <Card className={classes.card}>
           <h1>Voter Dashboard</h1>
           <Card className={classes.userInfo}>
-            <h2>Welcome back {formatName(user.fullName) || "Guest"}, Please cast your vote now.</h2>
+            <h2>
+              Welcome back {formatName(user.fullName) || "Guest"}, Please cast
+              your vote now.
+            </h2>
             <p>Voter ID: {user.userId || "N/A"}</p>
           </Card>
 
@@ -218,7 +224,7 @@ const VoterDashboardContent = () => {
           ) : (
             election.map((election) => (
               <ElectionCard
-                key={election.id}
+                key={election.id }
                 election={election}
                 selectedCandidates={selectedCandidates}
                 handleSelectCandidate={handleSelectCandidate}

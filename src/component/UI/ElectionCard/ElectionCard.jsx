@@ -73,65 +73,64 @@ const ElectionCard = ({
                     candidateId;
 
                   return (
-                    <>
-                      <div
-                        key={candidateId}
-                        className={`${classes.candidateCard} ${
-                          isSelected ? classes.selected : ""
-                        }`}
-                        onClick={() => {
-                          // election.status === "Closed";
+                    <div
+                      key={candidateId}
+                      className={`${classes.candidateCard} ${
+                        isSelected ? classes.selected : ""
+                      }`}
+                      onClick={() => {
+                        // election.status === "Closed";
 
-                          //Preventing voter to vote when election status is closed
-                          if (election.status === "Closed") {
-                            Toast("error", "Election is closed");
-                            return;
-                          }
+                        //Preventing voter to vote when election status is closed
+                        if (election.status === "Closed") {
+                          Toast("error", "Election is closed");
+                          return;
+                        }
 
-                          //Preventing voter to vote when election status is upcoming
-                          if (election.status === "Upcoming") {
-                            Toast("error", "Election is yet to commence");
-                            return;
-                          }
+                        //Preventing voter to vote when election status is upcoming
+                        if (election.status === "Upcoming") {
+                          Toast("info", "Election is yet to commence");
+                          return;
+                        }
 
-                          //Function to handle selected candidate
-                          handleSelectCandidate(
-                            election._id || election.id,
-                            candidateId,
-                          );
-                        }}
-                        style={{ cursor: "pointer" }}
-                      >
-                        <div className={classes.radioButton}>
-                          {isSelected && (
-                            <div className={classes.radioButtonInner} />
-                          )}
-                        </div>
-
-                        <div className={classes.candidateInfo}>
-                          <ImageBox
-                            src={candidate.image}
-                            width="12rem"
-                            height="16rem"
-                            alt={candidate.name}
-                          />
-
-                          <Box>
-                            <h2>{candidate.name}</h2>
-                            <p>{candidate.position || "Candidate"}</p>
-                          </Box>
-                        </div>
-
-                        {/* */}
+                        //Function to handle selected candidate
+                        handleSelectCandidate(
+                          election._id || election.id,
+                          candidateId,
+                        );
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className={classes.radioButton}>
                         {isSelected && (
-                          <div className={classes.selectIndicator}>
-                            {isSelected ? (
-                              <span className={classes.selectedCheck}>✓</span>
-                            ) : null}
-                          </div>
+                          <div className={classes.radioButtonInner} />
                         )}
                       </div>
-                    </>
+
+                      <div className={classes.candidateInfo}>
+                        <ImageBox
+                          // key={candidateId}
+                          src={candidate.image}
+                          width="12rem"
+                          height="16rem"
+                          alt={candidate.name}
+                        />
+
+                        <Box>
+                          <h2>{candidate.name}</h2>
+                          <p>{candidate.position || "Candidate"}</p>
+                        </Box>
+                      </div>
+
+                      {/* */}
+                      {isSelected && (
+                        <div className={classes.selectIndicator}>
+                          {isSelected ? (
+                            <span className={classes.selectedCheck}>✓</span>
+                          ) : null}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
