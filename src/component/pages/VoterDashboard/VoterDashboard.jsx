@@ -6,9 +6,11 @@ import QuestionModal from "../../UI/Modals/QuestionModal";
 import MainHeader from "../../MainHeader/MainHeader";
 import Navigation from "../../Navigation/Navigation";
 import ToolTip from "../../UI/ToolTip/ToolTip";
+import classes from "../../Navigation/Navigation.module.css";
 //import navigationClasses from "../../Navigation/Navigation.module.css";
 import "../../Layout/Layout.css";
 import VoterDashboardContent from "./VoterDashboardContent";
+import DashboardIcon from "../../UI/Icons/DashboardIcon";
 
 const VoterDashboard = () => {
   const navigate = useNavigate();
@@ -44,6 +46,19 @@ const VoterDashboard = () => {
       <div className="wrapper">
         <MainHeader>
           <Navigation>
+            <li>
+              <ToolTip title="Cast Vote" placement="bottom">
+                <NavLink to={"/voter/dashboard"}>
+                  <div className={` ${classes.link} ${classes.current}`}>
+                    <div className={classes.link__icon}>
+                      <DashboardIcon />
+                    </div>
+
+                    <div className={classes.link_title}>Cast Vote</div>
+                  </div>
+                </NavLink>
+              </ToolTip>
+            </li>
             {/* <li>
               <ToolTip title="Voting" placement="bottom">
                 <NavLink to={"/voter/dashboard"}>

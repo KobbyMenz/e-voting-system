@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 //import FormatDate from "../../Functions/FormatDate";
 //import formatName from "../../Functions/formatName";
 // import moment from "moment";
-import ProfileCardSkeleton from "../Skeleton/ProfileCardSkeleton";
+//import ProfileCardSkeleton from "../Skeleton/ProfileCardSkeleton";
 import {
   Box,
   IconButton,
@@ -37,23 +37,23 @@ const settings = [
 
 const ProfileCard = (props) => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
-  const userDataFromLocalStorage = authLocalStorage() || {};
-  const userDetails = {
-    fullName: userDataFromLocalStorage.fullName || "",
-    lastLogin: userDataFromLocalStorage.lastLogin || "",
-    loginType: userDataFromLocalStorage.loginType || "",
-  };
-  const [selectedImage, setSelectedImage] = useState("");
+  // const userDataFromLocalStorage = authLocalStorage() || {};
+  // const userDetails = {
+  //   fullName: userDataFromLocalStorage.fullName || "",
+  //   lastLogin: userDataFromLocalStorage.lastLogin || "",
+  //   loginType: userDataFromLocalStorage.loginType || "",
+  // };
+  const [selectedImage, setSelectedImage] = useState(authLocalStorage().photo);
   // const [loading, setLoading] = useState(true);
 
   //   props.loading(loading);
   //========Getting user's info from local storage ============
-
+  const user = authLocalStorage();
   //////////////////////////////////////////////////////////////
   useEffect(() => {
     //Fetching profile picture from the backend
 
-    const userId = authLocalStorage().userId;
+    const userId = user.userId;
 
     axios
       .get(`${app_api_url}/getUserProfilePicture/${userId}`)
@@ -76,7 +76,7 @@ const ProfileCard = (props) => {
         console.log(err.response.data.error);
         // setLoading(false);
       });
-  }, [selectedImage, props.profileImage]);
+  }, [selectedImage, props.profileImage, user]);
   //////////////////////////////////////////////////////
 
   //Getting user name from props
@@ -90,14 +90,14 @@ const ProfileCard = (props) => {
   //Navigating to the various user profile
   const navigate = useNavigate();
   const onClickProfileHandler = () => {
-    if (userDetails.role === ROLES.ADMIN) {
+    if (user.role === ROLES.ADMIN) {
       //navigate("/adminProfile");
       navigate("#");
     }
 
-    if (userDetails.loginType === ROLES.VOTER) {
+    if (user.role === ROLES.VOTER) {
       //navigate("/voterProfile");
-      navigate("#");
+      navigate("/voter/profile");
     }
   };
 
@@ -187,9 +187,7 @@ const ProfileCard = (props) => {
                         border: "1px solid var(--border-color)",
                         boxShadow: "0rem 0.5rem 1.5rem rgba(0, 0, 0, 0.51)",
                       },
-                      // "& .MuiMenu-paper .MuiMenu-list": {
-                      //   p: 1,
-                      // },
+                      
                       "& .MuiMenu-paper .MuiMenu-list .MuiMenuItem-root": {
                         color: "var(--text-color)",
                       },

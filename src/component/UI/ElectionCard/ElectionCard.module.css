@@ -24,13 +24,13 @@
   gap: 0.8rem;
   padding: 1.5rem;
 
-  background: #28a74634;
+  background: #28a74646;
   border-radius: 0.5rem;
   font-size: 1.6rem;
 }
 
 .hasVoted_content p {
-  color: #197c30;
+  color: #1a7a31;
   font-weight: 500;
 }
 
@@ -40,9 +40,9 @@
   text-align: center;
   padding: 0.2rem 0.2rem;
   border-radius: 50%;
-  border: 0.3rem solid #28a745;
+  border: 0.3rem solid #107728;
   /* background: #28a745; */
-  color: #28a745;
+  color: #107728;
   font-weight: bold;
 }
 
@@ -112,7 +112,7 @@
 .candidateCard.selected {
   border-color: #28a745;
   background-color: var(--bg-color3);
-  box-shadow: 0 0.4rem 1.2rem rgba(40, 167, 69, 0.3);
+  box-shadow: 0 0.4rem 1.2rem rgba(40, 167, 70, 0.404);
 }
 
 .radioButton {

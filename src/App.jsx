@@ -11,6 +11,7 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from "./context/ThemeContext";
 import ManageUsers from "./component/pages/ManageUsers/ManageUsers";
 import { useCallback, useEffect, useRef, useState } from "react";
+import Profile from "./component/pages/Profile/Profile";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -126,6 +127,7 @@ function App() {
         {/* Protected Voter Routes */}
         <Route element={<ProtectedRoute allowedRoles={["Voter"]} />}>
           <Route path="/voter/dashboard" element={<VoterDashboard />} />
+          <Route path="/voter/profile" element={<Profile />} />
         </Route>
 
         {/* Catch all */}
