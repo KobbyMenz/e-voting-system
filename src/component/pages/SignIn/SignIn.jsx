@@ -136,10 +136,10 @@ const SignIn = () => {
         }
 
         //========checking for voter login ============
-        // if (response.data.token && response.data.user.role !== "Admin") {
-        //   navigate("/voter/dashboard");
-        //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-        // }
+        if (response.data.token && response.data.user.role !== ROLES.VOTER) {
+          navigate("/voter/dashboard");
+          sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
+        }
       } catch (err) {
         if (err.response && err.response.data && err.response.data.message) {
           Toast("error", err.response.data.message);
@@ -206,6 +206,8 @@ const SignIn = () => {
                 id="role"
                 onChange={onChangeHandler}
                 value={formData.role}
+                required
+                className={error ? `${classes.error}` : `${classes.success}`}
               >
                 <option value="">Select User Type</option>
                 <option value={ROLES.VOTER}>Voter</option>
