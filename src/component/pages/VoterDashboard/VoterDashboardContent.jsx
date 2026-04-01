@@ -9,11 +9,7 @@ import Toast from "../../UI/Notification/Toast";
 import ImageBox from "../../UI/ImageBox/ImageBox";
 import Loader from "../../UI/Loader/Loader";
 import ElectionCard from "../../UI/ElectionCard/ElectionCard";
-// import bp1 from "../../../assets/images/candidate/bp1.jpg";
-// import bp2 from "../../../assets/images/candidate/bp2.jpg";
-// import bp3 from "../../../assets/images/candidate/bp3.jpg";
-// import gp1 from "../../../assets/images/candidate/gp1.jpg";
-// import gp2 from "../../../assets/images/candidate/gp2.jpg";
+import formatName from "../../Functions/formatName";
 import useFetch from "../../CustomHooks/useFetch";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
 import useInsertHook from "../../CustomHooks/useInsertHook";
@@ -160,30 +156,6 @@ const VoterDashboardContent = () => {
     [uniqueElections, candidatesByElection],
   );
 
-  //console.log(election);
-
-  // Fetch elections and candidates from backend
-  // useEffect(() => {
-  //   const fetchElections = async () => {
-  //     try {
-  //       const response = await axios.get(`${app_api_url}/elections`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       setElections(response.data.elections || []);
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.error("Error fetching elections:", err);
-  //       Toast("error", "Failed to load elections");
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchElections();
-  // }, [token]);
-
   // Handle candidate selection per election
   const handleSelectCandidate = (electionId, candidateId) => {
     setSelectedCandidates({
@@ -217,53 +189,11 @@ const VoterDashboardContent = () => {
         };
 
         insertData(`insertVote`, voteData, Toast, refetchHandler);
-
-        // const castVote = async () => {
-        //   try {
-        //     // setVotingInProgress(false);
-        //     const response = await axios.post(
-        //       `${app_api_url}/insertVote/${electionId}`,
-        //       {
-        //         // electionId: electionId,
-        //         candidateId: selectedCandidates[electionId],
-        //         voterId: JSON.parse(localStorage.getItem("user")).userId,
-        //         // candidateId: selectedCandidates[electionId],
-        //       },
-        //       {
-        //         headers: {
-        //           Authorization: `Bearer ${token}`,
-        //           "Content-Type": "application/json",
-        //         },
-        //       },
-        //     );
-
-        //     if (response.data.success) {
-        //       Toast("success", "Your vote has been recorded successfully!");
-        //       setSelectedCandidates((prev) => ({
-        //         ...prev,
-        //         [electionId]: null,
-        //       }));
-        //     }
-        //   } catch (err) {
-        //     Toast(
-        //       "error",
-        //       err.response?.data?.message || "Failed to cast vote",
-        //     );
-        //     //setVotingInProgress(false);
-        //   }
-        // };
-        // castVote();
       }
     },
     [selectedCandidates, insertData, refetchHandler],
   );
 
-  // Confirm vote after clicking cast vote
-  // const handleConfirmVote = async () => {};
-
-  // const handleCloseVoteModal = () => {
-  //   setVotingInProgress(false);
-  // };
   return (
     <>
       {/* {votingInProgress && (
@@ -279,7 +209,7 @@ const VoterDashboardContent = () => {
         <Card className={classes.card}>
           <h1>Voter Dashboard</h1>
           <Card className={classes.userInfo}>
-            <h2>Welcome, {user.fullName || "Guest"}!</h2>
+            <h2>Welcome back {formatName(user.fullName) || "Guest"}, Please cast your vote now.</h2>
             <p>Voter ID: {user.userId || "N/A"}</p>
           </Card>
 

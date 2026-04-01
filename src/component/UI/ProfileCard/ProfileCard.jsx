@@ -28,6 +28,7 @@ import QuestionModal from "../Modals/QuestionModal";
 import axios from "axios";
 import app_api_url from "../../../app_api_url";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
+import ROLES from "../../Utils/ROLES";
 
 const settings = [
   { key: "profile", label: "Profile", Icon: Person },
@@ -36,8 +37,7 @@ const settings = [
 
 const ProfileCard = (props) => {
   const [showQuestionModal, setShowQuestionModal] = useState(false);
-  const userDataFromLocalStorage =
-    JSON.parse(localStorage.getItem("user")) || {};
+  const userDataFromLocalStorage = authLocalStorage() || {};
   const userDetails = {
     fullName: userDataFromLocalStorage.fullName || "",
     lastLogin: userDataFromLocalStorage.lastLogin || "",
@@ -90,12 +90,12 @@ const ProfileCard = (props) => {
   //Navigating to the various user profile
   const navigate = useNavigate();
   const onClickProfileHandler = () => {
-    if (userDetails.loginType === "Admin") {
+    if (userDetails.role === ROLES.ADMIN) {
       //navigate("/adminProfile");
       navigate("#");
     }
 
-    if (userDetails.loginType !== "Admin") {
+    if (userDetails.loginType === ROLES.VOTER) {
       //navigate("/voterProfile");
       navigate("#");
     }

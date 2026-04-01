@@ -1,0 +1,167 @@
+:root {
+  --primary: #0c007c;
+  --secondary: #007aba;
+}
+
+.form_control {
+  position: relative;
+}
+
+/* .form_control .select {
+  width: 100%;
+  background: #e8e8e8;
+  padding: 1.2rem 1rem 1.2rem 3.5rem;
+  font-size: 1.6rem;
+  font-
+  weight: 500;
+} */
+
+.form_control select,
+::picker(select) {
+  /* background: var(--bg-color); */
+  /* color: var(--text-color); */
+  background: var(--primary);
+  border: 0.1rem solid var(--primary);
+  border-radius: 1rem;
+  /* overflow: scroll; */
+  appearance: base-select;
+  color: #fff;
+}
+
+.form_control .select {
+  width: 100%;
+  margin-bottom: -0.1rem;
+  /* background: var(--bg-color);
+  border: 0.1rem solid var(--border-color);
+  border-radius: 2.5rem; */
+
+  font-weight: 500;
+  font-size: 1.3rem;
+  display: block;
+  /* background: #fff; */
+  border: none;
+  width: 100%;
+  height: 5.1rem;
+  /* border: 0.1rem solid #fff; */
+  color: #fff;
+  padding: 1.5rem 1.8rem 1.6rem 6.5rem;
+  margin: 0.8rem auto 2.8rem auto;
+  border-radius: 5rem;
+  background: #eee;
+}
+
+.form_control select > option {
+  /* border: 0.1rem solid var(--border-color); */
+  border-radius: 0.5rem;
+  background: transparent;
+color: #fff;
+  /* background: var(--bg-color2); */
+  /* background: rgba(255, 255, 255, 0.356);
+  -webkit-backdrop-filter: blur(2.5rem);
+  backdrop-filter: blur(2.5rem); */
+  margin: 0.2rem 0;
+  padding: 0.4rem 0.8rem;
+  /* color: var(--text-color); */
+  /* color: #000; */
+}
+
+.form_control select > option:hover {
+  background: var(--bg-color);
+  color: #fff !important;
+}
+
+.form_control select:focus {
+  border: 0.1rem solid var(--primary);
+}
+
+.form_control option:checked {
+  background: var(--primary);
+  color: #fff !important;
+}
+
+.form_control .label {
+  position: absolute;
+  left: 0.2rem;
+  top: 50%;
+  transform: translateY(-45%);
+}
+
+.close_btn {
+  position: absolute;
+  right: 2rem;
+  top: 45%;
+  transform: translateY(-45%);
+  display: block;
+  transition: 0.3s ease-in-out;
+  padding: 0.2rem;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form_control .close_btn:hover {
+  /* background: #d4d4d4; */
+  /* background: var(--bg-color2); */
+  cursor: pointer;
+}
+
+
+
+.form_control .close_btn:hover svg {
+  color: red;
+}
+
+/* .form_control select:not(:placeholder-shown) ~ .close_btn {
+  display: none;
+} */
+.form_control select:invalid ~ .close_btn {
+  display: none;
+  transition: 0.3s ease-in-out;
+}
+
+.form_control select:invalid {
+  color: #7e7e7e;
+}
+
+.form_control option:not(:invalid) {
+  color: var(--text-color);
+}
+
+#select_option_placeholder {
+  color: #7e7e7e;
+  /* color: var(--text-color); */
+  background: var(--bg-color);
+}
+
+/* option {
+  color: var(--text-color);
+  background: var(--bg-color);
+  
+} */
+
+.form_control .label svg {
+  width: 3.5rem;
+  height: 3.5rem;
+  color: var(--text-color);
+}
+
+/* .form_control .label svg, */
+.form_control .close_btn svg {
+  width: 2.4rem;
+  height: 2.4rem;
+  color: #707070;
+}
+.form_control select {
+  width: 100%;
+  /* background: #e8e8e8; */
+  background: var(--bg--color);
+  color: var(--text-color);
+  padding: 1.1rem 1rem 1.1rem 3.5rem;
+  font-size: 1.6rem;
+  font-weight: 500;
+  border: 0.1rem solid #ccc;
+  border-radius: 1rem;
+}
