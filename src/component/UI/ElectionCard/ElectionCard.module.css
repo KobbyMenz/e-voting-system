@@ -57,9 +57,12 @@
 .election_closed_content span {
   width: 3rem;
   height: 3rem;
-  text-align: center;
-  padding: 0.2rem 0.2rem;
-  border-radius: 50%;
+  /* text-align: center; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* padding: 0.2rem 0.2rem; */
+  border-radius: 60%;
   font-weight: bold;
 }
 
@@ -232,7 +235,7 @@
 } */
 
 .castVoteBtn:disabled {
-  background-color: #ccc;
+  background-color: var(--bg-color);
   cursor: not-allowed;
   opacity: 0.6;
 }
