@@ -19,7 +19,11 @@ const ElectionCard = ({
       <Card
         // key={election.id}
         className={
-          election.hasVoted ? `${classes.hasVoted}` : `${classes.content}`
+          election.hasVoted
+            ? `${classes.hasVoted}`
+            : election.status === "Closed"
+              ? `${classes.hasClosed}`
+              : `${classes.content}`
         }
       >
         <Box
@@ -58,6 +62,11 @@ const ElectionCard = ({
         {election.hasVoted === 1 ? (
           <div className={classes.hasVoted_content}>
             <span>✓</span> <p>You have already voted in this election</p>
+          </div>
+        ) : election.status === "Closed" ? (
+          <div className={classes.election_closed_content}>
+            <span>x</span>{" "}
+            <p>Election ended on {formatDateTime(election.endDate)}</p>
           </div>
         ) : (
           <div>

@@ -1,5 +1,6 @@
 .content,
-.hasVoted {
+.hasVoted,
+.hasClosed {
   margin: 3rem 0;
   padding: 2rem;
   background: var(--bg-color3);
@@ -13,37 +14,67 @@
   border-left: 0.4rem solid #28a745;
 }
 
+.hasClosed {
+  border-left: 0.4rem solid #c70115;
+}
+
 .content h3 {
   color: var(--text-color);
   margin-top: 0;
 }
 
-.hasVoted_content {
+.hasVoted_content,
+.election_closed_content {
   display: flex;
   align-items: center;
   gap: 0.8rem;
   padding: 1.5rem;
 
-  background: #28a74646;
   border-radius: 0.5rem;
   font-size: 1.6rem;
+}
+
+.election_closed_content {
+  background: #fd00192d;
+}
+
+.hasVoted_content {
+  background: #28a74646;
 }
 
 .hasVoted_content p {
   color: #1a7a31;
   font-weight: 500;
+  /* font-size: 1.6rem; */
 }
 
-.hasVoted_content span {
+.election_closed_content p {
+  color: #c70115;
+  font-weight: 400;
+}
+
+.hasVoted_content span,
+.election_closed_content span {
   width: 3rem;
   height: 3rem;
   text-align: center;
   padding: 0.2rem 0.2rem;
   border-radius: 50%;
+  font-weight: bold;
+}
+
+.hasVoted_content span {
+  border-color: #28a745;
   border: 0.3rem solid #107728;
   /* background: #28a745; */
   color: #107728;
-  font-weight: bold;
+}
+
+.election_closed_content span {
+  border-color: #c70115;
+  border: 0.3rem solid #c70115;
+  /* background: #d8081d; */
+  color: #c70115;
 }
 
 .content h4 {
@@ -77,7 +108,7 @@
   background-color: #28a745;
 }
 .status.closed {
-  background-color: #dc3545;
+  background-color: #d8081d;
 }
 .status.upcoming {
   background-color: var(--primary);
