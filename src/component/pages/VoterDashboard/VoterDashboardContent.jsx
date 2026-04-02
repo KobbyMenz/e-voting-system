@@ -177,6 +177,15 @@ const VoterDashboardContent = () => {
         return;
       }
 
+      if (
+        +electionId.length === 0 ||
+        +selectedCandidates[electionId].length === 0 ||
+        +authLocalStorage().userId.length === 0
+      ) {
+        Toast("error", "Failed to cast vote");
+        return;
+      }
+
       //setCurrentElectionId(electionId);
       // setVotingInProgress(true);
 
@@ -224,7 +233,7 @@ const VoterDashboardContent = () => {
           ) : (
             election.map((election) => (
               <ElectionCard
-                key={election.id }
+                key={election.id}
                 election={election}
                 selectedCandidates={selectedCandidates}
                 handleSelectCandidate={handleSelectCandidate}
