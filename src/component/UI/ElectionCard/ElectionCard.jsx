@@ -167,7 +167,16 @@ const ElectionCard = ({
           </p>
         </Typography>
 
-        <div className={classes.buttonContainer}>
+        <div
+          style={{
+            display:
+              !selectedCandidates[election._id || election.id] ||
+              election.hasVoted === 1
+                ? "none"
+                : "flex",
+          }}
+          className={classes.buttonContainer}
+        >
           <Button
             className={classes.castVoteBtn}
             onClick={() => handleCastVote(election._id || election.id)}
