@@ -123,7 +123,7 @@ const ElectionCard = ({
                           width="12rem"
                           height="16rem"
                           alt={candidate.name}
-                          border="0.1rem solid #ccc"
+                          border="0.1rem solid var(--border-color)"
                         />
 
                         <Box>
