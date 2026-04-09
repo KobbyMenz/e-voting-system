@@ -6,9 +6,9 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import PropTypes from "prop-types";
 import PaginationTable from "../PaginationTable/PaginationTable";
 import { Box, IconButton } from "@mui/material";
-import Button from "../Button/Button";
-import StopIcon from "../Icons/StopIcon";
-import PlayIcon from "../Icons/PlayIcon";
+// import Button from "../Button/Button";
+// import StopIcon from "../Icons/StopIcon";
+// import PlayIcon from "../Icons/PlayIcon";
 //import classes from "../Accordion/Accordion.module.css";
 //import DeleteIcon from "../Icons/DeleteIcon";
 import { Delete, Edit } from "@mui/icons-material";
@@ -136,7 +136,30 @@ export default function AccordionExpandDefault({
                     color: "#747474",
                   }}
                 >
-                  Election ID: {id}
+                  <span>Election ID: {id}</span>{" "}
+                  <span
+                    style={{
+                      background:
+                        status === "Active"
+                          ? "#06882d"
+                          : status === "Upcoming"
+                            ? "var(--primary)"
+                            : status === "Closed"
+                              ? "#ca0202"
+                              : "",
+                      padding: "0.5rem 1.2rem",
+                      fontSize: "1.4rem",
+                      borderRadius: "1.5rem",
+                      // height: "fit-content",
+                      // width: "fit-content",
+                      // display: "flex",
+                      // alignItems: "center",
+                      // justifyContent: "center",
+                      color: "#fff",
+                    }}
+                  >
+                    {status}
+                  </span>
                 </p>
                 <p
                   style={{
@@ -148,7 +171,8 @@ export default function AccordionExpandDefault({
                   {electionTitle}
                 </p>{" "}
               </Typography>
-              <div
+
+              {/* <div
                 style={{
                   background:
                     status === "Active"
@@ -170,7 +194,7 @@ export default function AccordionExpandDefault({
                 }}
               >
                 {status}
-              </div>{" "}
+              </div> */}
             </Box>
             <Typography variant="p" color="initial">
               <p style={{ color: "#747474" }}>{description}</p>

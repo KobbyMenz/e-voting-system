@@ -282,7 +282,7 @@ const SignIn = () => {
                   className={classes.password__icon}
                   onClick={togglePassword}
                 >
-                  {showPassword ? <OpenEyeIcon /> : <CloseEyeIcon />}
+                  {showPassword ? <CloseEyeIcon /> : <OpenEyeIcon />}
                 </div>
               )}
             </div>
