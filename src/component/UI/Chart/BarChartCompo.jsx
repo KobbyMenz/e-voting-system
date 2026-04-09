@@ -81,45 +81,6 @@ const BarChartCompo = ({
           </BarChart>
         </ResponsiveContainer>
       </Paper>
-
-      {/* <Paper
-        sx={{ padding: 2, marginTop: 0, boxShadow: 3, borderRadius: "1rem" }}
-      >
-        
-        <h2 style={{ textAlign: "left", paddingLeft: "2rem" }}>
-          Monthly Sales
-        </h2>
-        <ResponsiveContainer width="100%" height={200}>
-          <LineChart
-            data={data}
-            margin={{ top: 0, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={`MONTH`} />
-            <YAxis />
-            <Tooltip />
-            <Line
-              type="monotone"
-              dataKey={"TOTAL_SALES"}
-              //   stroke="#4CAF50"
-              stroke="#006aa3"
-              strokeWidth={2}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
-            />
-
-            <Line
-              type="monotone"
-              dataKey="QTY_SOLD"
-              //   stroke="#4CAF50"
-              stroke="#006aa3"
-              strokeWidth={2}
-              dot={{ r: 4 }}
-              activeDot={{ r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </Paper> */}
     </div>
   );
 };

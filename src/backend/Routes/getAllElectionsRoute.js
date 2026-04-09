@@ -52,7 +52,12 @@ const getAllElectionsRoute = (app) => {
         candidate.photo, 
         candidate.position,
         COUNT(vote.voteId) AS votes,
-        MAX(CASE WHEN vote.voterId = ? THEN 1 ELSE 0 END) AS hasVoted
+        MAX(CASE WHEN vote.voterId = ? THEN 1 ELSE 0 END) AS hasVoted,
+         ROUND(
+        (COUNT(vote.voteId) / 
+        SUM(COUNT(vote.voteId)) OVER (PARTITION BY vote.electionId)
+        ) * 100, 
+    2) AS percentage
       FROM e_voting_db.election 
       LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
       LEFT JOIN e_voting_db.vote ON candidate.candidateId = vote.candidateId
@@ -61,6 +66,7 @@ const getAllElectionsRoute = (app) => {
       LIMIT ? OFFSET ?
     `;
 
+    // Separate count query to get total number of elections for pagination
     const countQuery = `SELECT COUNT(DISTINCT electionId) as total FROM e_voting_db.election`;
 
     const now = dayjs();

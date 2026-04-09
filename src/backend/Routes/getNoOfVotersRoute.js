@@ -1,6 +1,7 @@
 import db from "./../Services/dataBaseConnection.js";
 
 const getNoOfVotersRoute = (app) => {
+  // Route to get the number of voters
   app.get("/api/getNoOfVoters", (req, res) => {
     const sqlQuery = `SELECT COUNT(*) AS noOfVoters FROM e_voting_db.voter`;
 
@@ -17,6 +18,7 @@ const getNoOfVotersRoute = (app) => {
     });
   });
 
+  // Route to get the number of votes cast for each election
   app.get("/api/getNoOfVoteCast", (req, res) => {
     const sqlQuery = `SELECT COUNT(DISTINCT voterId) AS noOfVoteCast FROM e_voting_db.vote`; // Assuming you want to count votes for each election. Adjust the query as needed.
 

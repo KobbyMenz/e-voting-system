@@ -39,6 +39,7 @@ const columns = [
   { field: "name", headerName: "Candidate Name", type: "candidateName" },
   { field: "position", headerName: "Position", type: "position" },
   { field: "votes", headerName: "No. of Votes", type: "votes" },
+  { field: "percentage", headerName: "Percentage", type: "percentage" },
 ];
 
 // Function to create a new election instance with candidates
@@ -67,6 +68,7 @@ const createElectionInstance = (
     name: candidate.fullName || "N/A",
     position: candidate.position ? candidate.position : "N/A",
     votes: candidate.votes ? candidate.votes : 0,
+    percentage: candidate.percentage ? candidate.percentage : 0,
   })),
 });
 
