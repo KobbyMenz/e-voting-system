@@ -58,9 +58,9 @@ const PaginationTable = ({
   };
 
   //column has candidate name and id, hide id column and use id value to display candidate name
-  // const hasCandidateNameColumn = columns.some(
-  //   (col) => col.type === "candidateName",
-  // );
+  const hasCandidateNameColumn = columns.some(
+    (col) => col.type === "candidateName",
+  );
 
   return (
     <Paper
@@ -124,7 +124,8 @@ const PaginationTable = ({
             },
           }}
         >
-          Number of Candidates: {FormatNumber(filteredRows.length)}
+          Number of {hasCandidateNameColumn ? "candidates" : "voters"}:{" "}
+          {FormatNumber(filteredRows.length)}
         </Typography>
 
         <Box

@@ -178,7 +178,7 @@ const SignIn = () => {
         {/* <DarkVeil speed={2.0} resolutionScale={1.3} scanlineFrequency={1} /> */}
 
         <Card className={classes.input}>
-          <h2 className={classes.title}>OLINE VOTING SYSTEM</h2>
+          <h2 className={classes.title}>OLINE VOTING SYSTEM FOR SHS</h2>
           {/* <h1 className={classes.sub__title}></h1> */}
           {/* <div className={classes.logo}>
             <img src={logo} alt="logo" />

@@ -18,7 +18,7 @@ const getNoOfVotersRoute = (app) => {
   });
 
   app.get("/api/getNoOfVoteCast", (req, res) => {
-    const sqlQuery = `SELECT COUNT(voterId) AS noOfVoteCast FROM e_voting_db.vote GROUP BY electionId`; // Assuming you want to count votes for each election. Adjust the query as needed.
+    const sqlQuery = `SELECT COUNT(DISTINCT voterId) AS noOfVoteCast FROM e_voting_db.vote`; // Assuming you want to count votes for each election. Adjust the query as needed.
 
     db.query(sqlQuery, (err, result) => {
       if (err) {

@@ -40,17 +40,7 @@ export default function AccordionExpandDefault({
   expanded,
   onExpandChange,
 }) {
-  // Automatically calculate election status based on current time and update database
-  // const calculatedStatus = useElectionStatus(
-  //   id,
-  //   startDate,
-  //   endDate,
-  //   status,
-  //   null, // onStatusChange callback can be added here if needed
-  // );
-
   return (
-    // <Card className={classes.card}>
     <Accordion
       expanded={expanded}
       onChange={(event, isExpanded) => onExpandChange(id, isExpanded)}
@@ -148,7 +138,7 @@ export default function AccordionExpandDefault({
                             : status === "Closed"
                               ? "#ca0202"
                               : "",
-                      padding: "0.5rem 1.2rem",
+                      padding: "0.4rem 1rem 0.5rem 1rem",
                       borderRadius: "1.5rem",
                       color: "#fff",
                     }}
@@ -445,7 +435,6 @@ export default function AccordionExpandDefault({
         <Typography sx={{ fontSize: "1.1rem" }}></Typography>
       </AccordionDetails>
     </Accordion>
-    // </Card>
   );
 }
 AccordionExpandDefault.propTypes = {
