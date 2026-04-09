@@ -127,16 +127,14 @@ export default function AccordionExpandDefault({
               flexDirection: "column",
             }}
           >
-            <Box 
-            // sx={{ display: "flex", gap: "1rem", alignItems: "center" }}
-            >
+            <Box>
               <Typography variant="h4" color="initial">
                 <p
                   style={{
                     fontSize: "1.4rem",
                     fontWeight: "500",
                     color: "#747474",
-                    marginBottom:"1rem"
+                    marginBottom: "1rem",
                   }}
                 >
                   <span>Election ID: {id}</span>{" "}
@@ -151,20 +149,13 @@ export default function AccordionExpandDefault({
                               ? "#ca0202"
                               : "",
                       padding: "0.5rem 1.2rem",
-                      // fontSize: "1.4rem",
                       borderRadius: "1.5rem",
-                      // height: "fit-content",
-                      // width: "fit-content",
-                      // display: "flex",
-                      // alignItems: "center",
-                      // justifyContent: "center",
                       color: "#fff",
                     }}
                   >
                     {status}
                   </span>
                 </p>
-
                 <p
                   style={{
                     fontSize: "1.8rem",
@@ -175,30 +166,6 @@ export default function AccordionExpandDefault({
                   {electionTitle}
                 </p>{" "}
               </Typography>
-
-              {/* <div
-                style={{
-                  background:
-                    status === "Active"
-                      ? "#06882d"
-                      : status === "Upcoming"
-                        ? "var(--primary)"
-                        : status === "Closed"
-                          ? "#ca0202"
-                          : "",
-                  padding: "0.5rem 1.2rem",
-                  fontSize: "1.4rem",
-                  borderRadius: "1.5rem",
-                  height: "fit-content",
-                  width: "fit-content",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#fff",
-                }}
-              >
-                {status}
-              </div> */}
             </Box>
             <Typography variant="p" color="initial">
               <p style={{ color: "#747474" }}>{description}</p>
