@@ -43,7 +43,7 @@ export const generateElectionPrintHTML = (elections) => {
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Candidate Name</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Position</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">No. of Votes</th>
-              <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Percentage(%)</th>
+              <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Percentage</th>
             </tr>
           </thead>
           
