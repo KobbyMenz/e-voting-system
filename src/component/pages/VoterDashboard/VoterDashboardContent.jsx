@@ -221,10 +221,10 @@ const VoterDashboardContent = () => {
         <Card className={classes.card}>
           <h1>Voter Dashboard</h1>
           <Card className={classes.userInfo}>
-            <h2>
+            <h1>
               Welcome back {formatName(user.fullName) || "Guest"}, Please cast
               your vote now.
-            </h2>
+            </h1>
             <p>Voter ID: {user.userId || "N/A"}</p>
           </Card>
 
