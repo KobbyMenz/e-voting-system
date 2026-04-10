@@ -22,6 +22,7 @@ import FormatCurrency from "../../Functions/FormatCurrency";
 import ChartSkeleton from "../Skeleton/ChartSkeleton";
 import formatNumberToK from "../../Functions/formatNumberToK";
 import { useTheme } from "../../../context/useTheme";
+import { LabelList } from "recharts";
 //import app_api_url from "../../../app_api_url";
 
 //import FormatCurrency from "../../Functions/FormatCurrency";
@@ -37,7 +38,7 @@ const BarChartCompo = ({
     <div>
       <Paper
         sx={{
-          paddingTop: 1,
+          paddingTop: 2,
           paddingBottom: 1,
           paddingRight: 1,
           paddingLeft: 0,
@@ -67,7 +68,11 @@ const BarChartCompo = ({
             <XAxis dataKey={name} />
             <YAxis tickFormatter={formatNumberToK} />
             <Tooltip
-              formatter={(value) => formatNumberToK(value)}
+              // formatter={(value) => formatNumberToK(value)}
+              formatter={(value, name, props) => {
+                const percentage = props.payload.percentage;
+                return [`${formatNumberToK(value)} (${percentage}%)`, "Votes"];
+              }}
               contentStyle={{
                 // color: "#000",
                 backgroundColor: isDarkTheme
@@ -77,7 +82,13 @@ const BarChartCompo = ({
                 borderRadius: "0.8rem",
               }}
             />
-            <Bar dataKey={total_vote} fill="var(--primary)" barSize={"100"} />
+            <Bar dataKey={total_vote} fill="var(--primary)" barSize={"100"}>
+              <LabelList
+                dataKey="percentage"
+                position="top"
+                formatter={(value) => `${value}%`}
+              />
+            </Bar>
           </BarChart>
         </ResponsiveContainer>
       </Paper>

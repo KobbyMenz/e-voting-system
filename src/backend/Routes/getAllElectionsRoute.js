@@ -40,30 +40,38 @@ const getAllElectionsRoute = (app) => {
     // ✅ NEW: Add LEFT JOIN to vote table to check if voter has voted
     const sqlQuery = `
       SELECT 
-        election.electionId, 
-        election.title, 
-        election.description, 
-        election.dateCreated, 
-        election.status, 
-        election.startDate, 
-        election.endDate, 
-        candidate.candidateId, 
-        candidate.fullName, 
-        candidate.photo, 
-        candidate.position,
-        COUNT(vote.voteId) AS votes,
-        MAX(CASE WHEN vote.voterId = ? THEN 1 ELSE 0 END) AS hasVoted,
-         ROUND(
-        (COUNT(vote.voteId) / 
-        SUM(COUNT(vote.voteId)) OVER (PARTITION BY vote.electionId)
-        ) * 100, 
-    2) AS percentage
+      election.electionId, 
+      election.title, 
+      election.description, 
+      election.dateCreated, 
+      election.status, 
+      election.startDate, 
+      election.endDate, 
+
+      candidate.candidateId, 
+      candidate.fullName, 
+      candidate.photo, 
+      candidate.position,
+
+      COUNT(vote.voteId) AS votes,
+      MAX(CASE WHEN vote.voterId = ? THEN 1 ELSE 0 END) AS hasVoted,
+
+      ROUND((COUNT(vote.voteId) * 100.0) / NULLIF(
+        SUM(COUNT(vote.voteId)) OVER (PARTITION BY election.electionId),
+          0), 2) AS percentage
+
       FROM e_voting_db.election 
-      LEFT JOIN e_voting_db.candidate ON election.electionId = candidate.electionId
-      LEFT JOIN e_voting_db.vote ON candidate.candidateId = vote.candidateId
-      GROUP BY election.electionId, candidate.candidateId
+      LEFT JOIN e_voting_db.candidate 
+      ON election.electionId = candidate.electionId
+      LEFT JOIN e_voting_db.vote 
+      ON candidate.candidateId = vote.candidateId
+
+      GROUP BY 
+      election.electionId, candidate.candidateId
+
       ORDER BY election.dateCreated DESC, election.electionId, candidate.candidateId
-      LIMIT ? OFFSET ?
+
+      LIMIT ? OFFSET ?;
     `;
 
     // Separate count query to get total number of elections for pagination

@@ -20,7 +20,7 @@ export const generateElectionPrintHTML = (elections) => {
       (election) => `
     <div style="page-break-inside: avoid; margin-bottom: 3rem; border-bottom: 2px solid #757575; padding-bottom: 2rem;">
 
-      <h2 style="color: #141414; margin-bottom: 0.5rem; font-size: 1.8rem;">${election.title || "Untitled Election"}</h2>
+      <h1 style="color: #141414; margin-bottom: 0.5rem; font-size: 1.8rem;">${election.title || "Untitled Election"}</h1>
 
       <p style="color: #666; margin: 0.5rem 0; font-size: 0.95rem;"><strong>Description:</strong> ${election.description || "N/A"}</p>
 
@@ -43,6 +43,7 @@ export const generateElectionPrintHTML = (elections) => {
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Candidate Name</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Position</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">No. of Votes</th>
+              <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Percentage(%)</th>
             </tr>
           </thead>
           
@@ -57,6 +58,7 @@ export const generateElectionPrintHTML = (elections) => {
                 <td style="border: 1px solid #141414; padding: 0.75rem;">${candidate.name || ""}</td>
                 <td style="border: 1px solid #141414; padding: 0.75rem;">${candidate.position || "N/A"}</td>
                 <td style="border: 1px solid #141414; padding: 0.75rem; text-align: center; font-weight: 600;">${candidate.votes || 0}</td>
+                <td style="border: 1px solid #141414; padding: 0.75rem; text-align: center; font-weight: 600;">${candidate.percentage || 0}</td>
               </tr>
             `,
               )
@@ -126,7 +128,7 @@ export const printElectionResults = (
         }
         
         .print-header h1 {
-          font-size: 2.2rem;
+          font-size: 1.8rem;
           color: #141414;
           margin-bottom: 0.5rem;
         }
@@ -158,7 +160,7 @@ export const printElectionResults = (
     </head>
     <body>
       <div class="print-header">
-        <h2>${title.toLocaleUpperCase()}</h2>
+        <h1>${title.toLocaleUpperCase()}</h1>
         <p>Generated on: ${currentDate}</p>
         <p>Total Elections: ${elections.length}</p>
       </div>
