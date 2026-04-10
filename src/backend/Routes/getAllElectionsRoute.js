@@ -109,7 +109,7 @@ const getAllElectionsRoute = (app) => {
         };
       });
 
-      // ✅ NEW: Include pagination metadata
+      //Include pagination metadata
       res.status(200).json({
         result: electionsWithCalculatedStatus,
         pagination: {
@@ -122,7 +122,7 @@ const getAllElectionsRoute = (app) => {
 
       log("Elections fetched:", electionsWithCalculatedStatus.length);
 
-      // ✅ FIXED: Asynchronously update status using prepared statements if needed
+      //Asynchronously update status using prepared statements if needed
       if (electionsToUpdate.length > 0) {
         updateElectionsStatus(electionsToUpdate);
       }
