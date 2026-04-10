@@ -68,7 +68,7 @@ const createElectionInstance = (
     name: candidate.fullName || "N/A",
     position: candidate.position ? candidate.position : "N/A",
     votes: candidate.votes ? candidate.votes : 0,
-    percentage: candidate.percentage ? candidate.percentage : 0,
+    percentage: candidate.percentage ? `${candidate.percentage}%` : "0%",
   })),
 });
 
