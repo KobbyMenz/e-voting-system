@@ -6,19 +6,20 @@ import Button from "../../UI/Button/Button";
 //import defaultProfilePicture from "../../../../src/assets/images/profilePicture.png";
 import PropTypes from "prop-types";
 import Modal from "../../UI/Modals/Modal";
-import axios from "axios";
+//import axios from "axios";
 //import Loader from "../../UI/Loader";
-import ErrorIcon from "../../UI/Icons/ErrorIcon";
+//import ErrorIcon from "../../UI/Icons/ErrorIcon";
 import Footer from "../../Footer/Footer";
 import Toast from "../../UI/Notification/Toast";
 import ProfileSkeleton from "../../UI/Skeleton/ProfileSkeleton";
-import UploadIcon from "../../UI/Icons/UploadIcon";
-import DeleteIcon from "../../UI/Icons/DeleteIcon";
+// import UploadIcon from "../../UI/Icons/UploadIcon";
+// import DeleteIcon from "../../UI/Icons/DeleteIcon";
 import SaveIcon from "../../UI/Icons/SaveIcon";
 import ImageBox from "../../UI/ImageBox/ImageBox";
 import PasswordInput from "../../UI/PasswordInput/PasswordInput";
-import app_api_url from "../../../app_api_url";
+//import app_api_url from "../../../app_api_url";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
+import useUpdateHook from "../../CustomHooks/useUpdateHook";
 
 const ProfileContent = () => {
   const [showModal, setShowModal] = useState(false);
@@ -29,13 +30,12 @@ const ProfileContent = () => {
   // const { onSubmitProfilePicture } = props;
   const [formData, setFormData] = useState({
     id: authLocalStorage().userId,
-    userName: "",
     name: authLocalStorage().fullName,
-    email: "",
-    phone: "",
     password: "",
     confirmPassword: "",
   });
+
+  const { updateData } = useUpdateHook();
 
   //function to handle form data
   const formDataHandler = useCallback((e) => {
@@ -58,117 +58,7 @@ const ProfileContent = () => {
       setLoading(false);
       return;
     }
-
-    // const userDataFromLocalStorage = JSON.parse(storedUser);
-    // const userId = userDataFromLocalStorage?.userId;
-
-    // const getUserData = async () => {
-    //   try {
-    //     const response = await axios.get(`${app_api_url}/getUser/${+userId}`);
-
-    //     if (response.data) {
-    //       setFormData((prev) => ({
-    //         ...prev,
-    //         id: response.data.userId,
-    //         userName: response.data.userName,
-    //         name: response.data.fullName,
-    //         email: response.data.email,
-    //         phone: response.data.phoneNumber,
-    //       }));
-    //     }
-    //   } catch (err) {
-    //     if (err.response && err.response.data && err.response.data.error) {
-    //       Toast("error", err.response.data.error);
-
-    //       setShowModal({
-    //         title: "Error Message",
-    //         icon: <ErrorIcon />,
-    //         message: err.response.data.error,
-    //       });
-    //     } else {
-    //       Toast("error", "Server can not be reached");
-    //     }
-    //   }
-    // };
-    // getUserData();
   }, []);
-
-  //=======fetching profile picture from the backend========
-  // const fetchProfilePictureCallBack = useCallback(() => {
-  //   //Fetching profile picture from the backend
-  //   const fetchProfilePicture = async () => {
-  //     const userId = formData.id;
-
-  //     if (userId === "" || userId === null) return;
-
-  //     try {
-  //       const response = await axios.get(
-  //         `${app_api_url}/getUserProfilePicture/${userId}`,
-  //       );
-  //       const pic = response?.data?.profilePicture;
-  //       if (pic) {
-  //         setSelectedImage(pic);
-  //         onSubmitProfilePicture(pic);
-  //       }
-  //       //  else {
-  //       //   setSelectedImage(defaultProfilePicture);
-  //       //   onSubmitProfilePicture(defaultProfilePicture);
-  //       // }
-  //       setLoading(false);
-  //     } catch (err) {
-  //       console.log(err.message || err);
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchProfilePicture();
-  // }, [formData.id, onSubmitProfilePicture]);
-
-  // useEffect(() => {
-  //   //Fetching profile picture from the backend
-  //   fetchProfilePictureCallBack();
-  // }, [fetchProfilePictureCallBack]);
-
-  //////////////////////////////////////
-  // DELETE PROFILE PHOTO
-  /////////////////////////////////////
-  // const deleteProfileHandler = useCallback(
-  //   async (e) => {
-  //     e.preventDefault();
-
-  //     if (window.confirm("Are you sure you want to delete")) {
-  //       const profileFormData = new FormData();
-  //       profileFormData.append("userId", formData.id);
-  //       profileFormData.append("profilePicture", file);
-
-  //       try {
-  //         //Deleting profile picture from the backend
-  //         const response = await axios.put(
-  //           `${app_api_url}/deleteProfile`,
-  //           profileFormData,
-  //           {
-  //             headers: {
-  //               "Content-Type": "multipart/form-data",
-  //             },
-  //           },
-  //         );
-
-  //         //Checking for successful update and clear image path
-  //         if (response.data.message) {
-  //           Toast("success", `${response.data.message}`); //successful upload
-
-  //           setSelectedImage(null);
-  //           onSubmitProfilePicture(null);
-
-  //           setFile(null);
-  //           fileInput.current.value = null;
-  //         }
-  //       } catch (err) {
-  //         Toast("error", `Error deleting profile photo ${err}`);
-  //       }
-  //     }
-  //   },
-  //   [formData.id, file, onSubmitProfilePicture],
-  // );
 
   //////////////////////////////
   // Updating password
@@ -190,39 +80,26 @@ const ProfileContent = () => {
       //confirmation to update
       if (window.confirm("Are you sure you want to save changes?")) {
         const userId = formData.id;
-        try {
-          const response = await axios.put(
-            `${app_api_url}/updateUserProfile/${+userId}`,
-            {
-              userName: formData.userName,
-              password: formData.password,
-            },
-          );
 
-          Toast("success", `${response.data.message}`);
+        updateData(
+          `updateVoterPassword/${+userId}`,
+          {
+            password: formData.password,
+          },
+          Toast,
+        );
 
-          setFormData((prevFormData) => {
-            return {
-              ...prevFormData,
-              password: "",
-              confirmPassword: "",
-            };
-          });
-        } catch (err) {
-          if (err.response && err.response.data && err.response.data.error) {
-            Toast("error", `${err.response.data.error}`);
-          } else {
-            Toast("error", `Error updating records`);
-          }
-        }
+        // Clear password fields after update
+        setFormData((prevFormData) => {
+          return {
+            ...prevFormData,
+            password: "",
+            confirmPassword: "",
+          };
+        });
       }
     },
-    [
-      formData.confirmPassword,
-      formData.id,
-      formData.password,
-      formData.userName,
-    ],
+    [updateData, formData.confirmPassword, formData.id, formData.password],
   );
 
   ////////////////////////////////

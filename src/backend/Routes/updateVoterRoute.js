@@ -7,6 +7,7 @@ import ROLES from "../../component/Utils/ROLES.js";
 const updateVoterRoute = (app) => {
   const upload = staticStorage();
 
+  // Route to update voter information, including optional profile picture and password
   app.put("/api/updateVoter/:id", upload.single("photo"), (req, res) => {
     //console.log("Body Request received: ", req.body);
     // console.log("File Request received: ", req.file);
@@ -99,6 +100,36 @@ const updateVoterRoute = (app) => {
         // console.log(result);
       });
     }
+  });
+
+  // Route to update voter password only
+  app.put("/api/updateVoterPassword/:voterId", (req, res) => {
+    const voterId = req.params.voterId;
+
+    const { password } = req.body;
+
+    //Hashing the password before updating
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: err });
+      }
+
+      const sqlUpdate = `UPDATE e_voting_db.voter SET password = ? WHERE voterId = ?`;
+
+      db.query(sqlUpdate, [hashedPassword, voterId], (err) => {
+        if (err) {
+          // console.log("Database error", err);
+          // return res.status(500).send("This user name can not be used!"); //returning HTTP status
+          return res.status(500).json({
+            error: "Failed to update password. Please try again later.",
+          });
+        }
+
+        res.status(200).json({ message: "Saved successfully" });
+        // console.log(result);
+      });
+    });
   });
 };
 export default updateVoterRoute;

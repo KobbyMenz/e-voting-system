@@ -6,7 +6,9 @@ const useUpdateHook = () => {
     apiEndPointName,
     dataToUpdate,
     toastModal,
-    refreshTable,
+    refreshTable = () => {
+      // Default empty function if no refresh is needed
+    }, // Optional callback to refresh data after update
   ) => {
     try {
       const response = await axios.put(
