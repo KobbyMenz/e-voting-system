@@ -273,6 +273,7 @@ const ProfileContent = () => {
                     id="password"
                     placeholder="Enter new password"
                     value={formData.password}
+                    required
                   />
                 </div>
 
@@ -285,6 +286,7 @@ const ProfileContent = () => {
                     id="confirmPassword"
                     placeholder="Confirm new password"
                     value={formData.confirmPassword}
+                    required
                   />
                 </div>
 
