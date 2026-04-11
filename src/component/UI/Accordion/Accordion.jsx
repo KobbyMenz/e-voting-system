@@ -163,7 +163,7 @@ export default function AccordionExpandDefault({
           </Box>
 
           <div style={{ fontSize: "1.5rem", color: "var(--text-color)" }}>
-            Created: {formatDateTime(dateCreated)}
+            Date Created: {formatDateTime(dateCreated)}
           </div>
 
           <Box
