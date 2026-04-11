@@ -66,7 +66,7 @@ const ElectionCard = ({
         ) : election.status === "Closed" ? (
           <div className={classes.election_closed_content}>
             <span>x</span>{" "}
-            <p>Election ended on {formatDateTime(election.endDate)}</p>
+            <p>Election ended on: {formatDateTime(election.endDate)}</p>
           </div>
         ) : (
           <div>
