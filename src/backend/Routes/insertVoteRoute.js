@@ -8,7 +8,7 @@ const insertVoteRoute = (app) => {
     // console.log("File Request received: ", req.file);
 
     const { electionId, candidateId, voterId } = req.body;
-    // const status = "Upcoming";
+
     const timeStamp = dayjs().format("YYYY-MM-DDTHH:mm");
 
     const sqlInsert =
