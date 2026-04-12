@@ -207,6 +207,8 @@ const PaginationTable = ({
                     fontWeight: "bolder",
                     fontSize: "1.5rem",
                     backgroundColor: "var(--primary)",
+                    // background:
+                    //   "linear-gradient(135deg, var(--primary-deep) 0%, var(--primary) 100%)",
                     borderLeft: "0.1rem solid var(--table-header)",
                     borderBottom: "none",
                     // display:

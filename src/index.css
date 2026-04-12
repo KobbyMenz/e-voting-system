@@ -11,8 +11,8 @@
   --text-color: #1a1a1a;
   --shadow-color: hsla(246, 100%, 24%, 0.397);
 
-  --primary: #0c007c;
-  --primary-deep: #0a0063;
+  --primary: #0c007c; /*#011d49  #0c007c*/
+  --primary-deep: #0a0063; /*#011d49*/
   --secondary: #007aba;
   --nav-bg: hsla(246, 100%, 24%, 0.938);
   --hover-color: #c4c4c48f; /*#c4c4c48f*/
