@@ -11,7 +11,7 @@ import CloseIcon from "../Icons/CloseIcon";
 import SaveIcon from "../Icons/SaveIcon";
 import CancelIcon from "../Icons/CancelIcon";
 //import DateTimeInput from "../DateTimeInput/DateTimeInput";
-import dayjs from "dayjs";
+//import dayjs from "dayjs";
 import useUpdateHook from "../../CustomHooks/useUpdateHook";
 //import DateTimeInput from "../DateTimeInput/DateTimeInput";
 //import app_api_url from "../../../app_api_url";
@@ -49,6 +49,15 @@ const EditElectionModal = (props) => {
   const onEditElectionHandler = useCallback(
     (e) => {
       e.preventDefault();
+
+      // Validate that start date is before end date
+      if (formData.startDate > formData.endDate) {
+        props.toastModal(
+          "error",
+          "Election start date must be earlier than the end date!",
+        );
+        return;
+      }
 
       if (window.confirm("Are you sure you want to update election?")) {
         const electionData = {
@@ -150,6 +159,7 @@ const EditElectionModal = (props) => {
                 onChange={onFormDataChangeHandler}
                 // min={dayjs().format("YYYY-MM-DDTHH:mm")}
                 // max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
+                //  max={formData.endDate}
                 required
               />
             </div>
@@ -168,6 +178,7 @@ const EditElectionModal = (props) => {
                 placeholder="Enter election end date..."
                 onChange={onFormDataChangeHandler}
                 // min={dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")}
+
                 required
               />
             </div>
