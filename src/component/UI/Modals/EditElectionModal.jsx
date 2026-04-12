@@ -11,7 +11,7 @@ import CloseIcon from "../Icons/CloseIcon";
 import SaveIcon from "../Icons/SaveIcon";
 import CancelIcon from "../Icons/CancelIcon";
 //import DateTimeInput from "../DateTimeInput/DateTimeInput";
-//import dayjs from "dayjs";
+import dayjs from "dayjs";
 import useUpdateHook from "../../CustomHooks/useUpdateHook";
 //import DateTimeInput from "../DateTimeInput/DateTimeInput";
 //import app_api_url from "../../../app_api_url";
@@ -23,6 +23,7 @@ const EditElectionModal = (props) => {
     description: props.submitElectionData.description,
     startDate: props.submitElectionData.startDate,
     endDate: props.submitElectionData.endDate,
+    dateCreated: props.submitElectionData.dateCreated,
   });
 
   const { updateData } = useUpdateHook();
@@ -50,26 +51,13 @@ const EditElectionModal = (props) => {
     (e) => {
       e.preventDefault();
 
-      // Validate that start date is before end date
-      if (formData.startDate > formData.endDate) {
-        props.toastModal(
-          "error",
-          "Election start date must be earlier than the end date!",
-        );
-        return;
-      }
-
       if (window.confirm("Are you sure you want to update election?")) {
         const electionData = {
-          // id: Date.now().toString(),
           title: formData.title,
           description: formData.description,
           startDate: formData.startDate,
           endDate: formData.endDate,
         };
-
-        // props.onEditElection(electionData);
-        // props.toastModal("success", `Election updated successfully`);
 
         //sending election details to be updated into the database at the backend
         updateData(
@@ -157,9 +145,8 @@ const EditElectionModal = (props) => {
                 type="datetime-local"
                 placeholder="Enter election start date..."
                 onChange={onFormDataChangeHandler}
-                // min={dayjs().format("YYYY-MM-DDTHH:mm")}
-                // max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
-                //  max={formData.endDate}
+                min={dayjs(formData.dateCreated).format("YYYY-MM-DDTHH:mm")}
+                max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
                 required
               />
             </div>
@@ -177,8 +164,10 @@ const EditElectionModal = (props) => {
                 type="datetime-local"
                 placeholder="Enter election end date..."
                 onChange={onFormDataChangeHandler}
-                // min={dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")}
-
+                min={
+                  dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm") ||
+                  dayjs(formData.dateCreated).format("YYYY-MM-DDTHH:mm")
+                }
                 required
               />
             </div>
