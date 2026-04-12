@@ -14,8 +14,16 @@ export const generateElectionPrintHTML = (elections) => {
     `;
   }
 
-  // Generate HTML for each election
-  const electionHTML = elections
+  //Sorting elections according hightest votes to the lowest votes 
+  const sortedElections = elections.map((election) => ({
+    ...election,
+    candidates: [...election.candidates].sort(
+      (a, b) => Number(b.votes) - Number(a.votes),
+    ),
+  }));
+
+  // Generate HTML for each sorted election
+  const electionHTML = sortedElections
     .map(
       (election) => `
     <div style="page-break-inside: avoid; margin-bottom: 3rem; border-bottom: 2px solid #757575; padding-bottom: 2rem;">
@@ -37,7 +45,7 @@ export const generateElectionPrintHTML = (elections) => {
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 1rem;">
           <thead>
             <tr style="background-color: #f5f5f5; border-bottom: 1px solid #333;">
-              <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">S/N</th>
+              <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">RANK</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">ID</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Photo</th>
               <th style="border: 1px solid #141414; padding: 0.75rem; text-align: left; font-weight: 600;">Candidate Name</th>
@@ -50,9 +58,9 @@ export const generateElectionPrintHTML = (elections) => {
           <tbody>
             ${election.candidates
               .map(
-                (candidate) => `
+                (candidate, index) => `
               <tr style="border-bottom: 1px solid #141414;">
-                <td style="border: 1px solid #141414; padding: 0.75rem;">${candidate.sn || ""}</td>
+                <td style="border: 1px solid #141414; padding: 0.75rem;">${index + 1 || ""}</td>
                 <td style="border: 1px solid #141414; padding: 0.75rem;">${candidate.id || ""}</td>
                 <td style="border: 1px solid #141414; padding: 0.75rem;"> <img style="border-radius:0.2rem;" width="50" "height=58" src=${candidate.image} alt="Photo" /> </td>
                 <td style="border: 1px solid #141414; padding: 0.75rem;">${candidate.name || ""}</td>

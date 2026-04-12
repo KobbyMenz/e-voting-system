@@ -71,7 +71,7 @@ const BarChartCompo = ({
               // formatter={(value) => formatNumberToK(value)}
               formatter={(value, name, props) => {
                 const percentage = props.payload.percentage;
-                return [`${formatNumberToK(value)} (${percentage})`, "Votes"];
+                return [`${formatNumberToK(value)}  (${percentage})`, "Votes"];
               }}
               contentStyle={{
                 // color: "#000",
@@ -84,8 +84,9 @@ const BarChartCompo = ({
             />
             <Bar dataKey={total_vote} fill="var(--primary)" barSize={"100"}>
               <LabelList
+              fill="#fff"
                 dataKey="percentage"
-                position="top"
+                position="center"
                 formatter={(value) => `${value}`}
               />
             </Bar>
