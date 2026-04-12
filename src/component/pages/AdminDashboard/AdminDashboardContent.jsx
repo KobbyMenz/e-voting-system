@@ -560,7 +560,7 @@ const AdminDashboardContent = () => {
 
                 <Button onClick={onShowAddElectionModalHandler}>
                   {" "}
-                  <AddIcon /> New Election
+                  <AddIcon /> Add Election
                 </Button>
               </Box>
             </div>
