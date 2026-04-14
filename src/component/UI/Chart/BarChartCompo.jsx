@@ -49,16 +49,6 @@ const BarChartCompo = ({
           background: "var(--bg-color2)",
         }}
       >
-        {/* <h3
-          style={{
-            textAlign: "left",
-            paddingLeft: "2rem",
-            color: "var(--primary)",
-            fontWeight: "400",
-          }}
-        >
-          Total Votes for Candidates
-        </h3> */}
         <ResponsiveContainer width="100%" height={226}>
           <BarChart
             data={candidatesRow}
@@ -74,7 +64,7 @@ const BarChartCompo = ({
                 return [`${formatNumberToK(value)}  (${percentage})`, "Votes"];
               }}
               contentStyle={{
-                // color: "#000",
+                color: "var(--primary)",
                 backgroundColor: isDarkTheme
                   ? "var(--bg-color2)"
                   : "var(--bg-color2)",
@@ -82,9 +72,22 @@ const BarChartCompo = ({
                 borderRadius: "0.8rem",
               }}
             />
-            <Bar dataKey={total_vote} fill="var(--primary)" barSize={"100"}>
+
+            {/* Define the gradient for the bars */}
+            <defs>
+              <linearGradient id="gradientBar" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="var(--primary)" stopOpacity={1} />
+                <stop
+                  offset="100%"
+                  stopColor="var(--primary-deep)"
+                  stopOpacity={1}
+                />
+              </linearGradient>
+            </defs>
+
+            <Bar dataKey={total_vote} fill="url(#gradientBar)" barSize={"100"}>
               <LabelList
-              fill="#fff"
+                fill="#fff"
                 dataKey="percentage"
                 position="center"
                 formatter={(value) => `${value}`}
