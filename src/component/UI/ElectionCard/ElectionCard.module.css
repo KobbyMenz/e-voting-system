@@ -4,6 +4,7 @@
   margin: 3rem 0;
   padding: 2rem;
   background: var(--bg-color3);
+  /* border: 0.2rem solid var(--border-color); */
 }
 
 .content {

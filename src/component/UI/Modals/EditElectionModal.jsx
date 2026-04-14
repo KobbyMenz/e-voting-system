@@ -146,13 +146,11 @@ const EditElectionModal = (props) => {
                 placeholder="Enter election start date..."
                 onChange={onFormDataChangeHandler}
                 min={
-                 formData.startDate===""? dayjs(formData.dateCreated).format("YYYY-MM-DDTHH:mm"):dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")
-
+                  formData.startDate === ""
+                    ? dayjs(formData.dateCreated).format("YYYY-MM-DDTHH:mm")
+                    : dayjs(formData.startDate).format("YYYY-MM-DDTHH:mm")
                 }
                 max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
-
-                // min={dayjs().format("YYYY-MM-DDTHH:mm")}
-                // max={dayjs(formData.endDate).format("YYYY-MM-DDTHH:mm")}
                 required
               />
             </div>
