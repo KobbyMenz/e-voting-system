@@ -96,7 +96,7 @@ const updateUserRoute = (app) => {
             return res.status(500).json({ error: "Unable to update user" });
           }
 
-          res.status(201).json({ message: "User updated successfully" });
+          res.status(201).json({ message: "Updated successfully" });
           //console.log(result);
         },
       );
@@ -109,7 +109,7 @@ const updateUserRoute = (app) => {
           return res.status(500).json({ error: "Unable to update user" });
         }
 
-        res.status(201).json({ message: "User updated successfully" });
+        res.status(201).json({ message: "Updated successfully" });
         //console.log(result);
       });
     }
