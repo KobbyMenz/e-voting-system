@@ -170,8 +170,9 @@ const ElectionCard = ({
         <div
           style={{
             display:
-              !selectedCandidates[election._id || election.id] ||
-              election.hasVoted === 1
+              !selectedCandidates[election._id || election.id] || // Disable the button if no candidate is selected or if the user has already voted
+              election.hasVoted === 1 || // Disable the button if the user has already voted
+              election.status === "Closed" // Disable the button if the election is closed
                 ? "none"
                 : "flex",
           }}
