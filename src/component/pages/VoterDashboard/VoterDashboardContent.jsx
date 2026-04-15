@@ -1,13 +1,13 @@
 import { Box } from "@mui/material";
-import Button from "../../UI/Button/Button";
+//import Button from "../../UI/Button/Button";
 import Card from "../../UI/Card/Card";
 import classes from "../VoterDashboard/VoterDashboard.module.css";
 import { useCallback, useEffect, useMemo, useState } from "react";
 //import axios from "axios";
 import app_api_url from "../../../app_api_url";
 import Toast from "../../UI/Notification/Toast";
-import ImageBox from "../../UI/ImageBox/ImageBox";
-import Loader from "../../UI/Loader/Loader";
+// import ImageBox from "../../UI/ImageBox/ImageBox";
+// import Loader from "../../UI/Loader/Loader";
 import ElectionCard from "../../UI/ElectionCard/ElectionCard";
 import formatName from "../../Functions/formatName";
 import useFetch from "../../CustomHooks/useFetch";
@@ -25,21 +25,21 @@ const createElectionInstance = (
   startDate,
   endDate,
   candidates = [],
-  hasVoted = false, // ✅ NEW: Add hasVoted parameter
+  hasVoted = false, // Add hasVoted parameter
 ) => ({
   id: electionId,
-  _id: electionId, // ✅ Keep both for compatibility
+  _id: electionId, // Keep both for compatibility
   title: title,
   description: description,
   dateCreated: dateCreated,
   status: status,
   startDate: startDate,
   endDate: endDate,
-  hasVoted: hasVoted, // ✅ NEW: Include hasVoted in election object
+  hasVoted: hasVoted, // Include hasVoted in election object
   candidates: candidates.map((candidate, index) => ({
     sn: index + 1,
     id: candidate.candidateId || `candidate-${index}`,
-    _id: candidate.candidateId, // ✅ Keep both for compatibility
+    _id: candidate.candidateId, // Keep both for compatibility
     image: candidate.photo ? `${candidate.photo}` : "", // Maps database photo to image
     name: candidate.fullName || "N/A",
     position: candidate.position ? candidate.position : "N/A",
@@ -49,16 +49,11 @@ const createElectionInstance = (
 
 const VoterDashboardContent = () => {
   const user = authLocalStorage() || {};
-
   const [selectedCandidates, setSelectedCandidates] = useState({});
   const [loading, setLoading] = useState(true);
 
-  // const [votingInProgress, setVotingInProgress] = useState(false);
-  // const [currentElectionId, setCurrentElectionId] = useState(null);
-  // Auto-refresh election data every 60 seconds to check start/end dates
-  // Auto-refresh election data every 60 seconds to check start/end dates
-  const { insertData } = useInsertHook();
-  // ✅ NEW: Pass voterId to API
+  const { insertData } = useInsertHook(); // Custom hook for inserting data (casting vote)
+  // Pass voterId to API
   const { data, setRefetch } = useFetch(
     `${app_api_url}/getAllElections?voterId=${user?.userId || ""}`,
     60000, // Changed from 1000 (every 1 second) to 60000 (every 60 seconds) - 98% reduction in API calls!
@@ -142,6 +137,7 @@ const VoterDashboardContent = () => {
   const election = useMemo(
     () =>
       uniqueElections.map((electionRow) =>
+        // Pass the raw candidate rows for this election to createElectionInstance, which will handle mapping to the correct format
         createElectionInstance(
           electionRow.electionId,
           electionRow.title,
@@ -157,7 +153,23 @@ const VoterDashboardContent = () => {
     [uniqueElections, candidatesByElection],
   );
 
-  //console.log("Transformed Election Data:", election); // Debug log to verify data structure
+  // Deselect candidate when election status becomes Closed
+  useEffect(() => {
+    setSelectedCandidates((prevSelected) => {
+      const updated = { ...prevSelected };
+      let hasChanges = false;
+
+      // Loop through elections and remove selected candidate if election is closed
+      election.forEach((election) => {
+        if (election.status === "Closed" && updated[election._id]) {
+          delete updated[election._id];
+          hasChanges = true;
+        }
+      });
+
+      return hasChanges ? updated : prevSelected;
+    });
+  }, [election]);
 
   // Handle candidate selection per election
   const handleSelectCandidate = (electionId, candidateId) => {
@@ -177,6 +189,7 @@ const VoterDashboardContent = () => {
         return;
       }
 
+      // Basic validation before casting vote
       if (
         +electionId.length === 0 ||
         +selectedCandidates[electionId].length === 0 ||
@@ -200,6 +213,7 @@ const VoterDashboardContent = () => {
           voterId: authLocalStorage().userId,
         };
 
+        // Cast the vote into database using the insertData function from useInsertHook
         insertData(`insertVote`, voteData, Toast, refetchHandler);
       }
     },
