@@ -7,8 +7,17 @@ const updateCandidateRoute = (app) => {
 
   app.put("/api/updateCandidate/:id", upload.single("photo"), (req, res) => {
     const candidateId = req.params.id;
-
     const { fullName, position } = req.body;
+
+    // ✅ CRITICAL FIX: Validate candidateId
+    if (!candidateId || candidateId.trim().length === 0) {
+      return res.status(400).json({ error: "Invalid candidate ID" });
+    }
+
+    // ✅ CRITICAL FIX: Validate fullName is provided
+    if (!fullName) {
+      return res.status(400).json({ error: "Candidate name is required" });
+    }
 
     if (req.file) {
       const photo = `/uploads/${req.file.filename}`;
@@ -18,11 +27,11 @@ const updateCandidateRoute = (app) => {
         "UPDATE e_voting_db.candidate SET fullName = ?, photo = ?, position = ? WHERE candidateId = ?";
       db.query(sqlUpdate, [fullName, photo, position, candidateId], (err) => {
         if (err) {
-          console.log("Database error", err);
-          return res.status(500).json({ error: "Error saving candidate" }); //returning HTTP status
+          console.error("Database operation failed");
+          return res.status(500).json({ error: "Unable to update candidate" });
         }
 
-        res.status(201).json({ message: "Saved successfully" });
+        res.status(201).json({ message: "Candidate updated successfully" });
         // console.log(result);
       });
     } else {
@@ -31,11 +40,11 @@ const updateCandidateRoute = (app) => {
         "UPDATE e_voting_db.candidate SET fullName = ?, position = ? WHERE candidateId = ?";
       db.query(sqlUpdate, [fullName, position, candidateId], (err) => {
         if (err) {
-          console.log("Database error", err);
-          return res.status(500).json({ error: "Error saving candidate" }); //returning HTTP status
+          console.error("Database operation failed");
+          return res.status(500).json({ error: "Unable to update candidate" });
         }
 
-        res.status(201).json({ message: "Saved successfully" });
+        res.status(201).json({ message: "Candidate updated successfully" });
         // console.log(result);
       });
     }

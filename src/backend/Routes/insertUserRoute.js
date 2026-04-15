@@ -2,16 +2,31 @@ import db from "./../Services/dataBaseConnection.js";
 import staticStorage from "../Services/staticStorage.js";
 import bcrypt from "bcryptjs";
 import dayjs from "dayjs";
-import ROLES from "../../component/Utils/ROLES.js"
+import ROLES from "../../component/Utils/ROLES.js";
 
 const insertUserRoute = (app) => {
   const upload = staticStorage();
 
   app.post("/api/addUser", upload.single("photo"), (req, res) => {
-    //console.log("Body Request received: ", req.body);
-    // console.log("File Request received: ", req.file);
-
     const { fullName, email, phone, password } = req.body;
+
+    // ✅ CRITICAL FIX: Validate all required fields
+    if (!fullName || !email || !phone || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // ✅ CRITICAL FIX: Validate email format
+    if (!email.includes("@") || !email.includes(".")) {
+      return res.status(400).json({ error: "Invalid email format" });
+    }
+
+    // ✅ CRITICAL FIX: Validate password strength
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 6 characters" });
+    }
+
     const role = ROLES.ADMIN;
     const status = "Enabled";
     const dateCreated = dayjs().format("YYYY-MM-DDTHH:mm");
@@ -67,13 +82,11 @@ const insertUserRoute = (app) => {
           [fullName, email, phone, hashedPassword, status, role, dateCreated],
           (err) => {
             if (err) {
-              console.log("Database error", err);
-              return res
-                .status(500)
-                .json({ error: "This username or email can not be used!" }); //returning HTTP status
+              console.error("Database operation failed");
+              return res.status(500).json({ error: "Unable to create user" });
             }
 
-            res.status(201).json({ message: "Added successfully" });
+            res.status(201).json({ message: "User added successfully" });
             //console.log(result);
           },
         );

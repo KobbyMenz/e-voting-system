@@ -29,6 +29,8 @@ import axios from "axios";
 import app_api_url from "../../../app_api_url";
 import { authLocalStorage } from "../../Utils/authLocalStorage";
 import ROLES from "../../Utils/ROLES";
+// 🔒 SECURITY: Import secure logout service
+import { secureLogout } from "../../Services/secureLogout";
 
 const settings = [
   { key: "profile", label: "Profile", Icon: Person },
@@ -119,12 +121,12 @@ const ProfileCard = (props) => {
     });
   };
 
-  //Confirm handler of logout modal
-  const onConfirmHandler = () => {
+  //Confirm handler of logout modal - 🔒 SECURITY: Use secure logout
+  const onConfirmHandler = async () => {
     setShowQuestionModal(false);
+    // 🔒 SECURITY: Call secure logout that invalidates token on backend
+    await secureLogout();
     navigate("/");
-    sessionStorage.clear();
-    localStorage.removeItem("user");
   };
 
   //Handler to close logout modal
@@ -147,20 +149,6 @@ const ProfileCard = (props) => {
         //   <ProfileCardSkeleton />
         // ) :
         <div className={classes.user_details_container}>
-          {/*======= user and last login details ===========*/}
-          {/* <div className={classes.user_details}>
-            <p className={classes.user_name}>{userDetails.fullName}</p> */}
-          {/* <div className={classes.last_login}>
-              <span>Last Login: </span>
-              {day === "Today" || day === "Yesterday"
-                ? `${day},`
-                : `${lastLoginDate},`}
-            </div>
-            <div className={classes.time}>
-              {userDetails.lastLogin === "N/A" ? "" : `${dayName} @ ${time}`}
-            </div> */}
-          {/* </div> */}
-
           {/*=========== Profile Menu =======s=====*/}
           <div className={classes.avatar_container}>
             <Toolbar disableGutters>

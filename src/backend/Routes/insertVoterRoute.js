@@ -8,12 +8,21 @@ const insertVoterRoute = (app) => {
   const upload = staticStorage();
 
   app.post("/api/insertVoter", upload.single("photo"), (req, res) => {
-    //console.log("Body Request received: ", req.body);
-    // console.log("File Request received: ", req.file);
-
     const { fullName, dob, password } = req.body;
+
+    // ✅ CRITICAL FIX: Validate all required fields
+    if (!fullName || !dob || !password) {
+      return res.status(400).json({ error: "Missing required fields" });
+    }
+
+    // ✅ CRITICAL FIX: Validate password strength
+    if (password.length < 6) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 6 characters" });
+    }
+
     const role = ROLES.VOTER;
-    //const status = "Enabled";
     const dateCreated = dayjs().format("YYYY-MM-DDTHH:mm");
 
     if (req.file) {
@@ -32,13 +41,13 @@ const insertVoterRoute = (app) => {
           [fullName, dob, photo, role, hashedPassword, dateCreated],
           (err) => {
             if (err) {
-              console.log("Database error", err);
+              console.error("Database operation failed");
               return res
                 .status(500)
-                .json({ error: "This username or email can not be used!" }); //returning HTTP status
+                .json({ error: "Unable to register voter" });
             }
 
-            res.status(201).json({ message: "Registered successfully" });
+            res.status(201).json({ message: "Voter registered successfully" });
             // console.log(result);
           },
         );
@@ -58,11 +67,13 @@ const insertVoterRoute = (app) => {
           [fullName, dob, role, hashedPassword, dateCreated],
           (err) => {
             if (err) {
-              console.log("Database error", err);
-              return res.status(500).json({ error: "Registered failed!" }); //returning HTTP status
+              console.error("Database operation failed");
+              return res
+                .status(500)
+                .json({ error: "Unable to register voter" });
             }
 
-            res.status(201).json({ message: "Registered successfully" });
+            res.status(201).json({ message: "Voter registered successfully" });
             //console.log(result);
           },
         );

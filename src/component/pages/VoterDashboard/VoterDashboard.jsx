@@ -24,7 +24,8 @@ const VoterDashboard = () => {
 
   const handleConfirmLogout = () => {
     localStorage.removeItem("user");
-    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("expiryTime");
     sessionStorage.removeItem("isLoggedIn");
     setShowLogoutModal(false);

@@ -70,34 +70,6 @@ const SignIn = () => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
 
-    // if (userName === "KobbyMenz" && pass === "11111111") {
-    //   localStorage.setItem(
-    //     "user",
-    //     JSON.stringify({
-    //       userId: 2025001,
-    //       userName: "KobbyMenz",
-    //       fullName: "Augustine Mensah",
-    //       loginType: "Admin",
-    //     }),
-    //   );
-    //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-    //   navigate("/admin/dashboard");
-    // } else if (userName === "Ronyx" && pass === "22222222") {
-    //   localStorage.setItem(
-    //     "user",
-    //     JSON.stringify({
-    //       userId: 2026001,
-    //       userName: "Ronyx",
-    //       fullName: "Ronyx Mensah",
-    //       loginType: "Voter",
-    //     }),
-    //   );
-    //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-    //   navigate("/voter/dashboard");
-    // } else {
-    //   Toast("error", "Wrong credentials");
-    // }
-
     //=======Making API call to the backend for LOGIN============
     const login = async () => {
       setLoadingLogin(true);
@@ -117,23 +89,23 @@ const SignIn = () => {
             headers: {
               "Content-Type": "application/json",
             },
+            withCredentials: true, // Include credentials for cookie handling
           },
-          { withCredentials: true }, // Include credentials for cookie handling
         );
-        const expiryTimestamp = Date.now() + response.data.expiresIn;
-        //console.log("Time:", new Date(response.data.expiresIn));
+        // Store tokens and user data
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        sessionStorage.setItem("token", JSON.stringify(response.data.token));
+        sessionStorage.setItem("accessToken", response.data.accessToken);
+        sessionStorage.setItem("refreshToken", response.data.refreshToken);
+
+        // Calculate 15-minute expiry time
+        const expiryTimestamp = Date.now() + 15 * 60 * 1000; // 15 minutes in milliseconds
         sessionStorage.setItem("expiryTime", JSON.stringify(expiryTimestamp));
 
-        // //==========checking for admin login============
-        // if (response.data.token && response.data.user.loginType === "Admin") {
-        //   navigate("/dashboard");
-        //   sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
-        // }
-
         //==========checking for admin login============
-        if (response.data.token && response.data.user.role === ROLES.ADMIN) {
+        if (
+          response.data.accessToken &&
+          response.data.user.role === ROLES.ADMIN
+        ) {
           navigate("/admin/dashboard");
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         } else {

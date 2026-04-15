@@ -8,6 +8,17 @@ dotenv.config(); //Loading environment variables
 import process from "process";
 import createBackup from "./Services/createBackup.js";
 //import cron from "node-cron";
+
+// 🔒 Security Middleware Imports
+import {
+  securityHeaders,
+  securityAuditLog,
+  securityCORS,
+} from "./Middleware/securityHeaders.js";
+import { rateLimit } from "./Middleware/rateLimitMiddleware.js";
+// 🔒 SECURITY: Use secure login route with refresh tokens
+import loginRoute from "./Routes/loginRoute.REFRESH.js";
+
 import getAllUsersRoute from "./Routes/getAllUsersRoute.js";
 import insertUserRoute from "./Routes/insertUserRoute.js";
 import updateUserRoute from "./Routes/updateUserRoute.js";
@@ -29,21 +40,25 @@ import insertCandidateRoute from "./Routes/insertCandidateRoute.js";
 import updateCandidateRoute from "./Routes/updateCandidateRoute.js";
 import deleteCandidateRoute from "./Routes/deleteCandidateRoute.js";
 import insertVoteRoute from "./Routes/insertVoteRoute.js";
-//import loginRouteSecure from "./Routes/LoginRouteSecure.js";
-import loginRoute from "./Routes/loginRoute.js";
 
 const app = express();
+
+/*
+===============================================
+🔒 SECURITY MIDDLEWARE - Apply to all routes
+===============================================*/
+// ✅ SECURITY: Add security headers to all responses
+app.use(securityHeaders);
+
+// ✅ SECURITY: Log security-relevant requests
+app.use(securityAuditLog);
+
 /*
 ======================================
-Setting up cross-origin requests (COR)
+Setting up cross-origin requests (CORS)
 ======================================*/
-app.use(
-  cors({
-    origin: process.env.VITE_APP_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  }),
-);
+// ✅ SECURITY: Enhanced CORS configuration
+app.use(cors(securityCORS));
 
 //  Middleware
 /*=========================*/
@@ -53,10 +68,13 @@ app.use(cookieParser());
 ////////////////////////////////////////////////////////////////
 
 /*
-              LOGIN
+  LOGIN - 🔒 Secure Login with Rate Limiting
 ===================================*/
+// ✅ Apply rate limiting middleware to login endpoint
+app.post("/api/login", rateLimit("login"));
+
+// Use the secure login route with proper async handling and security features
 loginRoute(app);
-//loginRouteSecure(app);
 
 /*
 ==============================

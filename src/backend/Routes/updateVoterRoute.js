@@ -9,13 +9,22 @@ const updateVoterRoute = (app) => {
 
   // Route to update voter information, including optional profile picture and password
   app.put("/api/updateVoter/:id", upload.single("photo"), (req, res) => {
-    //console.log("Body Request received: ", req.body);
-    // console.log("File Request received: ", req.file);
     const voterId = req.params.id;
     const { fullName, dob, password } = req.body;
+
+    // ✅ CRITICAL FIX: Validate voterId
+    if (!voterId || voterId.trim().length === 0) {
+      return res.status(400).json({ error: "Invalid voter ID" });
+    }
+
+    // ✅ CRITICAL FIX: Validate password strength if provided
+    if (password && password.length < 8) {
+      return res
+        .status(400)
+        .json({ error: "Password must be at least 8 characters" });
+    }
+
     const role = ROLES.VOTER;
-    //const status = "Enabled";
-    //const dateCreated = dayjs().format("YYYY-MM-DDTHH:mm");
 
     if (req.file && password) {
       const photo = `/uploads/${req.file.filename}`;
@@ -58,13 +67,11 @@ const updateVoterRoute = (app) => {
           [fullName, dob, role, hashedPassword, voterId],
           (err) => {
             if (err) {
-              console.log("Database error", err);
-              return res
-                .status(500)
-                .json({ error: "This username or email can not be used!" }); //returning HTTP status
+              console.error("Database operation failed");
+              return res.status(500).json({ error: "Unable to update voter" });
             }
 
-            res.status(201).json({ message: "Saved successfully" });
+            res.status(201).json({ message: "Voter updated successfully" });
             //console.log(result);
           },
         );
@@ -76,13 +83,11 @@ const updateVoterRoute = (app) => {
         "UPDATE e_voting_db.voter SET fullName = ?, DOB = ?, photo = ?, role = ? WHERE voterId = ?";
       db.query(sqlInsert, [fullName, dob, photo, role, voterId], (err) => {
         if (err) {
-          console.log("Database error", err);
-          return res
-            .status(500)
-            .json({ error: "This username or email can not be used!" }); //returning HTTP status
+          console.error("Database operation failed");
+          return res.status(500).json({ error: "Unable to update voter" });
         }
 
-        res.status(201).json({ message: "Saved successfully" });
+        res.status(201).json({ message: "Voter updated successfully" });
         // console.log(result);
       });
     } else {
@@ -90,13 +95,11 @@ const updateVoterRoute = (app) => {
         "UPDATE e_voting_db.voter SET fullName = ?, DOB = ?, role = ? WHERE voterId = ?";
       db.query(sqlInsert, [fullName, dob, role, voterId], (err) => {
         if (err) {
-          console.log("Database error", err);
-          return res
-            .status(500)
-            .json({ error: "This username or email can not be used!" }); //returning HTTP status
+          console.error("Database operation failed");
+          return res.status(500).json({ error: "Unable to update voter" });
         }
 
-        res.status(201).json({ message: "Saved successfully" });
+        res.status(201).json({ message: "Voter updated successfully" });
         // console.log(result);
       });
     }
