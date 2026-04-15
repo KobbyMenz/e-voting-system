@@ -40,6 +40,7 @@ import insertCandidateRoute from "./Routes/insertCandidateRoute.js";
 import updateCandidateRoute from "./Routes/updateCandidateRoute.js";
 import deleteCandidateRoute from "./Routes/deleteCandidateRoute.js";
 import insertVoteRoute from "./Routes/insertVoteRoute.js";
+import fileManagementRoute from "./Routes/fileManagementRoute.js";
 
 const app = express();
 
@@ -139,6 +140,13 @@ insertCandidateRoute(app);
 updateCandidateRoute(app);
 
 deleteCandidateRoute(app);
+
+/*
+
+==============================
+FILE MANAGEMENT
+=============================*/
+fileManagementRoute(app);
 
 /*
 

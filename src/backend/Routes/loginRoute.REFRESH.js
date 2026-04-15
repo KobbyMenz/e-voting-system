@@ -191,7 +191,7 @@ const loginRoute = (app) => {
               userId: user.userId,
               role: user.role,
               type: "access", // 🔒 Token type for validation
-              iat: Math.floor(Date.now() / 1000),
+              iat: Math.floor(Date.now() / 1000), // Issued at time
             };
 
             // 🔒 SECURITY: Short-lived access token (15 minutes)
@@ -199,8 +199,8 @@ const loginRoute = (app) => {
               tokenPayload,
               process.env.VITE_JWT_SECRET,
               {
-                expiresIn: "15m",
-                algorithm: "HS256",
+                expiresIn: "15m",// 15 minutes
+                algorithm: "HS256", // Use HS256 algorithm
               },
             );
 
