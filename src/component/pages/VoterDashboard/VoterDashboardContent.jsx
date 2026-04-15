@@ -66,7 +66,7 @@ const VoterDashboardContent = () => {
     }
   }, [data]);
 
-  //Refetch data handler
+  // Refetch handler to trigger data refresh after voting
   const refetchHandler = useCallback(() => {
     setRefetch((prev) => !prev);
   }, [setRefetch]);
