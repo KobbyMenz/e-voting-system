@@ -83,23 +83,23 @@ export const deleteImageFile = async (filePath, maxRetries = 2) => {
     return { success: false, message: "Invalid file path" };
   }
 
-  console.log(`📋 Starting deletion with ${maxRetries} retries...`);
+  //console.log(`📋 Starting deletion with ${maxRetries} retries...`);
 
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       // ✅ Check if file exists before attempting deletion
       const fileExists = await fileExistsAsync(validatedPath);
-      console.log(`🔎 File exists check (attempt ${attempt}): ${fileExists}`);
+      //console.log(`🔎 File exists check (attempt ${attempt}): ${fileExists}`);
       
       if (!fileExists) {
-        console.log(`ℹ️ File already deleted or doesn't exist: ${filePath}`);
+        //console.log(`ℹ️ File already deleted or doesn't exist: ${filePath}`);
         return { success: true, message: "File not found (already deleted)" };
       }
 
       // ✅ Delete the file
       console.log(`🔨 Attempting to delete: ${validatedPath}`);
       await fs.unlink(validatedPath);
-      console.log(`✅ Image deleted successfully: ${filePath}`);
+      //console.log(`✅ Image deleted successfully: ${filePath}`);
       return { success: true, message: "Image deleted successfully" };
     } catch (error) {
       console.error(
@@ -118,7 +118,7 @@ export const deleteImageFile = async (filePath, maxRetries = 2) => {
 
       // Wait before retrying (exponential backoff: 50ms, 100ms, etc.)
       const waitTime = 50 * attempt;
-      console.log(`⏳ Waiting ${waitTime}ms before retry...`);
+      //console.log(`⏳ Waiting ${waitTime}ms before retry...`);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
   }
@@ -136,7 +136,7 @@ export const deleteImageFilesBatch = async (filePaths) => {
     return { successful: 0, failed: 0, errors: [] };
   }
 
-  console.log(`🔄 Starting batch deletion of ${filePaths.length} files...`);
+  //console.log(`🔄 Starting batch deletion of ${filePaths.length} files...`);
 
   // ✅ PERFORMANCE: Process deletions in parallel (concurrent)
   const results = await Promise.allSettled(
@@ -168,9 +168,9 @@ export const deleteImageFilesBatch = async (filePaths) => {
     }
   });
 
-  console.log(
-    `📊 Batch deletion complete: ${successful} successful, ${failed} failed`,
-  );
+  // console.log(
+  //   `📊 Batch deletion complete: ${successful} successful, ${failed} failed`,
+  // );
 
   return { successful, failed, errors };
 };
@@ -213,11 +213,11 @@ export const cleanupOrphanedFiles = async (referencedFiles = []) => {
     }
 
     if (orphanedFiles.length === 0) {
-      console.log("✅ No orphaned files found");
+      //console.log("✅ No orphaned files found");
       return { deletedCount: 0, errors: [] };
     }
 
-    console.log(`Found ${orphanedFiles.length} orphaned files, deleting...`);
+    //console.log(`Found ${orphanedFiles.length} orphaned files, deleting...`);
 
     // Delete orphaned files
     const results = await deleteImageFilesBatch(orphanedFiles);
@@ -228,10 +228,10 @@ export const cleanupOrphanedFiles = async (referencedFiles = []) => {
       });
     }
 
-    console.log(`🧹 Cleanup complete: ${results.successful} files deleted`);
+    //console.log(`🧹 Cleanup complete: ${results.successful} files deleted`);
     return { deletedCount: results.successful, errors };
   } catch (error) {
-    console.error("❌ Error during orphaned file cleanup:", error);
+    //console.error("❌ Error during orphaned file cleanup:", error);
     return { deletedCount: 0, errors: [error.message] };
   }
 };
