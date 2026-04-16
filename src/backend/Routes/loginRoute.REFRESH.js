@@ -199,7 +199,7 @@ const loginRoute = (app) => {
               tokenPayload,
               process.env.VITE_JWT_SECRET,
               {
-                expiresIn: "15m",// 15 minutes
+                expiresIn: "30m", // 30 minutes
                 algorithm: "HS256", // Use HS256 algorithm
               },
             );
@@ -243,7 +243,7 @@ const loginRoute = (app) => {
               httpOnly: true,
               secure: process.env.NODE_ENV === "production",
               sameSite: "strict",
-              maxAge: 15 * 60 * 1000, // 15 minutes
+              maxAge: 30 * 60 * 1000, // 30 minutes
               path: "/",
             });
 
@@ -268,7 +268,7 @@ const loginRoute = (app) => {
               },
               accessToken: accessToken, // For frontend to store in sessionStorage
               refreshToken: refreshToken, // For frontend to store in sessionStorage
-              expiresIn: "15m", // Access token expiry
+              expiresIn: "30m", // Access token expiry
               refreshExpiresIn: "7d", // Refresh token expiry
             });
           });
@@ -323,7 +323,7 @@ const loginRoute = (app) => {
               tokenPayload,
               process.env.VITE_JWT_SECRET,
               {
-                expiresIn: "15m",
+                expiresIn: "30m",
                 algorithm: "HS256",
               },
             );
@@ -356,7 +356,7 @@ const loginRoute = (app) => {
               httpOnly: true,
               secure: process.env.NODE_ENV === "production",
               sameSite: "strict",
-              maxAge: 15 * 60 * 1000, // 15 minutes
+              maxAge: 30 * 60 * 1000, // 30 minutes
               path: "/",
             });
 
@@ -378,7 +378,7 @@ const loginRoute = (app) => {
               },
               accessToken: accessToken,
               refreshToken: refreshToken,
-              expiresIn: "15m",
+              expiresIn: "30m",
               refreshExpiresIn: "7d",
             });
           });
@@ -448,7 +448,7 @@ const loginRoute = (app) => {
         newAccessTokenPayload,
         process.env.VITE_JWT_SECRET,
         {
-          expiresIn: "15m",
+          expiresIn: "30m",
           algorithm: "HS256",
         },
       );
@@ -458,14 +458,14 @@ const loginRoute = (app) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 15 * 60 * 1000, // 15 minutes
+        maxAge: 30 * 60 * 1000, // 30 minutes
         path: "/",
       });
 
       return res.status(200).json({
         success: true,
         accessToken: newAccessToken,
-        expiresIn: "15m",
+        expiresIn: "30m",
         message: "Token refreshed successfully",
       });
     } catch (err) {

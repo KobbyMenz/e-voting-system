@@ -1,4 +1,11 @@
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Box } from "@mui/material";
 import classes from "../AdminDashboard/AdminDashboardContent.module.css";
 import Card from "../../UI/Card/Card";
@@ -161,10 +168,12 @@ const AdminDashboardContent = () => {
 
   // Track initial load separately from polling refreshes
   const [initialLoading, setInitialLoading] = useState(true);
+  const hasInitialized = useRef(false);
 
   // Only show skeleton on first load, not on polling refreshes
   useEffect(() => {
-    if (data !== null) {
+    if (data !== null && !hasInitialized.current) {
+      hasInitialized.current = true;
       setInitialLoading(false);
     }
   }, [data]);
