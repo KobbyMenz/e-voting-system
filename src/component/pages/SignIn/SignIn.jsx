@@ -21,6 +21,7 @@ import CloseEyeIcon from "../../UI/Icons/CloseEyeIcon";
 import ROLES from "../../Utils/ROLES";
 //import Filter from "../../UI/Filter/Filter";
 import FilterIcon from "../../UI/Icons/FilterIcon";
+import { useLockoutTimer } from "../../CustomHooks/useLockoutTimer";
 
 // import { ToastContainer } from "react-toastify";
 // import { toast } from "react-toastify";
@@ -45,8 +46,10 @@ const SignIn = () => {
 
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [error, setError] = useState(false);
+  const [isAccountLocked, setIsAccountLocked] = useState(false);
 
   const navigate = useNavigate();
+  const { formatTime } = useLockoutTimer(isAccountLocked);
   const togglePassword = () => {
     setShowPassword((prevPassword) => !prevPassword);
   };
@@ -62,6 +65,14 @@ const SignIn = () => {
       ...prevData,
       [name]: value,
     }));
+
+    // 🔒 SECURITY: Reset account lockout & error state when username or role changes
+    // Lockout is username-specific, not session-specific
+    // Different users should have independent lockout states
+    if (name === "userName" || name === "role") {
+      setIsAccountLocked(false);
+      setError(false); // Clear error styling from previous attempts
+    }
   };
 
   //////////////////////////////////////
@@ -113,14 +124,32 @@ const SignIn = () => {
           sessionStorage.setItem("isLoggedIn", JSON.stringify(true));
         }
       } catch (err) {
-        if (err.response && err.response.data && err.response.data.message) {
+        // 🔒 Handle account lockout (429 Too Many Requests)
+        if (err.response && err.response.status === 429) {
+          setIsAccountLocked(true);
+          Toast("error", err.response.data.error);
+          setError(true);
+          closeLoaderLogin();
+        }
+        // ❌ Handle invalid credentials (401 Unauthorized)
+        else if (err.response && err.response.data && err.response.data.error) {
+          Toast("error", err.response.data.error);
+          setError(true);
+          closeLoaderLogin();
+        }
+        // ❌ Handle other error responses with message field
+        else if (
+          err.response &&
+          err.response.data &&
+          err.response.data.message
+        ) {
           Toast("error", err.response.data.message);
           setError(true);
-
           closeLoaderLogin();
-        } else {
+        }
+        // 🌐 Handle network errors
+        else {
           Toast("error", "Network error! Server cannot be reached");
-
           closeLoaderLogin();
         }
       }
@@ -260,7 +289,15 @@ const SignIn = () => {
             </div>
 
             <div className={classes.btn_container}>
-              <Button className={classes.login_btn} type="submit">
+              <Button
+                className={classes.login_btn}
+                type="submit"
+                disabled={isAccountLocked || loadingLogin}
+                style={{
+                  opacity: isAccountLocked ? 0.5 : 1,
+                  cursor: isAccountLocked ? "not-allowed" : "pointer",
+                }}
+              >
                 {<LoginIcon />} {loadingLogin ? <LoginLoader /> : `Login`}
               </Button>
             </div>
@@ -269,6 +306,51 @@ const SignIn = () => {
               <p>forgot password</p>
             </div> */}
           </form>
+
+          {/* 🔒 LOCKOUT MESSAGE WITH COUNTDOWN TIMER */}
+          {isAccountLocked && (
+            <div
+              style={{
+                marginTop: "20px",
+                padding: "15px",
+                backgroundColor: "#fee2e2",
+                border: "2px solid #dc2626",
+                borderRadius: "8px",
+                textAlign: "center",
+              }}
+            >
+              <p
+                style={{
+                  color: "#991b1b",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                  margin: "0 0 8px 0",
+                }}
+              >
+                🔒 Account Locked
+              </p>
+              <p
+                style={{
+                  color: "#7f1d1d",
+                  fontSize: "13px",
+                  margin: "0 0 8px 0",
+                }}
+              >
+                Too many failed login attempts.
+              </p>
+              <p
+                style={{
+                  color: "#991b1b",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  margin: "0",
+                }}
+              >
+                Try again in:{" "}
+                <span style={{ fontSize: "18px" }}>{formatTime()}</span>
+              </p>
+            </div>
+          )}
 
           <footer>
             <p>Powered by KOBBY-MENZ Tech Solutions.</p>
