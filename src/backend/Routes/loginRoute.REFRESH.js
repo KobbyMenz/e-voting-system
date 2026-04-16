@@ -20,78 +20,151 @@ import jwt from "jsonwebtoken";
 import process from "process";
 import dotenv from "dotenv";
 import dayjs from "dayjs";
+import redis from "redis";
 import ROLES from "../../component/Utils/ROLES.js";
 
 dotenv.config();
 
-// ✅ SECURITY: In-memory store for failed login attempts (use Redis in production)
+// 🔒 SECURITY: Redis client for distributed session management (production)
+const redisClient = redis.createClient({
+  host: process.env.REDIS_HOST || "127.0.0.1",
+  port: process.env.REDIS_PORT || 6379,
+  password: process.env.REDIS_PASSWORD || undefined,
+});
+
+const isRedisConnected = process.env.NODE_ENV === "production";
+
+redisClient.on("error", (err) => {
+  console.error("Redis connection error:", err);
+  console.warn("Falling back to in-memory storage (development mode)");
+});
+
+if (isRedisConnected) {
+  redisClient.connect().catch((err) => {
+    console.error("Failed to connect to Redis:", err);
+  });
+}
+
+// ✅ SECURITY: In-memory fallback stores (for development/single-server)
 const failedLoginAttempts = new Map();
+const revokedTokens = new Set();
+const refreshTokenSessions = new Map();
+
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_TIME_MS = 15 * 60 * 1000; // 15 minutes
 const ATTEMPT_RESET_TIME_MS = 15 * 60 * 1000; // 15 minutes
 
-// ✅ SECURITY: In-memory store for revoked tokens (use Redis in production)
-// On logout, tokens are added here to prevent their reuse
-const revokedTokens = new Set();
-
-// ✅ SECURITY: In-memory store for refresh token sessions
-// Maps refresh tokens to user info for validation
-const refreshTokenSessions = new Map();
-
 /**
  * ✅ SECURITY: Check if user account is locked due to too many failed attempts
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
  */
-const isAccountLocked = (identifier) => {
-  const attempts = failedLoginAttempts.get(identifier);
-  if (!attempts) return false;
+const isAccountLocked = async (identifier) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      const attemptData = await redisClient.get(`login_attempts:${identifier}`);
+      if (!attemptData) return false;
 
-  const now = Date.now();
-  // Reset if lockout period expired
-  if (now - attempts.lastAttemptTime > ATTEMPT_RESET_TIME_MS) {
-    failedLoginAttempts.delete(identifier);
+      const attempts = JSON.parse(attemptData);
+      const now = Date.now();
+
+      // Reset if lockout period expired
+      if (now - attempts.lastAttemptTime > ATTEMPT_RESET_TIME_MS) {
+        await redisClient.del(`login_attempts:${identifier}`);
+        return false;
+      }
+
+      // Check if account is currently locked
+      if (attempts.count >= MAX_FAILED_ATTEMPTS) {
+        const lockTimeRemaining = LOCKOUT_TIME_MS - (now - attempts.lockedAt);
+        return lockTimeRemaining > 0;
+      }
+      return false;
+    } else {
+      // Fallback to in-memory
+      const attempts = failedLoginAttempts.get(identifier);
+      if (!attempts) return false;
+
+      const now = Date.now();
+      if (now - attempts.lastAttemptTime > ATTEMPT_RESET_TIME_MS) {
+        failedLoginAttempts.delete(identifier);
+        return false;
+      }
+
+      if (attempts.count >= MAX_FAILED_ATTEMPTS) {
+        const lockTimeRemaining = LOCKOUT_TIME_MS - (now - attempts.lockedAt);
+        return lockTimeRemaining > 0;
+      }
+    }
+  } catch (err) {
+    console.error("Error checking account lock:", err);
     return false;
   }
-
-  // Check if account is currently locked
-  if (attempts.count >= MAX_FAILED_ATTEMPTS) {
-    const lockTimeRemaining = LOCKOUT_TIME_MS - (now - attempts.lockedAt);
-    if (lockTimeRemaining > 0) {
-      return true; // Still locked
-    } else {
-      // Lockout expired, reset
-      failedLoginAttempts.delete(identifier);
-      return false;
-    }
-  }
-
   return false;
 };
 
 /**
  * ✅ SECURITY: Record failed login attempt
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
  */
-const recordFailedAttempt = (identifier) => {
-  const attempts = failedLoginAttempts.get(identifier) || {
-    count: 0,
-    lastAttemptTime: Date.now(),
-    lockedAt: null,
-  };
+const recordFailedAttempt = async (identifier) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      const key = `login_attempts:${identifier}`;
+      const attemptData = await redisClient.get(key);
+      const attempts = attemptData
+        ? JSON.parse(attemptData)
+        : {
+            count: 0,
+            lastAttemptTime: Date.now(),
+            lockedAt: null,
+          };
 
-  attempts.count++;
-  attempts.lastAttemptTime = Date.now();
+      attempts.count++;
+      attempts.lastAttemptTime = Date.now();
 
-  if (attempts.count >= MAX_FAILED_ATTEMPTS) {
-    attempts.lockedAt = Date.now();
+      if (attempts.count >= MAX_FAILED_ATTEMPTS) {
+        attempts.lockedAt = Date.now();
+      }
+
+      // Store in Redis with TTL of ATTEMPT_RESET_TIME_MS (in seconds)
+      await redisClient.setEx(
+        key,
+        Math.ceil(ATTEMPT_RESET_TIME_MS / 1000),
+        JSON.stringify(attempts),
+      );
+    } else {
+      // Fallback to in-memory
+      const attempts = failedLoginAttempts.get(identifier) || {
+        count: 0,
+        lastAttemptTime: Date.now(),
+        lockedAt: null,
+      };
+      attempts.count++;
+      attempts.lastAttemptTime = Date.now();
+      if (attempts.count >= MAX_FAILED_ATTEMPTS) {
+        attempts.lockedAt = Date.now();
+      }
+      failedLoginAttempts.set(identifier, attempts);
+    }
+  } catch (err) {
+    console.error("Error recording login attempt:", err);
   }
-
-  failedLoginAttempts.set(identifier, attempts);
 };
 
 /**
  * ✅ SECURITY: Clear failed login attempts on successful login
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
  */
-const clearFailedAttempts = (identifier) => {
-  failedLoginAttempts.delete(identifier);
+const clearFailedAttempts = async (identifier) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      await redisClient.del(`login_attempts:${identifier}`);
+    } else {
+      failedLoginAttempts.delete(identifier);
+    }
+  } catch (err) {
+    console.error("Error clearing login attempts:", err);
+  }
 };
 
 /**
@@ -109,16 +182,99 @@ const validateToken = (token, secret) => {
 
 /**
  * ✅ SECURITY: Check if token is revoked
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
  */
-const isTokenRevoked = (token) => {
-  return revokedTokens.has(token);
+const isTokenRevoked = async (token) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      const exists = await redisClient.exists(`revoked_token:${token}`);
+      return exists === 1;
+    } else {
+      return revokedTokens.has(token);
+    }
+  } catch (err) {
+    console.error("Error checking token revocation:", err);
+    return false;
+  }
 };
 
 /**
  * ✅ SECURITY: Revoke a token (on logout)
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
  */
-const revokeToken = (token) => {
-  revokedTokens.add(token);
+const revokeToken = async (token, expiresIn = "30m") => {
+  try {
+    // Calculate TTL in seconds (default 30 minutes)
+    const ttl = parseInt(expiresIn) * 60 || 30 * 60;
+
+    if (isRedisConnected && redisClient.isOpen) {
+      await redisClient.setEx(`revoked_token:${token}`, ttl, "revoked");
+    } else {
+      revokedTokens.add(token);
+    }
+  } catch (err) {
+    console.error("Error revoking token:", err);
+  }
+};
+
+/**
+ * ✅ SECURITY: Store refresh token session
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
+ */
+const storeRefreshTokenSession = async (refreshToken, userId) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      // Store for 7 days
+      await redisClient.setEx(
+        `refresh_session:${refreshToken}`,
+        7 * 24 * 60 * 60,
+        JSON.stringify({ userId, createdAt: Date.now() }),
+      );
+    } else {
+      refreshTokenSessions.set(refreshToken, {
+        userId,
+        createdAt: Date.now(),
+      });
+    }
+  } catch (err) {
+    console.error("Error storing refresh token session:", err);
+  }
+};
+
+/**
+ * ✅ SECURITY: Check if refresh token session exists
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
+ */
+const hasRefreshTokenSession = async (refreshToken) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      const exists = await redisClient.exists(
+        `refresh_session:${refreshToken}`,
+      );
+      return exists === 1;
+    } else {
+      return refreshTokenSessions.has(refreshToken);
+    }
+  } catch (err) {
+    console.error("Error checking refresh token session:", err);
+    return false;
+  }
+};
+
+/**
+ * ✅ SECURITY: Delete refresh token session
+ * 🔒 REDIS: Uses Redis in production, falls back to in-memory in development
+ */
+const deleteRefreshTokenSession = async (refreshToken) => {
+  try {
+    if (isRedisConnected && redisClient.isOpen) {
+      await redisClient.del(`refresh_session:${refreshToken}`);
+    } else {
+      refreshTokenSessions.delete(refreshToken);
+    }
+  } catch (err) {
+    console.error("Error deleting refresh token session:", err);
+  }
 };
 
 const loginRoute = (app) => {
@@ -128,7 +284,7 @@ const loginRoute = (app) => {
    * ✅ Account lockout
    * ✅ Secure token handling with refresh tokens
    */
-  app.post("/api/login", (req, res) => {
+  app.post("/api/login", async (req, res) => {
     const { username, password, role } = req.body;
 
     // ✅ SECURITY: Input validation
@@ -142,7 +298,7 @@ const loginRoute = (app) => {
     }
 
     // ✅ SECURITY: Check if account is locked
-    if (isAccountLocked(username)) {
+    if (await isAccountLocked(username)) {
       return res.status(429).json({
         error:
           "Account temporarily locked due to too many failed login attempts. Try again in 15 minutes.",
@@ -153,7 +309,7 @@ const loginRoute = (app) => {
       if (role === ROLES.ADMIN) {
         const sqlQuery = `SELECT * FROM e_voting_db.admin WHERE ((email = ? OR userId = ?) AND status = "Enabled")`;
 
-        db.query(sqlQuery, [username, username], (err, result) => {
+        db.query(sqlQuery, [username, username], async (err, result) => {
           if (err) {
             console.error("Database error: ", err);
             return res.status(500).json({
@@ -163,7 +319,7 @@ const loginRoute = (app) => {
 
           // ✅ SECURITY: Don't reveal whether user exists or not
           if (result.length === 0) {
-            recordFailedAttempt(username);
+            await recordFailedAttempt(username);
             return res.status(401).json({ error: "Invalid credentials" });
           }
 
@@ -171,20 +327,20 @@ const loginRoute = (app) => {
           const hashedPassword = user.password;
 
           // ✅ SECURITY: Use bcrypt.compare for password verification
-          bcrypt.compare(password, hashedPassword, (err, isMatch) => {
+          bcrypt.compare(password, hashedPassword, async (err, isMatch) => {
             if (err) {
               console.error("Password comparison error: ", err);
-              recordFailedAttempt(username);
+              await recordFailedAttempt(username);
               return res.status(401).json({ error: "Invalid credentials" });
             }
 
             if (!isMatch) {
-              recordFailedAttempt(username);
+              await recordFailedAttempt(username);
               return res.status(401).json({ error: "Invalid credentials" });
             }
 
             // ✅ SECURITY: Clear failed attempts on successful login
-            clearFailedAttempts(username);
+            await clearFailedAttempts(username);
 
             // ✅ SECURITY: Create minimal payload (no sensitive data in token)
             const tokenPayload = {
@@ -214,28 +370,35 @@ const loginRoute = (app) => {
 
             const refreshToken = jwt.sign(
               refreshTokenPayload,
-              process.env.VITE_REFRESH_TOKEN_SECRET ||
-                process.env.VITE_JWT_SECRET + "_refresh",
+              process.env.VITE_REFRESH_TOKEN_SECRET,
               {
                 expiresIn: "7d",
                 algorithm: "HS256",
               },
             );
 
-            // 🔒 SECURITY: Store refresh token session info
-            refreshTokenSessions.set(refreshToken, {
-              userId: user.userId,
-              createdAt: Date.now(),
-            });
+            // 🔒 SECURITY: Store refresh token session info in Redis
+            await storeRefreshTokenSession(refreshToken, user.userId);
 
-            // ✅ SECURITY: Update last login timestamp
+            // ✅ SECURITY: Update last login timestamp with transaction
             const currentDate = dayjs().format("YYYY-MM-DDTHH:mm:ss");
             const sqlUpdateQuery = `UPDATE e_voting_db.admin SET lastLogin = ? WHERE userId = ?`;
 
-            db.query(sqlUpdateQuery, [currentDate, user.userId], (err) => {
+            db.query("START TRANSACTION", (err) => {
               if (err) {
-                console.error("Error updating last login: ", err);
+                console.error("Error starting transaction: ", err);
               }
+
+              db.query(sqlUpdateQuery, [currentDate, user.userId], (err) => {
+                if (err) {
+                  console.error("Error updating last login: ", err);
+                  db.query("ROLLBACK");
+                  return;
+                }
+                db.query("COMMIT", (err) => {
+                  if (err) console.error("Error committing transaction: ", err);
+                });
+              });
             });
 
             // ✅ SECURITY: Send access token via httpOnly secure cookie (short-lived)
@@ -278,7 +441,7 @@ const loginRoute = (app) => {
       } else if (role === ROLES.VOTER) {
         const sqlQuery = `SELECT * FROM e_voting_db.voter WHERE voterId = ?`;
 
-        db.query(sqlQuery, [username], (err, result) => {
+        db.query(sqlQuery, [username], async (err, result) => {
           if (err) {
             console.error("Database error: ", err);
             return res.status(500).json({
@@ -288,7 +451,7 @@ const loginRoute = (app) => {
 
           // ✅ SECURITY: Don't reveal whether user exists
           if (result.length === 0) {
-            recordFailedAttempt(username);
+            await recordFailedAttempt(username);
             return res.status(401).json({ error: "Invalid credentials" });
           }
 
@@ -296,20 +459,20 @@ const loginRoute = (app) => {
           const hashedPassword = user.password;
 
           // ✅ SECURITY: Use bcrypt.compare for password verification
-          bcrypt.compare(password, hashedPassword, (err, isMatch) => {
+          bcrypt.compare(password, hashedPassword, async (err, isMatch) => {
             if (err) {
               console.error("Password comparison error: ", err);
-              recordFailedAttempt(username);
+              await recordFailedAttempt(username);
               return res.status(401).json({ error: "Invalid credentials" });
             }
 
             if (!isMatch) {
-              recordFailedAttempt(username);
+              await recordFailedAttempt(username);
               return res.status(401).json({ error: "Invalid credentials" });
             }
 
             // ✅ SECURITY: Clear failed attempts
-            clearFailedAttempts(username);
+            await clearFailedAttempts(username);
 
             // ✅ SECURITY: Create secure tokens
             const tokenPayload = {
@@ -337,19 +500,15 @@ const loginRoute = (app) => {
 
             const refreshToken = jwt.sign(
               refreshTokenPayload,
-              process.env.VITE_REFRESH_TOKEN_SECRET ||
-                process.env.VITE_JWT_SECRET + "_refresh",
+              process.env.VITE_REFRESH_TOKEN_SECRET,
               {
                 expiresIn: "7d",
                 algorithm: "HS256",
               },
             );
 
-            // 🔒 SECURITY: Store refresh token session
-            refreshTokenSessions.set(refreshToken, {
-              userId: user.voterId,
-              createdAt: Date.now(),
-            });
+            // 🔒 SECURITY: Store refresh token session in Redis
+            await storeRefreshTokenSession(refreshToken, user.voterId);
 
             // ✅ SECURITY: Send secure httpOnly cookies
             res.cookie("accessToken", accessToken, {
@@ -399,7 +558,7 @@ const loginRoute = (app) => {
    * ✅ Uses long-lived refresh token to get new short-lived access token
    * ✅ Prevents frequent re-login while maintaining security
    */
-  app.post("/api/refresh-token", (req, res) => {
+  app.post("/api/refresh-token", async (req, res) => {
     try {
       const refreshToken =
         req.cookies.refreshToken ||
@@ -411,17 +570,17 @@ const loginRoute = (app) => {
       }
 
       // ✅ SECURITY: Check if token is revoked
-      if (isTokenRevoked(refreshToken)) {
+      if (await isTokenRevoked(refreshToken)) {
         return res
           .status(401)
           .json({ error: "Refresh token has been revoked" });
       }
 
       // ✅ SECURITY: Validate refresh token
-      const secretKey =
-        process.env.VITE_REFRESH_TOKEN_SECRET ||
-        process.env.VITE_JWT_SECRET + "_refresh";
-      const decoded = validateToken(refreshToken, secretKey);
+      const decoded = validateToken(
+        refreshToken,
+        process.env.VITE_REFRESH_TOKEN_SECRET,
+      );
 
       if (!decoded || decoded.type !== "refresh") {
         return res
@@ -430,7 +589,7 @@ const loginRoute = (app) => {
       }
 
       // ✅ SECURITY: Check if session still exists
-      if (!refreshTokenSessions.has(refreshToken)) {
+      if (!(await hasRefreshTokenSession(refreshToken))) {
         return res
           .status(401)
           .json({ error: "Session not found or has been terminated" });
@@ -479,7 +638,7 @@ const loginRoute = (app) => {
    * ✅ Revokes both access and refresh tokens
    * ✅ Clears httpOnly cookies on server
    */
-  app.post("/api/logout", (req, res) => {
+  app.post("/api/logout", async (req, res) => {
     try {
       const accessToken =
         req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
@@ -487,12 +646,12 @@ const loginRoute = (app) => {
 
       // ✅ SECURITY: Revoke both tokens
       if (accessToken) {
-        revokeToken(accessToken);
+        await revokeToken(accessToken, "30m");
       }
 
       if (refreshToken) {
-        revokeToken(refreshToken);
-        refreshTokenSessions.delete(refreshToken);
+        await revokeToken(refreshToken, "7d");
+        await deleteRefreshTokenSession(refreshToken);
       }
 
       // ✅ SECURITY: Clear both httpOnly cookies
@@ -524,7 +683,7 @@ const loginRoute = (app) => {
    * 🔒 GET /api/verify-token - Verify Token Validity
    * ✅ Check if access token is still valid
    */
-  app.get("/api/verify-token", (req, res) => {
+  app.get("/api/verify-token", async (req, res) => {
     try {
       const accessToken =
         req.cookies.accessToken || req.headers.authorization?.split(" ")[1];
@@ -534,7 +693,7 @@ const loginRoute = (app) => {
       }
 
       // ✅ SECURITY: Check if token is revoked
-      if (isTokenRevoked(accessToken)) {
+      if (await isTokenRevoked(accessToken)) {
         return res.status(401).json({ error: "Token has been revoked" });
       }
 
