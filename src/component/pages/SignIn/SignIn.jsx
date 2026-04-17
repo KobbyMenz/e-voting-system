@@ -21,7 +21,7 @@ import CloseEyeIcon from "../../UI/Icons/CloseEyeIcon";
 import ROLES from "../../Utils/ROLES";
 //import Filter from "../../UI/Filter/Filter";
 import FilterIcon from "../../UI/Icons/FilterIcon";
-import { useLockoutTimer } from "../../CustomHooks/useLockoutTimer";
+//import { useLockoutTimer } from "../../CustomHooks/useLockoutTimer";
 import LockoutModal from "../../UI/Modals/LockoutModal";
 
 // import { ToastContainer } from "react-toastify";
@@ -51,15 +51,15 @@ const SignIn = () => {
   const [showLockoutModal, setShowLockoutModal] = useState(false);
 
   const navigate = useNavigate();
-  const { timeRemaining, isExpired } = useLockoutTimer(isAccountLocked);
+  //const { timeRemaining, isExpired } = useLockoutTimer(isAccountLocked);
 
   // Auto-unlock account when lockout expires
   useEffect(() => {
-    if (isExpired && isAccountLocked) {
+    if (isAccountLocked) {
       setIsAccountLocked(false);
       setShowLockoutModal(false);
     }
-  }, [isExpired, isAccountLocked]);
+  }, [isAccountLocked]);
 
   // Show modal when account gets locked
   useEffect(() => {
@@ -339,7 +339,7 @@ const SignIn = () => {
             <LockoutModal
               title="🔒 Account Locked"
               message="Too many failed login attempts."
-              timeRemaining={timeRemaining}
+              // timeRemaining={timeRemaining}
               onCloseModal={() => setShowLockoutModal(false)}
             />
           )}

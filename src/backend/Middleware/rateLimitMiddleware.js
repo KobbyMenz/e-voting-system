@@ -49,7 +49,9 @@ export const rateLimit = (identifier = "general") => {
   return (req, res, next) => {
     try {
       const clientIP = getClientIP(req);
-      const key = `${identifier}:${clientIP}`;
+      // const key = `${identifier}:${clientIP}`;
+      const username = req.body?.username || req.body?.email || "anonymous"; // 👈 extract username
+      const key = `${identifier}:${clientIP}:${username}`;
       const now = Date.now();
 
       // ✅ Cleanup old entries periodically
@@ -112,7 +114,10 @@ export const rateLimit = (identifier = "general") => {
 export const resetRateLimit = (req) => {
   try {
     const clientIP = getClientIP(req);
-    const key = `login:${clientIP}`;
+    //const key = `login:${clientIP}`;
+    const username = req.body?.username || req.body?.email || "anonymous"; // 👈
+    const key = `login:${clientIP}:${username}`;
+
     rateLimitStore.delete(key);
   } catch (err) {
     console.error("Error resetting rate limit:", err);
@@ -125,7 +130,10 @@ export const resetRateLimit = (req) => {
 export const getRateLimitStatus = (req) => {
   try {
     const clientIP = getClientIP(req);
-    const key = `login:${clientIP}`;
+    //const key = `login:${clientIP}`;
+    const username = req.body?.username || req.body?.email || "anonymous"; // 👈
+    const key = `login:${clientIP}:${username}`;
+
     const record = rateLimitStore.get(key);
 
     if (!record) {
