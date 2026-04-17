@@ -452,7 +452,7 @@ const loginRoute = (app) => {
           // ✅ SECURITY: Don't reveal whether user exists
           if (result.length === 0) {
             await recordFailedAttempt(username);
-            return res.status(401).json({ error: "Invalid credentials" });
+            return res.status(401).json({ error: "Wrong credentials" });
           }
 
           const user = result[0];
@@ -463,12 +463,12 @@ const loginRoute = (app) => {
             if (err) {
               console.error("Password comparison error: ", err);
               await recordFailedAttempt(username);
-              return res.status(401).json({ error: "Invalid credentials" });
+              return res.status(401).json({ error: "Wrong credentials" });
             }
 
             if (!isMatch) {
               await recordFailedAttempt(username);
-              return res.status(401).json({ error: "Invalid credentials" });
+              return res.status(401).json({ error: "Wrong credentials" });
             }
 
             // ✅ SECURITY: Clear failed attempts

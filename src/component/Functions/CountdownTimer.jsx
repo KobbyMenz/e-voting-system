@@ -48,8 +48,8 @@ export default function CountdownTimer({ onCloseModal }) {
     return `${m}:${s}`;
   };
 
-  if (timeLeft === null) return <p>No timer found in localStorage.</p>;
-  if (timeLeft === 0) return onCloseModal();
+  // if (timeLeft === null) return <p>No timer found in localStorage.</p>;
+  if (timeLeft === 0) onCloseModal();
 
   // Add warning class if time is running out (less than 2 minutes)
   const isLowTime = timeLeft < 120;
