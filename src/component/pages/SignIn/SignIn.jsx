@@ -1,4 +1,4 @@
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 //import DarkVeil from "./DarkVeil";
 //import Iridescence from "./Iridescence";
 //import { useNavigate } from "react-router-dom";
@@ -22,6 +22,7 @@ import ROLES from "../../Utils/ROLES";
 //import Filter from "../../UI/Filter/Filter";
 import FilterIcon from "../../UI/Icons/FilterIcon";
 import { useLockoutTimer } from "../../CustomHooks/useLockoutTimer";
+import LockoutModal from "../../UI/Modals/LockoutModal";
 
 // import { ToastContainer } from "react-toastify";
 // import { toast } from "react-toastify";
@@ -41,15 +42,32 @@ const SignIn = () => {
   });
   // const [userName, setUserName] = useState("");
   // const [password, setPassword] = useState("");
-  //const [showModal, setShowModal] = useState();
+  // const [sec, setSec] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   const [loadingLogin, setLoadingLogin] = useState(false);
   const [error, setError] = useState(false);
   const [isAccountLocked, setIsAccountLocked] = useState(false);
+  const [showLockoutModal, setShowLockoutModal] = useState(false);
 
   const navigate = useNavigate();
-  const { formatTime } = useLockoutTimer(isAccountLocked);
+  const { timeRemaining, isExpired } = useLockoutTimer(isAccountLocked);
+
+  // Auto-unlock account when lockout expires
+  useEffect(() => {
+    if (isExpired && isAccountLocked) {
+      setIsAccountLocked(false);
+      setShowLockoutModal(false);
+    }
+  }, [isExpired, isAccountLocked]);
+
+  // Show modal when account gets locked
+  useEffect(() => {
+    if (isAccountLocked) {
+      setShowLockoutModal(true);
+    }
+  }, [isAccountLocked]);
+
   const togglePassword = () => {
     setShowPassword((prevPassword) => !prevPassword);
   };
@@ -71,6 +89,7 @@ const SignIn = () => {
     // Different users should have independent lockout states
     if (name === "userName" || name === "role") {
       setIsAccountLocked(false);
+      setShowLockoutModal(false);
       setError(false); // Clear error styling from previous attempts
     }
   };
@@ -127,6 +146,7 @@ const SignIn = () => {
         // 🔒 Handle account lockout (429 Too Many Requests)
         if (err.response && err.response.status === 429) {
           setIsAccountLocked(true);
+          setShowLockoutModal(true);
           Toast("error", err.response.data.error);
           setError(true);
           closeLoaderLogin();
@@ -294,7 +314,7 @@ const SignIn = () => {
                 type="submit"
                 disabled={isAccountLocked || loadingLogin}
                 style={{
-                  opacity: isAccountLocked ? 0.5 : 1,
+                  opacity: isAccountLocked ? 0.2 : 1,
                   cursor: isAccountLocked ? "not-allowed" : "pointer",
                 }}
               >
@@ -307,49 +327,14 @@ const SignIn = () => {
             </div> */}
           </form>
 
-          {/* 🔒 LOCKOUT MESSAGE WITH COUNTDOWN TIMER */}
-          {isAccountLocked && (
-            <div
-              style={{
-                marginTop: "20px",
-                padding: "15px",
-                backgroundColor: "#fee2e2",
-                border: "2px solid #dc2626",
-                borderRadius: "8px",
-                textAlign: "center",
-              }}
-            >
-              <p
-                style={{
-                  color: "#991b1b",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  margin: "0 0 8px 0",
-                }}
-              >
-                🔒 Account Locked
-              </p>
-              <p
-                style={{
-                  color: "#7f1d1d",
-                  fontSize: "13px",
-                  margin: "0 0 8px 0",
-                }}
-              >
-                Too many failed login attempts.
-              </p>
-              <p
-                style={{
-                  color: "#991b1b",
-                  fontSize: "16px",
-                  fontWeight: "bold",
-                  margin: "0",
-                }}
-              >
-                Try again in:{" "}
-                <span style={{ fontSize: "18px" }}>{formatTime()}</span>
-              </p>
-            </div>
+          {/* 🔒 LOCKOUT MODAL WITH COUNTDOWN TIMER */}
+          {showLockoutModal && (
+            <LockoutModal
+              title="🔒 Account Locked"
+              message="Too many failed login attempts."
+              timeRemaining={timeRemaining}
+              onCloseModal={() => setShowLockoutModal(false)}
+            />
           )}
 
           <footer>
