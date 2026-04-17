@@ -15,7 +15,9 @@ export const useLockoutTimer = (isLocked) => {
 
   // Calculate remaining time based on stored lockout timestamp
   const calculateRemainingTime = () => {
-    const lockoutTimestamp = localStorage.getItem(LOCKOUT_TIMESTAMP_KEY);
+    const lockoutTimestamp = +JSON.parse(
+      localStorage.getItem(LOCKOUT_TIMESTAMP_KEY),
+    );
     if (!lockoutTimestamp) return 0;
 
     const now = Date.now();
@@ -35,15 +37,15 @@ export const useLockoutTimer = (isLocked) => {
     }
 
     // Store the lockout timestamp if not already stored
-    if (!localStorage.getItem(LOCKOUT_TIMESTAMP_KEY)) {
-      localStorage.setItem(LOCKOUT_TIMESTAMP_KEY, Date.now().toString());
-      // Set initial time to 15 minutes when timestamp is just created
-      setTimeRemaining(LOCKOUT_DURATION_MS / 1000);
-    } else {
+    // if (!localStorage.getItem(LOCKOUT_TIMESTAMP_KEY)) {
+    //   localStorage.setItem(LOCKOUT_TIMESTAMP_KEY, Date.now().toString());
+    //   // Set initial time to 15 minutes when timestamp is just created
+    //   setTimeRemaining(LOCKOUT_DURATION_MS / 1000);
+    // } else {
       // Calculate initial remaining time from existing timestamp
       const remaining = calculateRemainingTime();
       setTimeRemaining(remaining);
-    }
+    // }
 
     // Update timer every second
     const timer = setInterval(() => {
@@ -66,8 +68,11 @@ export const useLockoutTimer = (isLocked) => {
   //   return `${minutes}:${seconds.toString().padStart(2, "0")}`;
   // };
 
+  //console.log("timeRemaining: ", timeRemaining);
+
   return {
     timeRemaining,
+    // formatTime,
     isExpired: timeRemaining === 0,
   };
 };

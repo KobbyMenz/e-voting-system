@@ -91,7 +91,7 @@ export const rateLimit = (identifier = "general") => {
       // ✅ Check if limit exceeded
       if (record.count > DEFAULT_MAX_REQUESTS) {
         return res.status(429).json({
-          error: `Too many login attempts. Please try again in ${timeRemaining} seconds.`,
+          error: ` ${Math.ceil(timeRemaining)}`,
           retryAfter: timeRemaining,
           code: "RATE_LIMIT_EXCEEDED",
         });

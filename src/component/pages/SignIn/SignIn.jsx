@@ -147,7 +147,14 @@ const SignIn = () => {
         if (err.response && err.response.status === 429) {
           setIsAccountLocked(true);
           setShowLockoutModal(true);
-          Toast("error", err.response.data.error);
+          Toast(
+            "error",
+            `Too many login attempts. Please try again in ${Math.ceil(err.response.data.error / 60)} minutes`,
+          );
+          localStorage.setItem(
+            "LOCKOUT_TIMESTAMP_KEY",
+            JSON.stringify(err.response.data.error),
+          );
           setError(true);
           closeLoaderLogin();
         }
