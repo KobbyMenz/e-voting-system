@@ -35,7 +35,10 @@ export default function CountdownTimer({ onCloseModal }) {
     }, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [timeLeft === null]); // only re-run when timeLeft goes from null → a value
+  }, [
+    timeLeft,
+    // === null
+  ]); // only re-run when timeLeft goes from null → a value
 
   const formatTime = (secs) => {
     // const h = Math.floor(secs / 3600)
