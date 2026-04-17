@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import classes from "./LockoutModal.module.css";
 import Card from "../Card/Card";
 import Button from "../Button/Button";
-import CountdownTimer from "../../Functions/CountdownTimer";
+import CountdownTimer from "../../Services/CountdownTimer";
 //import { useLockoutTimer } from "../../CustomHooks/useLockoutTimer";
 
 const Backdrop = (props) => {
