@@ -52,19 +52,19 @@ export default function CountdownTimer({ onCloseModal }) {
   };
 
   // if (timeLeft === null) return <p>No timer found in localStorage.</p>;
-  if (timeLeft === 0) onCloseModal();
+  if (timeLeft === 0) {
+    onCloseModal();
+  }
 
   // Add warning class if time is running out (less than 2 minutes)
   const isLowTime = timeLeft < 120;
 
   return (
-    <div>
-      <h2
-        className={`${classes.timer} ${isLowTime ? classes.timerWarning : ""}`}
-      >
-        {formatTime(timeLeft)}
-      </h2>
-    </div>
+    // <div>
+    <h2 className={`${classes.timer} ${isLowTime ? classes.timerWarning : ""}`}>
+      {formatTime(timeLeft)}
+    </h2>
+    // </div>
   );
 }
 CountdownTimer.propTypes = {

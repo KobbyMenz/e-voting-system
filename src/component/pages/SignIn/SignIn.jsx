@@ -149,11 +149,17 @@ const SignIn = () => {
           setShowLockoutModal(true);
           Toast(
             "error",
-            `Too many login attempts. Please try again in ${Math.ceil(err.response.data.error / 60)} minutes`,
+            `Too many failed login attempts. Please try again in ${Math.floor(
+              (err.response.data.error % 3600) / 60,
+            )
+              .toString()
+              .padStart(2, "0")}:${Math.floor(err.response.data.error % 60)
+              .toString()
+              .padStart(2, "0")}`,
           );
           localStorage.setItem(
             "LOCKOUT_TIMESTAMP_KEY",
-            JSON.stringify(err.response.data.error),
+            err.response.data.error,
           );
           setError(true);
           closeLoaderLogin();

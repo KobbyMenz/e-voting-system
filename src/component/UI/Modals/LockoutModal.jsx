@@ -22,12 +22,12 @@ const ModalOverlay = (props) => {
         <header>{props.title}</header>
         <div className={classes.content}>
           <p className={classes.subtitle}>{props.message}</p>
-          <p className={classes.countdown}>
+          <div className={classes.countdown}>
             Try again in:{" "}
             <span>
               <CountdownTimer onCloseModal={props.onCloseModal} />
             </span>
-          </p>
+          </div>
         </div>
 
         <div className={classes.btn_container}>
