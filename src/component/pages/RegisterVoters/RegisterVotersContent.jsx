@@ -157,7 +157,7 @@ const RegisterVotersContent = () => {
   const rows = allVoters.map((voter, index) => ({
     sn: index + 1,
     id: voter.voterId,
-    image: voter.photo,
+    image: voter.photo ? voter.photo : "",
     name: voter.fullName,
     dob: dayjs(voter.DOB).format("DD MMM, YYYY"),
     dateCreated: formatDateTime(voter.dateCreated),
