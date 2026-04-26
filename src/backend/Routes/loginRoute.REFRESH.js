@@ -50,6 +50,7 @@ const failedLoginAttempts = new Map();
 const revokedTokens = new Set();
 const refreshTokenSessions = new Map();
 
+// ✅ SECURITY: Configuration for rate limiting and account lockout
 const MAX_FAILED_ATTEMPTS = 5;
 const LOCKOUT_TIME_MS = 15 * 60 * 1000; // 15 minutes
 const ATTEMPT_RESET_TIME_MS = 15 * 60 * 1000; // 15 minutes

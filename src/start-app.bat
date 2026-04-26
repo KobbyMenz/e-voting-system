@@ -13,7 +13,7 @@ start cmd /k "npm run dev"
 
 
 :: Wait a bit for server to start (optional)
-timeout /t 0 > nul
+timeout /t 3 > nul
 
 
 

@@ -65,6 +65,7 @@ const deleteUserRoute = (app) => {
           });
         });
       });
+      
     } catch (error) {
       console.error("❌ Error in deleteUserRoute:", error);
       res.status(500).json({ error: "Internal server error" });
